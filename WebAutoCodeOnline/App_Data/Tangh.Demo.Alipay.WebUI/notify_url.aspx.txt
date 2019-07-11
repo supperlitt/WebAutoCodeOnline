@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Tangh.Demo.Alipay.WebUI.notify_url.aspx.cs" Inherits="notify_url" %>

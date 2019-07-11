@@ -369,7 +369,7 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(117, 21);
             this.txtPwd.TabIndex = 1;
-            this.txtPwd.Text = "qwe123asd";
+            this.txtPwd.Text = "123456";
             // 
             // label2
             // 
@@ -386,7 +386,7 @@
             this.txtServer.Name = "txtServer";
             this.txtServer.Size = new System.Drawing.Size(117, 21);
             this.txtServer.TabIndex = 1;
-            this.txtServer.Text = "172.20.30.247";
+            this.txtServer.Text = "127.0.0.1";
             // 
             // label4
             // 
