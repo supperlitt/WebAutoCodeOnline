@@ -1,0 +1,115 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
+
+namespace Tangh.Demo.VisualStudio.MSTSCRemote
+{
+    public partial class RemoteTool : Form
+    {
+        public RemoteTool()
+        {
+            InitializeComponent();
+        }
+
+        private void RemoteTool_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRemote_Click(object sender, EventArgs e)
+        {
+            string ip = this.txtIP.Text;
+            string name = this.txtName.Text;
+            string pwd = this.txtPwd.Text;
+
+            Mstscpw mstsc = new Mstscpw();
+            pwd = mstsc.encryptpw(pwd);
+
+            string fileContent = string.Format(FileContent, ip, name, pwd);
+
+            string myDocPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            string filePath = myDocPath + "\\temp.rdp";
+
+            try
+            {
+                File.Delete(filePath);
+
+                using (FileStream fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs, Encoding.Unicode))
+                    {
+                        sw.Write(fileContent);
+                    }
+                }
+
+                Process process = new Process();
+                process.StartInfo = new ProcessStartInfo("mstsc", filePath);
+                process.Start();
+            }
+            catch
+            {
+            }
+        }
+
+        /// <summary>
+        /// 文件内容
+        /// </summary>
+        private string FileContent
+        {
+            get
+            {
+                return @"screen mode id:i:2
+use multimon:i:0
+desktopwidth:i:1920
+desktopheight:i:1080
+session bpp:i:32
+winposstr:s:0,3,0,0,800,600
+compression:i:1
+keyboardhook:i:2
+audiocapturemode:i:0
+videoplaybackmode:i:1
+connection type:i:2
+displayconnectionbar:i:1
+disable wallpaper:i:1
+allow font smoothing:i:0
+allow desktop composition:i:0
+disable full window drag:i:1
+disable menu anims:i:1
+disable themes:i:0
+disable cursor setting:i:0
+bitmapcachepersistenable:i:1
+full address:s:{0}
+audiomode:i:0
+redirectprinters:i:1
+redirectcomports:i:0
+redirectsmartcards:i:1
+redirectclipboard:i:1
+redirectposdevices:i:0
+redirectdirectx:i:1
+autoreconnection enabled:i:1
+authentication level:i:2
+prompt for credentials:i:0
+negotiate security layer:i:1
+remoteapplicationmode:i:0
+alternate shell:s:
+shell working directory:s:
+gatewayhostname:s:
+gatewayusagemethod:i:4
+gatewaycredentialssource:i:4
+gatewayprofileusagemethod:i:0
+promptcredentialonce:i:1
+use redirection server name:i:0
+username:s:{1}
+password 51:b:{2}";
+            }
+        }
+    }
+}

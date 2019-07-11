@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Diagnostics;
+
+namespace Tangh.Demo.VisualStudio.MyActiveX
+{
+    public partial class UserControl1 : UserControl, IObjectSafety
+    {
+        public UserControl1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnOpenNote_Click(object sender, EventArgs e)
+        {
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo("notepad.exe");
+            process.Start();
+        }
+
+        public void CloseNote()
+        {
+            Process[] process = Process.GetProcessesByName("notepad");
+
+            if (process.Length > 0)
+            {
+                process[0].Kill();
+            }
+        }
+
+        #region IObjectSafety 成员
+
+        public void GetInterfacceSafyOptions(int riid, out int pdwSupportedOptions, out int pdwEnabledOptions)
+        {
+            pdwSupportedOptions = 1;
+
+            pdwEnabledOptions = 2;
+        }
+
+        public void SetInterfaceSafetyOptions(int riid, int dwOptionsSetMask, int dwEnabledOptions)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+}

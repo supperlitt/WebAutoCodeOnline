@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.ServiceModel;
+
+namespace Contract
+{
+    /// <summary>
+    /// ILogin类 
+    /// </summary>
+    [ServiceContract]
+    public interface ILogin
+    {
+        [OperationContract]
+        bool Login(string name, string pwd);
+    }
+}

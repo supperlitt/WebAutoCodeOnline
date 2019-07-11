@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Tangh.Demo.Excel
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            List<Model> list = new List<Model>();
+            list.Add(new Model() { Name = "Name1", Value = "Value1" });
+            list.Add(new Model() { Name = "Name1", Value = "Value1" });
+
+            this.dataGridView1.DataSource = list;
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            ExportTOExcel(this.dataGridView1, new SaveFileDialog());
+        }
+
+        //导出当前页DataGridView中的数据到EXcel中
+        public static void ExportTOExcel(DataGridView gridView, SaveFileDialog saveFileDialog)
+        {
+            if (gridView.Rows.Count == 0)
+            {
+                MessageBox.Show("没有数据可供导出！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else
+            {
+                saveFileDialog.Filter = "Execl files (*.xls)|*.xls";
+                saveFileDialog.FilterIndex = 0;
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.CreatePrompt = true;
+                saveFileDialog.Title = "导出文件保存路径";
+                saveFileDialog.ShowDialog();
+                string strName = saveFileDialog.FileName;
+                if (strName.Length != 0)
+                {
+                    System.Reflection.Missing miss = System.Reflection.Missing.Value;
+                    Microsoft.Office.Interop.Excel.ApplicationClass excel = new Microsoft.Office.Interop.Excel.ApplicationClass();
+                    excel.Application.Workbooks.Add(true); ;
+                    excel.Visible = false;//若是true，则在导出的时候会显示EXcel界面。
+                    if (excel == null)
+                    {
+                        MessageBox.Show("EXCEL无法启动！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    Microsoft.Office.Interop.Excel.Workbooks books = (Microsoft.Office.Interop.Excel.Workbooks)excel.Workbooks;
+                    Microsoft.Office.Interop.Excel.Workbook book = (Microsoft.Office.Interop.Excel.Workbook)(books.Add(miss));
+                    Microsoft.Office.Interop.Excel.Worksheet sheet = (Microsoft.Office.Interop.Excel.Worksheet)book.ActiveSheet;
+                    sheet.Name = "test";
+
+                    //生成字段名称
+                    for (int i = 0; i < gridView.ColumnCount; i++)
+                    {
+                        excel.Cells[1, i + 1] = gridView.Columns[i].HeaderText.ToString();
+                    }
+                    //填充数据
+                    for (int i = 0; i < gridView.RowCount - 1; i++)
+                    {
+                        for (int j = 0; j < gridView.ColumnCount; j++)
+                        {
+                            if (gridView[j, i].Value == typeof(string))
+                            {
+                                excel.Cells[i + 2, j + 1] = "" + gridView[i, j].Value.ToString();
+                            }
+                            else
+                            {
+                                excel.Cells[i + 2, j + 1] = gridView[j, i].Value.ToString();
+                            }
+                        }
+                    }
+                    sheet.SaveAs(strName, miss, miss, miss, miss, miss, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, miss, miss, miss);
+                    book.Close(false, miss, miss);
+                    books.Close();
+                    excel.Quit();
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(sheet);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(book);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(books);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+                    GC.Collect();
+                    MessageBox.Show("数据已经成功导出到：" + saveFileDialog.FileName.ToString(), "导出完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+    }
+
+    public class Model
+    {
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        public string Value
+        {
+            get;
+            set;
+        }
+    }
+}

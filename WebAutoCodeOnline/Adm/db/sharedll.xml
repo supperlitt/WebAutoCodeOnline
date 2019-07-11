@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <ShareDLLS Title1="C#共享DLL下载" Title2="C#共享DLL下载">
+    <ShareDLL ZipPath="DotRas.zip" Name="DotRas">
+      <![CDATA[用于创建vpn或ADSL拨号连接<a href="http://dotras.codeplex.com/">官网下载</a>]]>
+    </ShareDLL>
+    <ShareDLL ZipPath="NPOI.zip" Name="NPOI">
+      <![CDATA[在不依赖于Office的环境中可以直接操作Excel]]>
+    </ShareDLL>
+    <ShareDLL ZipPath="OpenPop.zip" Name="OpenPop">
+      <![CDATA[可以用于开通了pop邮箱的账户进行pop接收邮件]]>
+    </ShareDLL>
+    <ShareDLL ZipPath="System.Data.SQLite.zip" Name="System.Data.SQLite 合集">
+      <![CDATA[sqlite本地数据库，不需要额外安装数据库软件]]>
+    </ShareDLL>
+    <ShareDLL ZipPath="Sqlite_2.0_and_4.0.zip" Name="System.Data.SQLite 2 and 4">
+      <![CDATA[sqlite本地数据库，DLL,包含2.0和4.0，请使用x86模式]]>
+    </ShareDLL>
+    <ShareDLL ZipPath="Sharppacp.zip" Name="Sharppacp">
+      <![CDATA[C#使用类似wincap抓包网络数据]]>
+    </ShareDLL>
+  </ShareDLLS>
+</Root>

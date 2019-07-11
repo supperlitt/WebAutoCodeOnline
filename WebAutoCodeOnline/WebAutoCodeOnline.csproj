@@ -1,0 +1,632 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3546A60B-78E9-4FAD-8566-C1C85DE86447}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebAutoCodeOnline</RootNamespace>
+    <AssemblyName>WebAutoCodeOnline</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\DLL\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Adm\db\sharedll.xml" />
+    <Content Include="Adm\html\friendly_dll.html" />
+    <Content Include="Adm\html\share_dll_download.html" />
+    <Content Include="Adm\manager\AboutAndHelpManager.aspx" />
+    <Content Include="Adm\assets\css\4095-rtl.min.css" />
+    <Content Include="Adm\assets\css\animate.min.css" />
+    <Content Include="Adm\assets\css\beyond-rtl.min.css" />
+    <Content Include="Adm\assets\css\beyond.min.css" />
+    <Content Include="Adm\assets\css\bootstrap-rtl.min.css" />
+    <Content Include="Adm\assets\css\bootstrap.min.css" />
+    <Content Include="Adm\assets\css\dataTables.bootstrap.css" />
+    <Content Include="Adm\assets\css\demo.min.css" />
+    <Content Include="Adm\assets\css\font-awesome.min.css" />
+    <Content Include="Adm\assets\css\skins\azure.min.css" />
+    <Content Include="Adm\assets\css\skins\black.min.css" />
+    <Content Include="Adm\assets\css\skins\blue.min.css" />
+    <Content Include="Adm\assets\css\skins\darkblue.min.css" />
+    <Content Include="Adm\assets\css\skins\darkred.min.css" />
+    <Content Include="Adm\assets\css\skins\deepblue.min.css" />
+    <Content Include="Adm\assets\css\skins\gray.min.css" />
+    <Content Include="Adm\assets\css\skins\green.min.css" />
+    <Content Include="Adm\assets\css\skins\orange.min.css" />
+    <Content Include="Adm\assets\css\skins\pink.min.css" />
+    <Content Include="Adm\assets\css\skins\purple.min.css" />
+    <Content Include="Adm\assets\css\skins\teal.min.css" />
+    <Content Include="Adm\assets\css\typicons.min.css" />
+    <Content Include="Adm\assets\css\weather-icons.min.css" />
+    <Content Include="Adm\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Adm\assets\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Adm\assets\fonts\typicons.svg" />
+    <Content Include="Adm\assets\fonts\weathericons-regular-webfont.svg" />
+    <Content Include="Adm\assets\img\attach-blue.png" />
+    <Content Include="Adm\assets\img\attach-green.png" />
+    <Content Include="Adm\assets\img\attach-red.png" />
+    <Content Include="Adm\assets\img\attach-yellow.png" />
+    <Content Include="Adm\assets\img\avatars\adam-jansen.jpg" />
+    <Content Include="Adm\assets\img\avatars\bing.png" />
+    <Content Include="Adm\assets\img\avatars\divyia.jpg" />
+    <Content Include="Adm\assets\img\avatars\Javi-Jimenez.jpg" />
+    <Content Include="Adm\assets\img\avatars\John-Smith.jpg" />
+    <Content Include="Adm\assets\img\avatars\Matt-Cheuvront.jpg" />
+    <Content Include="Adm\assets\img\avatars\Nicolai-Larson.jpg" />
+    <Content Include="Adm\assets\img\avatars\Osvaldus-Valutis.jpg" />
+    <Content Include="Adm\assets\img\avatars\Sergey-Azovskiy.jpg" />
+    <Content Include="Adm\assets\img\avatars\Stephanie-Walter.jpg" />
+    <Content Include="Adm\assets\img\favicon.png" />
+    <Content Include="Adm\assets\img\jquery.minicolors.png" />
+    <Content Include="Adm\assets\img\logo-inverted.png" />
+    <Content Include="Adm\assets\img\logo-rtl.png" />
+    <Content Include="Adm\assets\img\logo.png" />
+    <Content Include="Adm\assets\img\sort_asc.png" />
+    <Content Include="Adm\assets\img\sort_asc_disabled.png" />
+    <Content Include="Adm\assets\img\sort_both.png" />
+    <Content Include="Adm\assets\img\sort_desc.png" />
+    <Content Include="Adm\assets\img\sort_desc_disabled.png" />
+    <Content Include="Adm\assets\img\temp1.png" />
+    <Content Include="Adm\assets\js\beyond.js" />
+    <Content Include="Adm\assets\js\beyond.min.js" />
+    <Content Include="Adm\assets\js\bootbox\bootbox.js" />
+    <Content Include="Adm\assets\js\bootstrap.min.js" />
+    <Content Include="Adm\assets\js\charts\chartjs\Chart.js" />
+    <Content Include="Adm\assets\js\charts\chartjs\chartjs-init.js" />
+    <Content Include="Adm\assets\js\charts\easypiechart\easypiechart-init.js" />
+    <Content Include="Adm\assets\js\charts\easypiechart\jquery.easypiechart.js" />
+    <Content Include="Adm\assets\js\charts\flot\flot-init.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.crosshair.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.orderBars.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.pie.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.resize.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.selection.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.stack.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.time.js" />
+    <Content Include="Adm\assets\js\charts\flot\jquery.flot.tooltip.js" />
+    <Content Include="Adm\assets\js\charts\morris\morris-init.js" />
+    <Content Include="Adm\assets\js\charts\morris\morris.js" />
+    <Content Include="Adm\assets\js\charts\morris\raphael-2.0.2.min.js" />
+    <Content Include="Adm\assets\js\charts\sparkline\jquery.sparkline.js" />
+    <Content Include="Adm\assets\js\charts\sparkline\sparkline-init.js" />
+    <Content Include="Adm\assets\js\colorpicker\jquery.minicolors.js" />
+    <Content Include="Adm\assets\js\datatable\assets\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Adm\assets\js\datatable\datatables-init.js" />
+    <Content Include="Adm\assets\js\datatable\dataTables.bootstrap.min.js" />
+    <Content Include="Adm\assets\js\datatable\dataTables.tableTools.min.js" />
+    <Content Include="Adm\assets\js\datatable\jquery.dataTables.min.js" />
+    <Content Include="Adm\assets\js\datatable\ZeroClipboard.js" />
+    <Content Include="Adm\assets\js\datetime\bootstrap-datepicker.js" />
+    <Content Include="Adm\assets\js\datetime\bootstrap-timepicker.js" />
+    <Content Include="Adm\assets\js\datetime\daterangepicker.js" />
+    <Content Include="Adm\assets\js\datetime\moment.js" />
+    <Content Include="Adm\assets\js\editors\summernote\summernote.js" />
+    <Content Include="Adm\assets\js\editors\wysiwyg\bootstrap-wysiwyg.js" />
+    <Content Include="Adm\assets\js\editors\wysiwyg\jquery.hotkeys.js" />
+    <Content Include="Adm\assets\js\editors\wysiwyg\prettify.js" />
+    <Content Include="Adm\assets\js\fuelux\spinner\fuelux.spinner.min.js" />
+    <Content Include="Adm\assets\js\fuelux\treeview\tree-custom.min.js" />
+    <Content Include="Adm\assets\js\fuelux\treeview\treeview-init.js" />
+    <Content Include="Adm\assets\js\fuelux\wizard\wizard-custom.js" />
+    <Content Include="Adm\assets\js\fullcalendar\fullcalendar.js" />
+    <Content Include="Adm\assets\js\jquery-2.0.3.min.js" />
+    <Content Include="Adm\assets\js\jquery-ui-1.10.4.custom.js" />
+    <Content Include="Adm\assets\js\knob\jquery.knob.js" />
+    <Content Include="Adm\assets\js\nestable\jquery.nestable.min.js" />
+    <Content Include="Adm\assets\js\select2\select2.js" />
+    <Content Include="Adm\assets\js\skins.min.js" />
+    <Content Include="Adm\assets\js\slider\jQRangeSlider\jQAllRangeSliders-withRuler-min.js" />
+    <Content Include="Adm\assets\js\slider\jquery.nouislider.js" />
+    <Content Include="Adm\assets\js\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Adm\assets\js\tagsinput\bootstrap-tagsinput.js" />
+    <Content Include="Adm\assets\js\textarea\jquery.autosize.js" />
+    <Content Include="Adm\assets\js\toastr\toastr.js" />
+    <Content Include="Adm\assets\js\validation\bootstrapValidator.js" />
+    <Content Include="Adm\manager\FindNewManager.aspx" />
+    <Content Include="Adm\manager\HelperCodeManager.aspx" />
+    <Content Include="Adm\image\ex.jpg" />
+    <Content Include="Adm\manager\LeaveMsgManager.aspx" />
+    <Content Include="Adm\login.html" />
+    <Content Include="Adm\Manager.aspx" />
+    <Content Include="Adm\manager\SettingParamsManager.aspx" />
+    <Content Include="Adm\None.aspx" />
+    <Content Include="Adm\manager\NotifyForwardManager.aspx" />
+    <Content Include="Adm\manager\OtherLibraryManager.aspx" />
+    <Content Include="Adm\manager\ShareDllManager.aspx" />
+    <Content Include="App_Data\SocketServer\CleanSolution.bat.txt" />
+    <Content Include="App_Data\SocketServer\SocketClient\app.config.txt" />
+    <Content Include="App_Data\SocketServer\SocketClient\Program.cs.txt" />
+    <Content Include="App_Data\SocketServer\SocketClient\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\SocketServer\SocketClient\SocketClient.csproj.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer.sln.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer.suo.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer\app.config.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer\Program.cs.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\SocketServer\SocketServer\SocketServer.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Code\Config.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Code\Core.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Code\Notify.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Code\SecurityMD5.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Code\Submit.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Default.aspx.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Default.aspx.designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Default.aspx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\notify_url.aspx.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\notify_url.aspx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\readme.txt.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\return_url.aspx.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\return_url.aspx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Tangh.Demo.Alipay.WebUI.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.Alipay.WebUI\Web.config.txt" />
+    <Content Include="App_Data\Tangh.Demo.Config.ConsoleUI\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Config.ConsoleUI\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Config.ConsoleUI\Tangh.Demo.Config.ConsoleUI.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.Config.ConsoleUI\test.config.txt" />
+    <Content Include="App_Data\Tangh.Demo.DeepInConsole.HostUI\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.DeepInConsole.HostUI\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.DeepInConsole.HostUI\Tangh.Demo.DeepInConsole.HostUI.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\app.config.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Pop3Helper.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Properties\Resources.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Properties\Resources.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Properties\Settings.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Properties\Settings.settings.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\SmtpHelper.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.EmailTool\Tangh.Demo.EmailTool.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\app.config.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\ExcelHelper.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Form1.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Form1.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Form1.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Properties\Resources.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Properties\Resources.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Properties\Settings.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Properties\Settings.settings.txt" />
+    <Content Include="App_Data\Tangh.Demo.Excel\Tangh.Demo.Excel.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.HttpTool\HttpHelper.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.HttpTool\JsTool.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.HttpTool\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.HttpTool\Tangh.Demo.HttpTool.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.HttpTool\Tool.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.MicrosoftEL.MethodAOP\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.MicrosoftEL.MethodAOP\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.MicrosoftEL.MethodAOP\Tangh.Demo.MicrosoftEL.MethodAOP.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Form1.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Form1.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Form1.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Properties\Resources.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Properties\Resources.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Properties\Settings.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Properties\Settings.settings.txt" />
+    <Content Include="App_Data\Tangh.Demo.Remote.WinUI\Tangh.Demo.Remote.WinUI.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Mstscpw.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Program.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Properties\Resources.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Properties\Resources.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Properties\Settings.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Properties\Settings.settings.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\RemoteTool.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\RemoteTool.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\RemoteTool.resx.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MSTSCRemote\Tangh.Demo.VisualStudio.MSTSCRemote.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\app.config.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\IObjectSafety.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\Tangh.Demo.VisualStudio.MyActiveX.csproj.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\UserControl1.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\UserControl1.Designer.cs.txt" />
+    <Content Include="App_Data\Tangh.Demo.VisualStudio.MyActiveX\UserControl1.resx.txt" />
+    <Content Include="App_Data\WCF_DEMO\ConsoleServer\App.config.txt" />
+    <Content Include="App_Data\WCF_DEMO\ConsoleServer\ConsoleServer.csproj.txt" />
+    <Content Include="App_Data\WCF_DEMO\ConsoleServer\Program.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\ConsoleServer\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\Contract\Contract.csproj.txt" />
+    <Content Include="App_Data\WCF_DEMO\Contract\ILogin.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\Contract\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\Server\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\Server\Server.csproj.txt" />
+    <Content Include="App_Data\WCF_DEMO\Server\ServiceLogin.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\WebWcfService\Properties\AssemblyInfo.cs.txt" />
+    <Content Include="App_Data\WCF_DEMO\WebWcfService\Service.svc.txt" />
+    <Content Include="App_Data\WCF_DEMO\WebWcfService\Web.config.txt" />
+    <Content Include="App_Data\WCF_DEMO\WebWcfService\WebWcfService.csproj.txt" />
+    <Content Include="Down\DotRas.zip" />
+    <Content Include="Down\mysqlhelper.cs.file" />
+    <Content Include="Down\NPOI.zip" />
+    <Content Include="Down\OpenPop.zip" />
+    <Content Include="Down\sqlhelper.cs.file" />
+    <Content Include="Down\sqlitehelper.cs.file" />
+    <Content Include="Global.asax" />
+    <Content Include="image\headcarouse\1.jpg" />
+    <Content Include="image\lizi\easyui.jpg" />
+    <Content Include="image\lizi\normal.jpg" />
+    <Content Include="image\lizi\normal_mysql.jpg" />
+    <Content Include="image\lizi\easyui_mysql.jpg" />
+    <Content Include="index.html" />
+    <Content Include="Info\51jobinfo.html" />
+    <Content Include="Info\zhaopininfo.html" />
+    <Content Include="Info\51jobinfo_top_arch.html" />
+    <Content Include="Info\zhaopininfo_top_arch.html" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap-theme.css" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap-theme.min.css" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap.css" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap.min.css" />
+    <Content Include="js\bootstrap-3.3.0-dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="js\bootstrap-3.3.0-dist\js\bootstrap.js" />
+    <Content Include="js\bootstrap-3.3.0-dist\js\bootstrap.min.js" />
+    <Content Include="js\bootstrap-3.3.0-dist\js\npm.js" />
+    <Content Include="js\bootstrap-datetimepicker\css\bootstrap-datetimepicker.css" />
+    <Content Include="js\bootstrap-datetimepicker\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="js\bootstrap-datetimepicker\js\bootstrap-datetimepicker.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\bootstrap-datetimepicker.min.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ar.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.az.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.bg.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.bn.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ca.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.cs.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.da.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.de.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ee.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.el.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.es.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.fi.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.fr.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.he.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hr.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hu.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hy.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.id.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.is.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.it.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ja.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ka.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ko.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.lt.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.lv.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ms.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.nb.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.nl.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.no.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pl.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pt-BR.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pt.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ro.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.rs-latin.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.rs.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ru.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sk.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sl.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sv.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sw.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.th.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.tr.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ua.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.uk.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="js\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="js\jquery-treeview\images\file.gif" />
+    <Content Include="js\jquery-treeview\images\folder-closed.gif" />
+    <Content Include="js\jquery-treeview\images\folder.gif" />
+    <Content Include="js\jquery-treeview\images\minus.gif" />
+    <Content Include="js\jquery-treeview\images\plus.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-black-line.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-black.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-default-line.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-default.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-famfamfam.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-gray-line.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-gray.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-red-line.gif" />
+    <Content Include="js\jquery-treeview\images\treeview-red.gif" />
+    <Content Include="js\jquery-treeview\jquery.treeview.async.js" />
+    <Content Include="js\jquery-treeview\jquery.treeview.css" />
+    <Content Include="js\jquery-treeview\jquery.treeview.js" />
+    <Content Include="js\jquery-treeview\jquery.treeview.min.js" />
+    <Content Include="js\jquery-treeview\jquery.treeview.pack.js" />
+    <Content Include="js\jquery-treeview\lib\jquery.cookie.js" />
+    <Content Include="js\jquery-treeview\lib\jquery.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="js\jsencrypt-master\jquery.js" />
+    <Content Include="js\jsencrypt-master\jsencrypt.js" />
+    <Content Include="js\jsencrypt-master\jsencrypt.min.js" />
+    <Content Include="js\load.js" />
+    <Content Include="js\codehighlight\readme.txt" />
+    <Content Include="js\codehighlight\shBrushCSharp.js" />
+    <Content Include="js\codehighlight\shCore.js" />
+    <Content Include="js\codehighlight\SyntaxHighlighter.css" />
+    <Content Include="Layout\about_and_thanks.html" />
+    <Content Include="Layout\csharp_code_download.html" />
+    <Content Include="Layout\csharp_demo_all.html" />
+    <Content Include="Layout\csharp_encode.html" />
+    <Content Include="Layout\csharp_encrpty.html" />
+    <Content Include="Layout\csharp_find_new.html" />
+    <Content Include="Layout\csharp_normal.html" />
+    <Content Include="Layout\csharp_create_code_online.html" />
+    <Content Include="Layout\csharp_online_tools.html" />
+    <Content Include="Layout\json_to_csharp.html" />
+    <Content Include="Layout\recommend_and_share.html" />
+    <Content Include="Layout\seg_and_message.html" />
+    <Content Include="Layout\csharp_easyui.html" />
+    <Content Include="Layout\share_dll_download.html" />
+    <Content Include="Layout\show_demo_info.html" />
+    <Content Include="Layout\friendly_dll.html" />
+    <Content Include="Layout\csharp_api.html" />
+    <Content Include="Layout\csharp_bootstrap.html" />
+    <Content Include="Layout\csharp_encrpty_new.html" />
+    <Content Include="Layout\share_soft.html" />
+    <Content Include="Layout\csharp_online_soft_addshell.html" />
+    <Content Include="Web.config" />
+    <Content Include="Adm\db\friendlydll.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adm\db\ShareDLLXml.cs" />
+    <Compile Include="Adm\manager\AboutAndHelpManager.aspx.cs">
+      <DependentUpon>AboutAndHelpManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\AboutAndHelpManager.aspx.designer.cs">
+      <DependentUpon>AboutAndHelpManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\FindNewManager.aspx.cs">
+      <DependentUpon>FindNewManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\FindNewManager.aspx.designer.cs">
+      <DependentUpon>FindNewManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\HelperCodeManager.aspx.cs">
+      <DependentUpon>HelperCodeManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\HelperCodeManager.aspx.designer.cs">
+      <DependentUpon>HelperCodeManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\LeaveMsgManager.aspx.cs">
+      <DependentUpon>LeaveMsgManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\LeaveMsgManager.aspx.designer.cs">
+      <DependentUpon>LeaveMsgManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\Manager.aspx.cs">
+      <DependentUpon>Manager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\Manager.aspx.designer.cs">
+      <DependentUpon>Manager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\SettingParamsManager.aspx.cs">
+      <DependentUpon>SettingParamsManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\SettingParamsManager.aspx.designer.cs">
+      <DependentUpon>SettingParamsManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\None.aspx.cs">
+      <DependentUpon>None.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\None.aspx.designer.cs">
+      <DependentUpon>None.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\NotifyForwardManager.aspx.cs">
+      <DependentUpon>NotifyForwardManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\NotifyForwardManager.aspx.designer.cs">
+      <DependentUpon>NotifyForwardManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\OtherLibraryManager.aspx.cs">
+      <DependentUpon>OtherLibraryManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\OtherLibraryManager.aspx.designer.cs">
+      <DependentUpon>OtherLibraryManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adm\manager\ShareDllManager.aspx.cs">
+      <DependentUpon>ShareDllManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adm\manager\ShareDllManager.aspx.designer.cs">
+      <DependentUpon>ShareDllManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Api.ashx.cs">
+      <DependentUpon>Api.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\DebugHandler.ashx.cs">
+      <DependentUpon>DebugHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Cache\DownZipCache.cs" />
+    <Compile Include="Cache\IPCacheManager.cs" />
+    <Compile Include="Cache\ProjectFileCache.cs" />
+    <Compile Include="Cache\AccountCacheManager.cs" />
+    <Compile Include="DAL\ArticleDAL.cs" />
+    <Compile Include="Cache\ProjectCache.cs" />
+    <Compile Include="DAL\ConnectionFactory.cs" />
+    <Compile Include="DAL\DirCodeInfoDAL.cs" />
+    <Compile Include="DAL\LeaveMsgDAL.cs" />
+    <Compile Include="DAL\ProjectTypeInfoDAL.cs" />
+    <Compile Include="DAL\UserInfoDAL.cs" />
+    <Compile Include="Adm\LoginApi.ashx.cs">
+      <DependentUpon>LoginApi.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Article.cs" />
+    <Compile Include="Model\OpLog.cs" />
+    <Compile Include="DAL\OpLogDAL.cs" />
+    <Compile Include="DAL\SqlHelper.cs" />
+    <Compile Include="Down.ashx.cs">
+      <DependentUpon>Down.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Location.ashx.cs">
+      <DependentUpon>Location.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MySqlDAL\ArticleDAL.cs" />
+    <Compile Include="MySqlDAL\DirCodeInfoDAL.cs" />
+    <Compile Include="MySqlDAL\LeaveMsgDAL.cs" />
+    <Compile Include="MySqlDAL\OpLogDAL.cs" />
+    <Compile Include="MySqlDAL\ProjectTypeInfoDAL.cs" />
+    <Compile Include="MySqlDAL\Tool.cs" />
+    <Compile Include="MySqlDAL\UserInfoDAL.cs" />
+    <Compile Include="Tool\HelpEncrypt.cs" />
+    <Compile Include="DAL\Tool.cs" />
+    <Compile Include="Model\LeaveMsg.cs" />
+    <Compile Include="Model\ProjectTypeInfo.cs" />
+    <Compile Include="Model\UserInfo.cs" />
+    <Compile Include="MySqlDAL\ConnectionFactory.cs" />
+    <Compile Include="MySqlDAL\MySqlHelper2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Adm\db\FriendlyDllXml.cs" />
+    <Compile Include="Tool\Logs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Location.ashx" />
+    <Content Include="Api.ashx" />
+    <Content Include="Down.ashx" />
+    <Content Include="Down\System.Data.SQLite.zip" />
+    <Content Include="Adm\LoginApi.ashx" />
+    <Content Include="Api\DebugHandler.ashx" />
+    <Content Include="Adm\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Adm\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Adm\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Adm\assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Adm\assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Adm\assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Adm\assets\fonts\typicons.eot" />
+    <Content Include="Adm\assets\fonts\typicons.ttf" />
+    <Content Include="Adm\assets\fonts\typicons.woff" />
+    <Content Include="Adm\assets\fonts\weathericons-regular-webfont.eot" />
+    <Content Include="Adm\assets\fonts\weathericons-regular-webfont.ttf" />
+    <Content Include="Adm\assets\fonts\weathericons-regular-webfont.woff" />
+    <Content Include="Down\Sqlite_2.0_and_4.0.zip" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap-theme.css.map" />
+    <Content Include="js\bootstrap-3.3.0-dist\css\bootstrap.css.map" />
+    <Content Include="js\bootstrap-3.3.0-dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="js\bootstrap-3.3.0-dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="js\bootstrap-3.3.0-dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Down\Sharppacp.zip" />
+    <None Include="Properties\PublishProfiles\tt.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeHelper\CodeHelper.csproj">
+      <Project>{c3861a9f-3171-4d77-9922-2c64916fea8c}</Project>
+      <Name>CodeHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{cc80777c-2c80-4116-a565-73ef345e308d}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{b1a5ae22-4353-4548-a23b-f77e338a99e5}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Soft\" />
+    <Folder Include="TEMP_EXE\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:7396/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

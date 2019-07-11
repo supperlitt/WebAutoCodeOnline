@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C3861A9F-3171-4D77-9922-2C64916FEA8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeHelper</RootNamespace>
+    <AssemblyName>CodeHelper</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bootstrap_MSSql\BootstrapAspxCsHelper.cs" />
+    <Compile Include="Bootstrap_MSSql\BootstrapAspxHelper.cs" />
+    <Compile Include="Bootstrap_MSSql\BootstrapDALHelper.cs" />
+    <Compile Include="Bootstrap_MSSql\BootstrapFactoryHelper.cs" />
+    <Compile Include="Bootstrap_MSSql\BootstrapHelper.cs" />
+    <Compile Include="Bootstrap_MSSql\BootstrapModelHelper.cs" />
+    <Compile Include="Bootstrap_MySql\BootstrapMySqlDALHelper.cs" />
+    <Compile Include="Bootstrap_MySql\BootstrapMySqlFactoryHelper.cs" />
+    <Compile Include="Bootstrap_MySql\MySqlBootstrapHelper.cs" />
+    <Compile Include="Bootstrap_Xml\BootstrapXmlDALHelper.cs" />
+    <Compile Include="Bootstrap_Xml\BootstrapXmlFactoryHelper.cs" />
+    <Compile Include="Bootstrap_Xml\XmlBootstrapHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIAspxCsHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIAspxHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIDALHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIFactoryHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIHelper.cs" />
+    <Compile Include="EasyUI_MSSql\EasyUIModelHelper.cs" />
+    <Compile Include="ExtendMethod.cs" />
+    <Compile Include="IHelper.cs" />
+    <Compile Include="Code\MySqlCreateMySqlHelper.cs" />
+    <Compile Include="EasyUI_MySql\EasyUIMySqlFactoryHelper.cs" />
+    <Compile Include="EasyUI_MySql\EasyUIMySqlDALHelper.cs" />
+    <Compile Include="EasyUI_MySql\MySqlEasyUIHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Code\SqlCreateSqlHelper.cs" />
+    <Compile Include="TableHelper.cs" />
+    <Compile Include="UIHelper.cs" />
+    <Compile Include="Bootstrap_Sqlite\BootstrapSqliteDALHelper.cs" />
+    <Compile Include="Bootstrap_Sqlite\BootstrapSqliteFactoryHelper.cs" />
+    <Compile Include="Bootstrap_Sqlite\SqliteBootstrapHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{cc80777c-2c80-4116-a565-73ef345e308d}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{b1a5ae22-4353-4548-a23b-f77e338a99e5}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

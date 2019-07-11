@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.Script.Serialization;
+
+namespace {{NameSpace}}
+{
+    public partial class {{PageName}} : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Request.HttpMethod.ToUpper() == "POST")
+            {
+                string type = Request.QueryString["type"];
+                switch (type)
+                {
+                    case "load":
+                        LoadData();
+                        break;
+                    case "add":
+                        this.AddAndUpdate();
+                        break;
+					case "delete":
+						this.DeleteModel();
+						break;
+                }
+
+                Response.End();
+            }
+        }
+
+        private void AddAndUpdate()
+        {
+            {{AddAndUpdteStr}}
+            {{ModelName}} model = new {{ModelName}}();
+            {{CreateModel}}
+            {{DALName}} dal = new {{DALName}}();
+            if (string.IsNullOrEmpty({{keyId}}))
+            {
+                dal.Add{{ClassName}}(model);
+            }
+            else
+            {
+                dal.Update{{ClassName}}(model);
+            }
+
+            Response.Write("0");
+        }
+
+        private void LoadData()
+        {
+            int page = Convert.ToInt32(Request.Form["page"]);
+            int pageSize = Convert.ToInt32(Request.Form["pageSize"]);
+			{{QueryData}}
+            {{DALName}} dal = new {{DALName}}();
+            var list = dal.QueryList(page, pageSize{{QueryList}});
+            int itemCount = dal.QueryListCount({{QueryListCount}});
+            int pageCount = (int)Math.Ceiling((double)itemCount / (double)pageSize);
+			JavaScriptSerializer js = new JavaScriptSerializer();
+            var str = js.Serialize(new { PageCount = pageCount, ItemCount = itemCount, Data = list });
+            Response.Write(str);
+        }
+
+		private void DeleteModel()
+		{
+			string id = Request.Form["id"];
+			{{DeleteStr}}
+			{{DALName}} dal = new {{DALName}}();
+			dal.Delete{{ClassName}}(idData);
+			Response.Write("0");
+		}
+    }
+}

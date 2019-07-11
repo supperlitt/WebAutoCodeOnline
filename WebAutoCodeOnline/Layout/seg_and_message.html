@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta name="description" content="C# 建议&留言" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="我要调试,51调试,51debug,C#在线代码生成器" name="Keywords" />
+    <meta name="description" content="51debug是程序员的好助手，帮助各种程序员进行快速开发，提高开发效率和分享代码库" />
+    <title>我要调试 - 建议&留言</title>
+
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="../js/bootstrap-3.3.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- 可选的Bootstrap主题文件（一般不使用） -->
+    <link href="../js/bootstrap-3.3.0-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../js/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../js/bootstrap-3.3.0-dist/js/bootstrap.min.js"></script>
+
+    <!-- 初始化界面js -->
+    <script src="../js/load.js?20161108_2"></script>
+</head>
+<body>
+    <!-- 导航 -->
+    <div id="nav"></div>
+
+    <div class="container">
+        <h2>建议&留言
+        </h2>
+        <div class="row">
+            <p>
+            </p>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">建议&留言</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item active">
+                                <h4 class="list-group-item-heading">来了，给点建议吧
+                                </h4>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <p class="list-group-item-text">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row form-group">
+                                            <div class="col-md-6" style="margin-bottom: 5px;">
+                                                <input type="text" class="form-control" id="txtNickName" placeholder="请输入昵称">
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" id="txtEmail" placeholder="请输入邮箱[邮箱不会显示在留言中]">
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding: 0 15px;">
+                                            <textarea id="txtContent" name="txtContent" class="form-control" rows="6"></textarea>
+                                        </div>
+                                        <div class="form-group" style="padding: 0 15px;">
+                                            <button onclick="dosubmit();" id="btnsubmit" type="button" class="btn btn-default">留言|建议</button>
+                                            <label class="info text-success hidden" id="lblSuccess"></label>
+                                            <label class="info text-warning hidden" id="lblError"></label>
+                                        </div>
+                                    </form>
+                                </p>
+                            </a>
+                        </div>
+                        <script type="text/javascript">
+                            function dosubmit() {
+                                $("#btnsubmit").addClass("disabled");
+                                var nickName = $("#txtNickName").val();
+                                var email = $("#txtEmail").val();
+                                var content = $("#txtContent").val();
+                                if (nickName != "" && email != "" && content != "" && nickName.length <= 25 && email.length <= 100 && content.length <= 200) {
+                                    var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+                                    isok = reg.test(email);
+                                    if (!isok) {
+                                        alert("请输入正确的邮箱");
+                                        $("#btnsubmit").removeClass("disabled");
+                                    }
+                                    else {
+                                        $.post("../Api.ashx",
+                                            { "type": "leavemsg", "nickname": encodeURI(nickName), "email": encodeURI(email), "content": encodeURI(content).replace("+", "%2b") },
+                                            function (data) {
+                                                if (data.Result == 0) {
+                                                    $("#lblError").hide();
+                                                    $("#lblSuccess").hide();
+
+                                                    $("#lblSuccess").show();
+                                                    $("#lblSuccess").text(data.Msg);
+
+                                                    $("#txtNickName").val("");
+                                                    $("#txtEmail").val("");
+                                                    $("#txtContent").text("");
+                                                } else {
+                                                    $("#lblError").hide();
+                                                    $("#lblSuccess").hide();
+
+                                                    $("#lblError").show();
+                                                    $("#lblError").text(data.Msg);
+                                                }
+
+                                                $("#btnsubmit").removeClass("disabled");
+                                            }
+                                       , "json");
+                                    }
+                                } else {
+                                    $("#btnsubmit").removeClass("disabled");
+                                }
+                            }
+                        </script>
+                        <div id="msgResult">
+                        </div>
+                        <div id="msgPager">
+                        </div>
+                        <script type="text/javascript">
+                            var pageSize = 5;
+                            $(document).ready(function () {
+                                loadMsg(1, pageSize);
+                            });
+
+                            function loadMsg(page, pageSize) {
+                                $("#msgResult").empty();
+                                $("#msgResult").append("<div class=\"list-group\"><p class=\"list-group-item-text\">内容加载中...</p></div>");
+                                $.post("../Api.ashx", { "type": "loadmsg", "page": page, "pagesize": pageSize }, function (data) {
+                                    var content = "";
+                                    for (var index in data.Result) {
+                                        var model = data.Result[index];
+                                        content += "<div class=\"list-group\"><a href=\"#\" class=\"list-group-item\"><p class=\"list-group-item-text\">";
+                                        content += model.LeaveContent;
+                                        content += "</p></a><a href=\"#\" class=\"list-group-item\"><p class=\"list-group-item-text text-right small\">";
+                                        content += model.NickName;
+                                        content += " &nbsp;&nbsp; ";
+                                        content += model.LeaveTime;
+                                        content += "</p></a></div>";
+                                    }
+
+                                    $("#msgResult").empty();
+                                    $("#msgResult").append(content);
+
+                                    // 构造页码
+                                    var pageContent = "<ul class=\"pagination\"><li><a href=\"javascript:loadMsg(1," + pageSize + ");\">&laquo;</a></li>";
+                                    var startI = 1;
+                                    var endI = 1;
+                                    if (data.PageCount > 5) {
+                                        if ((page - 2) >= 1 && (page + 2) <= data.PageCount) {
+                                            startI = page - 2;
+                                            endI = page + 2;
+                                        }
+                                        else if ((page - 2) < 1) {
+                                            startI = 1;
+                                            endI = 5;
+                                        }
+                                        else {
+                                            startI = (data.PageCount - 4);
+                                            endI = data.PageCount;
+                                        }
+                                    } else {
+                                        startI = 1;
+                                        endI = data.PageCount;
+                                    }
+
+                                    for (var i = startI; i <= endI; i++) {
+                                        if (page == i) {
+                                            pageContent += "<li class=\"active\"><a href=\"javascript:void();\">" + i + "</a></li>";
+                                        }
+                                        else {
+                                            pageContent += "<li><a href=\"javascript:loadMsg(" + i + "," + pageSize + ");\">" + i + "</a></li>";
+                                        }
+                                    }
+
+                                    pageContent += "<li><a href=\"javascript:loadMsg(" + data.PageCount + "," + pageSize + ");\">&raquo;</a></li></ul>";
+                                    $("#msgPager").empty();
+                                    $("#msgPager").append(pageContent);
+                                }, 'json');
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 站点地图&友情链接 -->
+    <div id="sitemap"></div>
+
+    <!-- Fotter -->
+    <div id="fotter"></div>
+</body>
+</html>

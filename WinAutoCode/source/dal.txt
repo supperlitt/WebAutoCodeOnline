@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace {{NameSpace}}
+{
+    public class {{DALName}}
+    {
+        public bool Add{{ClassName}}({{ModelName}} model)
+        {
+			{{AddContent}}
+            {{AddParamsContent}}
+            using (SqlConnection sqlcn = ConnectionFactory.{{DataBase}})
+            {
+                return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;
+            }
+        }
+
+		public bool Update{{ClassName}}({{ModelName}} model)
+		{
+			{{UpdateContent}}
+			{{UpdateParamsContent}}
+			using (SqlConnection sqlcn = ConnectionFactory.{{DataBase}})
+            {
+                return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, updateSql, listParams.ToArray()) > 0;
+            }
+		}
+
+		public bool Delete{{ClassName}}({{DeleteKey}})
+		{
+			{{DeleteContent}}
+			{{DeleteParamsContent}}
+			using (SqlConnection sqlcn = ConnectionFactory.{{DataBase}})
+            {
+                return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, deleteSql, listParams.ToArray()) > 0;
+            }
+		}
+
+        public List<{{ModelName}}> QueryList{{QueryHead}}
+        {
+            string whereStr = string.Empty;
+            List<SqlParameter> listParams = new List<SqlParameter>();
+            {{QueryWhere}}
+            List<{{ModelName}}> result = new List<{{ModelName}}>();
+            string selectSql = string.Format(@"select * from
+	        (select top 100 percent *,ROW_NUMBER() over(order by {{keyId}}) as rownumber from
+	        {{TableName}} with(nolock) where 1=1 {0}) as T
+	        where rownumber between {1} and {2};", whereStr, ((page - 1) * pageSize + 1), page * pageSize);
+            using (SqlConnection sqlcn = ConnectionFactory.{{DataBase}})
+            {
+                using (SqlDataReader sqldr = SqlHelper.ExecuteReader(sqlcn, CommandType.Text, selectSql, listParams.ToArray()))
+                {
+                    {{ModelName}} model = null;
+                    while (sqldr.Read())
+                    {
+                        model = new {{ModelName}}();
+                        {{AssignContent}}
+                        result.Add(model);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public int QueryListCount{{QueryCountHead}}
+        {
+            string whereStr = string.Empty;
+            List<SqlParameter> listParams = new List<SqlParameter>();
+            {{QueryWhere}}
+            string selectSql = string.Format(@"select count(0) from {{TableName}} with(nolock) where 1=1 {0};", whereStr);
+            using (SqlConnection sqlcn = ConnectionFactory.{{DataBase}})
+            {
+                return Convert.ToInt32(SqlHelper.ExecuteScalar(sqlcn, CommandType.Text, selectSql, listParams.ToArray()));
+            }
+        }
+    }
+}

@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2D37B823-B9DA-4509-98BA-47ACEDCE339F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WinGenerateCodeDB</RootNamespace>
+    <AssemblyName>WinGenerateCodeDB</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\DLL\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache\PageCache.cs" />
+    <Compile Include="Child\FieldExtendFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Child\FieldExtendFrm.Designer.cs">
+      <DependentUpon>FieldExtendFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Code\AspxCs\AspxCsHelper_Bootstrap.cs" />
+    <Compile Include="Code\AspxCs\AspxCsHelper_EasyUI.cs" />
+    <Compile Include="Code\Aspx\AspxHelper_Bootstrap.cs" />
+    <Compile Include="Code\Aspx\AspxHelper_EasyUI.cs" />
+    <Compile Include="Code\Config\ConfigHelper.cs" />
+    <Compile Include="Code\Controllers\MvcControllerHelper.cs" />
+    <Compile Include="Code\DAL\DALHelper_Bootstrap_MsSql.cs" />
+    <Compile Include="Code\DAL\DALHelper_Bootstrap_MySql.cs" />
+    <Compile Include="Code\DAL\DALHelper_Dapper.cs" />
+    <Compile Include="Code\DAL\DALHelper_EasyUI_MsSql.cs" />
+    <Compile Include="Code\DAL\DALHelper_EasyUI_MySql.cs" />
+    <Compile Include="Code\ExtendMethod.cs" />
+    <Compile Include="Code\Factory\FactoryHelper_Dapper_MsSql.cs" />
+    <Compile Include="Code\Factory\FactoryHelper_Dapper_MySql.cs" />
+    <Compile Include="Code\Factory\FactoryHelper_MySql.cs" />
+    <Compile Include="Code\Factory\FactoryHelper_MsSql.cs" />
+    <Compile Include="Code\Model\ModelHelper_DefaultLowerField.cs" />
+    <Compile Include="Code\Model\ModelHelper_Default.cs" />
+    <Compile Include="Code\Model\ModelHelper_DefaultAttribute.cs" />
+    <Compile Include="Code\Tool\CommentTool.cs" />
+    <Compile Include="Code\Tool\SqlTool.cs" />
+    <Compile Include="Code\Views\MvcViewHelper_Bootstrap.cs" />
+    <Compile Include="Code\Views\MvcViewHelper_EasyUI.cs" />
+    <Compile Include="ConnectHelper\IConnect.cs" />
+    <Compile Include="ConnectHelper\MySqlConnectHelper.cs" />
+    <Compile Include="DAL\SqlHelper.cs" />
+    <Compile Include="Extend\ExtendTool.cs" />
+    <Compile Include="MainFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFrm.Designer.cs">
+      <DependentUpon>MainFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\MySqlHelper2.cs" />
+    <Compile Include="Model\ExtendAttributeInfo.cs" />
+    <Compile Include="Model\FieldStyleInfo.cs" />
+    <Compile Include="Model\GenerateInfo.cs" />
+    <Compile Include="Model\SqlColumnInfo.cs" />
+    <Compile Include="Model\TemplateInfo.cs" />
+    <Compile Include="Model\SixStringInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\GolableSetting.cs" />
+    <Compile Include="Tool\StaticVariable.cs" />
+    <EmbeddedResource Include="Child\FieldExtendFrm.resx">
+      <DependentUpon>FieldExtendFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainFrm.resx">
+      <DependentUpon>MainFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Cache\Progress.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

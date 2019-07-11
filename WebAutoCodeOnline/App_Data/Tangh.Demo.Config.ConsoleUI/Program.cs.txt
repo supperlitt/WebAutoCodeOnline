@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Configuration;
+
+namespace Tangh.Demo.Config.ConsoleUI
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ExeConfigurationFileMap map = new ExeConfigurationFileMap();
+            map.ExeConfigFilename = AppDomain.CurrentDomain.BaseDirectory + "\\test.config";
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+
+            Console.WriteLine(config.AppSettings.Settings["test"].Value);
+
+            Console.ReadLine();
+        }
+    }
+}

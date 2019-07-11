@@ -1,0 +1,231 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="{{PageName}}.aspx.cs" Inherits="{{NameSpace}}.{{PageName}}" ValidateRequest="false" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>{{Title}}</title>
+    <link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="easyui/demo/demo.css">
+    <script type="text/javascript" src="easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+    <script src="easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <style type="text/css">
+        #dg tbody tr td
+        {
+            text-align: center;
+        }
+        
+        #divleft div, #divright div
+        {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{Title}}</h2>
+    <div class="demo-info" style="margin-bottom: 10px">
+        <div class="demo-tip icon-tip">
+            &nbsp;</div>
+        <div>{{SearchContent}}</div>
+    </div>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true"
+            onclick="newModel()">新增</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+                iconcls="icon-edit" plain="true" onclick="editModel()">编辑</a> <a href="javascript:void(0)"
+                    class="easyui-linkbutton" iconcls="icon-remove" plain="true" onclick="destroyModel()">删除</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" style="width: {{TableWidth}}px; height: auto" url="" pagination="true" sortname="itemid"
+        sortorder="desc" title="{{Title}}" singleselect="true" fitcolumns="true">
+        <thead>
+            <tr>
+				{{ThInfo}}
+            </tr>
+        </thead>
+    </table>
+    <div id="dlg" class="easyui-dialog" style="width: 720px; height: {{FormHeight}}px; padding: 10px 20px"
+        closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">{{Title}}</div>
+        <form id="fm" method="post" novalidate>
+			{{FormInfo}}
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconcls="icon-ok" onclick="saveModel()"
+            style="width: 90px">保 存</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+                iconcls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width: 90px">
+                取 消</a>
+    </div>
+    <div id="dialog" title="提示">
+        <p style="text-align: center;">
+        </p>
+    </div>
+    <script type="text/javascript">
+        /* 
+        日期格式化 2015-07-09
+        */
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            var d = parseInt(ss[2], 10);
+            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+                return new Date(y, m - 1, d);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        /*
+        增删改逻辑
+        */
+        function newModel() {
+            $('#dlg').dialog('open').dialog('setTitle', '新增成员');
+            $('#fm').form('clear');
+        }
+
+        function editModel() {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                $('#dlg').dialog('open').dialog('setTitle', '编辑成员');
+                $('#fm').form('load', row);
+
+				// 把row中包含的值，赋值到input上面
+				{{SetValue}}
+            }
+        }
+
+        function saveModel() {
+			{{CreateParams}}
+			{{POSTDATA}}
+            $.ajax({
+                type: "POST",
+                url: "{{PageName}}.aspx?type=add",
+                data: postData,
+                success: function (msg) {
+                    if (msg == "0") {
+                        if ({{keyId}} != "") {
+                            $("#dialog>p").text("更新成功！");
+                        }
+                        else if ({{keyId}} == "") {
+                            $("#dialog>p").text("添加成功！");
+                        }
+
+                        $('#dlg').dialog('close');        // close the dialog
+                        SearchTrainee();
+                    } else {
+                        $("#dialog>p").text(msg);
+                    }
+
+                    // show dialog
+                    $("#dialog").dialog({
+                        width: 180,
+                        height: 100,
+                        buttons: {
+                            Ok: function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function destroyModel() {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                $.messager.confirm('确认提示', '你确认删除这个信息?', function (r) {
+                    if (r) {
+                        $.post('{{PageName}}.aspx?type=delete', { id: row.{{keyId}} }, function (result) {
+                            if (result == "0") {
+                                $("#dialog>p").text("删除成功！");
+                            }else{
+								$("#dialog>p").text(result);
+							}
+							
+							$('#dlg').dialog('close');        // close the dialog
+							SearchTrainee();
+                        }, 'json');
+                    }
+                });
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var pager = $('#dg').datagrid('getPager');
+            $('#dg').datagrid('getPager').pagination({
+                pageSize: 10, //每页显示的记录条数，默认为10    
+                pageList: [10, 15, 20, 25], //可以设置每页记录条数的列表 
+                onSelectPage: function (pageNumber, pageSize) {
+                    var opts = $('#dg').datagrid('options');
+                    opts.pageNumber = pageNumber;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNumber,
+                        pageSize: pageSize
+                    });
+
+                    SearchTrainee(pageNumber, pageSize); //每次更换页面时触发更改   
+                },
+                onBeforeRefresh: function (pageNumber, pageSize) {
+					// 好像已经被执行过了，这里就不需要了
+                    // SearchTrainee(pageNumber, pageSize); //每次更换页面时触发更改  
+                },
+                displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+            });
+        });
+
+        function SearchTrainee(page_Number, page_Size) {
+            if (page_Number == undefined && page_Size == undefined) {
+                page_Number = $('#dg').datagrid('getPager').data("pagination").options.pageNumber;   //pageNumber为datagrid的当前页码
+                page_Size = $('#dg').datagrid('getPager').data("pagination").options.pageSize;       //pageSize为datagrid的每页记录条数
+            } else {
+                $('#dg').datagrid('options').pageNumber = page_Number;   //pageNumber为datagrid的当前页码
+                $('#dg').datagrid('options').pageSize = page_Size;       //pageSize为datagrid的每页记录条数
+            }
+
+			{{Condition}}
+			{{PagePost}}
+            var postData = "page=" + page_Number + "&pageSize=" + page_Size{{SearchExtend}};
+            $("#dg>tbody").empty();
+            $.ajax({
+                type: "POST",
+                url: "{{PageName}}.aspx?type=load&t=" + new Date().getTime(),
+                data: postData,
+                success: function (msg) {
+                    var data = eval("(" + msg + ")");
+                    $('#dg').datagrid('loadData', data.Data);
+                    $('#dg').datagrid('getPager').pagination({
+                        //更新pagination的导航列表各参数  
+                        total: data.ItemCount, //总数
+                        pageSize: page_Size, //行数  
+                        pageNumber: page_Number//页数  
+                    });
+                }
+            });
+
+        }
+
+        $(document).ready(function () {
+            $("#dg").datagrid("hideColumn", "{{KeyId}}");
+            SearchTrainee(1, 10);
+
+            if ($("#btnsearch") != null || $("#btnsearch") != undefined) {
+                $("#btnsearch").click(function () {
+                    SearchTrainee();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

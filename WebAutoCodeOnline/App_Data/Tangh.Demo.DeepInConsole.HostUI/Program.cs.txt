@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security;
+using System.Runtime.InteropServices;
+
+namespace Tangh.Demo.DeepInConsole.HostUI
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            UseSecureString();
+
+            UseColorForConsole();
+
+            UseTextStartPosition();
+
+            // at last you can use this console to create a game named snack
+
+            Console.ReadLine();
+        }
+
+        #region 绘制文字位置
+        private static void UseTextStartPosition()
+        {
+            Console.SetCursorPosition(3, 3);
+            Console.Write("你好");
+            Console.SetCursorPosition(5, 5);
+            Console.Write("我好");
+
+            Console.SetCursorPosition(6, 7);
+            Console.Write("大家好!");
+        }
+        #endregion
+
+        #region 绘制有颜色的
+        private static void UseColorForConsole()
+        {
+            Console.Title = "标题。。。";
+            //Console.WindowHeight = 10;
+            //Console.WindowWidth = 20;
+            //Console.WindowLeft = 5;
+            //Console.WindowTop = 5;
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write("Hello");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(",");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.Write("World!");
+        }
+        #endregion
+
+        #region SecureString
+        private static void UseSecureString()
+        {
+            using (SecureString str = new SecureString())
+            {
+                while (true)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    if (key.Key == ConsoleKey.Enter)
+                    {
+                        break;
+                    }
+                    else if (key.Key == ConsoleKey.Backspace)
+                    {
+                        // 退一格输出空格再退一格
+                        Console.Write("\b \b");
+                        if (str.Length > 0)
+                        {
+                            str.RemoveAt(str.Length - 1);
+                        }
+
+                        continue;
+                    }
+
+                    str.AppendChar(key.KeyChar);
+                    Console.Write("*");
+                }
+
+                DisplayStr(str);
+            }
+        }
+
+        private static void DisplayStr(SecureString str)
+        {
+            unsafe
+            {
+                Char* ch = (Char*)Marshal.SecureStringToBSTR(str);
+                Console.WriteLine();
+                for (int i = 0; ch[i] != 0; i++)
+                {
+                    Console.Write(ch[i]);
+                }
+            }
+        }
+        #endregion
+    }
+}

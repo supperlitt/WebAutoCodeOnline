@@ -1,0 +1,22 @@
+2016-11-9
+1、更新 DateTime tinyint int DLL层判断
+2、更新js，datetimeformat 
+3、更新html <div class="container" /> <input class="form-control" />
+4、更新max-width
+5、MySql update top(1) 错误。
+
+2016-11-29
+1、更新TryParse不包含out错误。
+
+2017-2-14
+1、增加模块化代码生成，后台。
+2、增加模块化代码生成，前端。（根据类型进行生成）。
+3、可以针对，生成.net framework 2.0`
+和自动化搭建站点，进行测试。（新机）。
+4、生成一个类似IIS的本地化exe服务器程序。
+5、RSA加密，解密，C#调用 js完成操作，接口
+6、
+
+
+2018-05-02
+1、服务器，提供生成接口。通过接口调用功能，实现功能api付费化。

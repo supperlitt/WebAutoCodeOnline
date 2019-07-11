@@ -1,0 +1,5 @@
+﻿namespace {{NameSpace}} {
+    public partial class {{ClassName}} {
+
+    }
+}

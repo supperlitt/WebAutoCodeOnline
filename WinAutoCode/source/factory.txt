@@ -1,0 +1,15 @@
+﻿using System.Data.SqlClient;
+
+namespace {{NameSpace}}
+{
+    public class ConnectionFactory
+    {
+        public static SqlConnection {{DataBase}}
+        {
+            get
+            {
+                return new SqlConnection("{{ConnectionString}}");
+            }
+        }
+    }
+}

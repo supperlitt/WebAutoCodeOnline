@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <DLLS Title1="C#三方类库" Title2="C#三方类库">
+    <DLL Url="http://referencesource.microsoft.com/" Text="C#基础类库-微软版" />
+    <DLL Url="http://tool.sufeinet.com/CodePreview/CodeView.aspx" Text="C#基类库大全-苏飞版" />
+    <DLL Url="http://referencesource.microsoft.com/" Text="C# Demo大全-站长版" />
+  </DLLS>
+</Root>

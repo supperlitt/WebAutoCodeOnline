@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta name="description" content="C# 在线 一般代码自动生成 SQL生成网页" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="我要调试,51调试,51debug,C#在线代码生成器" name="Keywords" />
+    <meta name="description" content="51debug是程序员的好助手，帮助各种程序员进行快速开发，提高开发效率和分享代码库" />
+    <title>我要调试 - 一般代码自动生成</title>
+
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="../js/bootstrap-3.3.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- 可选的Bootstrap主题文件（一般不使用） -->
+    <link href="../js/bootstrap-3.3.0-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../js/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../js/bootstrap-3.3.0-dist/js/bootstrap.min.js"></script>
+
+    <!-- 初始化界面js -->
+    <script src="../js/load.js?20161108_2"></script>
+</head>
+<body>
+    <!-- 导航 -->
+    <div id="nav"></div>
+
+    <div class="container">
+        <h2>一般代码自动生成
+        </h2>
+        <div class="row">
+            <p>
+            </p>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">创建表sql
+                            <label class="checkbox-inline">
+                                <input type="radio" name="optionsRadiosinline" id="rbtnmssql"
+                                    value="mssql" checked>
+                                MSSQL
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="radio" name="optionsRadiosinline" id="rbtnmysql"
+                                    value="mysql">
+                                MySQL
+                            </label>
+                            <span class="label label-info btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">参考样例</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            <textarea id="txtsql" class="form-control" rows="8"></textarea>
+                        </p>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <!--<div class="panel-heading">
+                        <h3 class="panel-title">操作
+                        </h3>
+                    </div>-->
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="txtnamespace" class="col-sm-2 control-label">命名空间：</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txtnamespace"
+                                        placeholder="命名空间">
+                                </div>
+                                <label for="txtdbname" class="col-sm-2 control-label">数据库名：</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txtdbname"
+                                        placeholder="数据库名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtcolumnsname" class="col-sm-2 control-label">查询列名：</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtcolumnsname"
+                                        placeholder="(查询类)a,b,c">
+                                </div>
+                                <div class="col-sm-2 text-right">
+                                    <button onclick="dosubmit();" type="button" class="btn btn-default">生成代码</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <link href="../js/codehighlight/SyntaxHighlighter.css" rel="stylesheet" />
+                <script src="../js/codehighlight/shCore.js"></script>
+                <script src="../js/codehighlight/shBrushCSharp.js"></script>
+                <script type="text/javascript">
+                    function dosubmit() {
+                        var dbtype = $("#rbtnmssql")[0].checked ? "0" : "1";
+                        var text = encodeURI($("#txtsql").val());
+                        var namespace = encodeURI($("#txtnamespace").val());
+                        var dbname = encodeURI($("#txtdbname").val());
+                        var searchcolumns = encodeURI($("#txtcolumnsname").val());
+                        $.post("../Api.ashx",
+                            { "type": "normal", "dbtype": dbtype, "sql": text, "namespace": namespace, "dbname": dbname, "searchcolumns": searchcolumns },
+                            function (data) {
+                                $("#pclass").empty();
+                                $("#pclass").html("<textarea id=\"txtclass\" name=\"txtclass\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#padd").empty();
+                                $("#padd").html("<textarea id=\"txtadd\" name=\"txtadd\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#pdelete").empty();
+                                $("#pdelete").html("<textarea id=\"txtdelete\" name=\"txtdelete\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#pbatdelete").empty();
+                                $("#pbatdelete").html("<textarea id=\"txtbatdelete\" name=\"txtbatdelete\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#pedit").empty();
+                                $("#pedit").html("<textarea id=\"txtedit\" name=\"txtedit\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#psearchcount").empty();
+                                $("#psearchcount").html("<textarea id=\"txtsearchcount\" name=\"txtsearchcount\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#psearchstr").empty();
+                                $("#psearchstr").html("<textarea id=\"txtsearchstr\" name=\"txtsearchstr\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#pall").empty();
+                                $("#pall").html("<textarea id=\"txtall\" name=\"txtall\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+                                $("#pfactory").empty();
+                                $("#pfactory").html("<textarea id=\"txtfactory\" name=\"txtfactory\" class=\"form-control csharp\" rows=\"10\"></textarea>");
+
+                                $("#txtclass").text(data.ClassStr);
+                                $("#txtadd").text(data.AddStr);
+                                $("#txtdelete").text(data.DeleteStr);
+                                $("#txtbatdelete").text(data.BatDeleteStr);
+                                $("#txtedit").text(data.EditStr);
+                                $("#txtsearchstr").text(data.SearchStr);
+                                $("#txtsearchcount").text(data.SearchCountStr);
+                                $("#txtall").text(data.SearchStr);
+                                $("#txtfactory").text(data.FactoryStr);
+
+                                // 代码高亮
+                                dp.SyntaxHighlighter.HighlightAll('txtclass');
+                                dp.SyntaxHighlighter.HighlightAll('txtadd');
+                                dp.SyntaxHighlighter.HighlightAll('txtdelete');
+                                dp.SyntaxHighlighter.HighlightAll('txtbatdelete');
+                                dp.SyntaxHighlighter.HighlightAll('txtedit');
+                                dp.SyntaxHighlighter.HighlightAll('txtsearchcount');
+                                dp.SyntaxHighlighter.HighlightAll('txtsearchstr');
+                                dp.SyntaxHighlighter.HighlightAll('txtall');
+                                dp.SyntaxHighlighter.HighlightAll('txtfactory');
+                            }
+                       , "json");
+                    }
+                </script>
+                <ul id="myTab" class="nav nav-tabs">
+                    <li><a href="#class" data-toggle="tab">类代码</a></li>
+                    <li><a href="#add" data-toggle="tab">添加</a></li>
+                    <li><a href="#delete" data-toggle="tab">删除</a></li>
+                    <li><a href="#batdelete" data-toggle="tab">批量删除</a></li>
+                    <li><a href="#edit" data-toggle="tab">修改</a></li>
+                    <li><a href="#searchcount" data-toggle="tab">查询总数</a></li>
+                    <li><a href="#searchstr" data-toggle="tab">分页查询</a></li>
+                    <li><a href="#cmdall" data-toggle="tab">操作集合</a></li>
+                    <li><a href="#factory" data-toggle="tab">工厂类</a></li>
+                    <li><a href="#helperdownload" data-toggle="tab">Helper下载</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="class">
+                        <p id="pclass">
+                            <textarea id="txtclass" name="txtclass" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="add">
+                        <p id="padd">
+                            <textarea id="txtadd" name="txtadd" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="delete">
+                        <p id="pdelete">
+                            <textarea id="txtdelete" name="txtdelete" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="batdelete">
+                        <p id="pbatdelete">
+                            <textarea id="txtbatdelete" name="txtbatdelete" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="edit">
+                        <p id="pedit">
+                            <textarea id="txtedit" name="txtedit" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="searchcount">
+                        <p id="psearchcount">
+                            <textarea id="txtsearchcount" name="txtsearchcount" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="searchstr">
+                        <p id="psearchstr">
+                            <textarea id="txtsearchstr" name="txtsearchstr" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="cmdall">
+                        <p id="pall">
+                            <textarea id="txtall" name="txtall" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="factory">
+                        <p id="pfactory">
+                            <textarea id="txtfactory" name="txtfactory" class="form-control csharp" rows="10"></textarea>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="helperdownload">
+                        <p>
+                            <ul class="list-group">
+                                <li class="list-group-item"><a href="../Down.ashx?cs=sqlhelper">SqlHelper.cs</a></li>
+                                <li class="list-group-item"><a href="../Down.ashx?cs=mysqlhelper">MySqlHelper.cs</a></li>
+                                <li class="list-group-item"><a href="../Down.ashx?cs=sqlitehelper">SqliteHelper.cs</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                <script>
+                    $(function () {
+                        $('#myTab li:eq(0) a').tab('show');
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: auto; max-width: 1200px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">样例
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <img src="../image/lizi/normal.jpg" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                        关闭
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+    <!-- 站点地图&友情链接 -->
+    <div id="sitemap"></div>
+
+    <!-- Fotter -->
+    <div id="fotter"></div>
+</body>
+</html>
