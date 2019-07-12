@@ -165,7 +165,7 @@ namespace WinGenerateCodeDB
             else if (rbtnMsSql.Checked)
             {
                 dbType = 1;
-                connect = null;
+                connect = new MsSqlConnectHelper();
             }
             else if (rbtnSqlite.Checked)
             {

@@ -4,11 +4,14 @@
 	多种生成方式：可以用sql生成，可以接入数据库服务器生成。
 参考网址：https://www.cnblogs.com/Supperlitt/p/11171799.html
 
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_1.png)
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_2.png)
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_3.png)
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_4.png)
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_proj.png)
-![](https://github.com/supperlitt/WebAutoCodeOnline/image/db_web.png)
+调整说明：·
+2019-7-12 1.增加AutoDB对MSSQL的支持
+
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_1.png)
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_2.png)
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_3.png)
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_4.png)
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_proj.png)
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_web.png)
 
 

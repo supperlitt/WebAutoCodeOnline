@@ -78,6 +78,7 @@
     <Compile Include="Code\Views\MvcViewHelper_Bootstrap.cs" />
     <Compile Include="Code\Views\MvcViewHelper_EasyUI.cs" />
     <Compile Include="ConnectHelper\IConnect.cs" />
+    <Compile Include="ConnectHelper\MsSqlConnectHelper.cs" />
     <Compile Include="ConnectHelper\MySqlConnectHelper.cs" />
     <Compile Include="DAL\SqlHelper.cs" />
     <Compile Include="Extend\ExtendTool.cs" />
