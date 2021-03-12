@@ -6,6 +6,7 @@
 
 调整说明：·
 2019-7-12 1.增加AutoDB对MSSQL的支持
+2021-3-12 1.增加对asp.net core的支持 WinGenerateCodeDB,（主界面，选中多张表，点击下一步(多表core)即可开始生成和打包成zip）
 
 ![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_1.png)
 ![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_2.png)
