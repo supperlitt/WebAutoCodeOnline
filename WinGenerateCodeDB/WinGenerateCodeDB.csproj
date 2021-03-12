@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspNetCore\AspNetCoreHelper.cs" />
     <Compile Include="Cache\PageCache.cs" />
     <Compile Include="Child\FieldExtendFrm.cs">
       <SubType>Form</SubType>
@@ -54,6 +55,8 @@
     <Compile Include="Child\FieldExtendFrm.Designer.cs">
       <DependentUpon>FieldExtendFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Code\AspNetCore\AspNetCoreOther.cs" />
+    <Compile Include="Code\AspNetCore\AspNetCoreApiController.cs" />
     <Compile Include="Code\AspxCs\AspxCsHelper_Bootstrap.cs" />
     <Compile Include="Code\AspxCs\AspxCsHelper_EasyUI.cs" />
     <Compile Include="Code\Aspx\AspxHelper_Bootstrap.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Code\Controllers\MvcControllerHelper.cs" />
     <Compile Include="Code\DAL\DALHelper_Bootstrap_MsSql.cs" />
     <Compile Include="Code\DAL\DALHelper_Bootstrap_MySql.cs" />
+    <Compile Include="Code\AspNetCore\DALHelper_DapperCore.cs" />
     <Compile Include="Code\DAL\DALHelper_Dapper.cs" />
     <Compile Include="Code\DAL\DALHelper_EasyUI_MsSql.cs" />
     <Compile Include="Code\DAL\DALHelper_EasyUI_MySql.cs" />
@@ -70,6 +74,7 @@
     <Compile Include="Code\Factory\FactoryHelper_Dapper_MySql.cs" />
     <Compile Include="Code\Factory\FactoryHelper_MySql.cs" />
     <Compile Include="Code\Factory\FactoryHelper_MsSql.cs" />
+    <Compile Include="Code\AspNetCore\ModelHelper_DefaultCore.cs" />
     <Compile Include="Code\Model\ModelHelper_DefaultLowerField.cs" />
     <Compile Include="Code\Model\ModelHelper_Default.cs" />
     <Compile Include="Code\Model\ModelHelper_DefaultAttribute.cs" />
@@ -129,7 +134,12 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{cc80777c-2c80-4116-a565-73ef345e308d}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

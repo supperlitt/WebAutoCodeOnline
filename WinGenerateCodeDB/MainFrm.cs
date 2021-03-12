@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using WinGenerateCodeDB.Cache;
@@ -51,6 +53,7 @@ namespace WinGenerateCodeDB
             this.tabControl1.TabPages.RemoveAt(1);
             this.tabControl1.TabPages.RemoveAt(1);
             this.tabControl1.TabPages.RemoveAt(1);
+            this.tabControl1.TabPages.RemoveAt(1);
         }
 
         private void InitListViewColumns()
@@ -61,6 +64,7 @@ namespace WinGenerateCodeDB
 
             this.lstTables.FullRowSelect = true;
             this.lstTables.HideSelection = false;
+            this.lstTables.MultiSelect = true;
             this.lstTables.Columns.Add("名称", 260, HorizontalAlignment.Left);
 
             this.lstColumns.FullRowSelect = true;
@@ -928,6 +932,183 @@ namespace WinGenerateCodeDB
             {
                 textBox.SelectAll();
                 e.Handled = true;      // 不再发出“噔”的声音
+            }
+        }
+
+        private void btnNextMulTable_Click(object sender, EventArgs e)
+        {
+            List<string> tableList = new List<string>();
+            if (connect != null && lstTables.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in lstTables.SelectedItems)
+                {
+                    tableList.Add(item.Text);
+                }
+            }
+
+            if (tableList.Count > 0)
+            {
+                AspNetCoreHelper.InitDbName(PageCache.DatabaseName);
+                AspNetCoreHelper.InitTables(tableList);
+                foreach (var tbName in tableList)
+                {
+                    var list = connect.GetColumnsList(server, name, pwd, port, dbname, tbName);
+                    AspNetCoreHelper.AddColumnList(tbName, list);
+                }
+
+                this.Invoke(new Action<TabControl>(p =>
+                {
+                    int mulIndex = 4;
+                    p.TabPages.RemoveAt(0);
+                    p.TabPages.AddRange(new TabPage[] { tabPageList[mulIndex] });
+                }), this.tabControl1);
+            }
+        }
+
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            this.Invoke(new Action<TabControl>(p =>
+            {
+                p.TabPages.RemoveAt(0);
+                p.TabPages.AddRange(new TabPage[] { tabPageList[0] });
+            }), this.tabControl1);
+        }
+
+        private void btnCore_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            switch (btn.Text)
+            {
+                case "Model":
+                    Core_CreateModel();
+                    break;
+                case "ApiController":
+                    Core_CreateApiController();
+                    break;
+                case "DAL":
+                    Core_CreateDAL();
+                    break;
+                case "Other":
+                    Core_CreateOther();
+                    break;
+                case "CopyClass":
+                    Core_CreateCopyClass();
+                    break;
+                case "CopyFullClass":
+                    Core_CreateCopyFullClass();
+                    break;
+                case "SaveFile":
+                    Core_SaveFile();
+                    break;
+            }
+        }
+
+        private void Core_CreateModel()
+        {
+            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked);
+
+            FillInTab(result);
+        }
+
+        private void Core_CreateApiController()
+        {
+            Dictionary<string, string> result = AspNetCoreHelper.CreateApiController(this.txtCoreNameSpace.Text, this.txtCoreDalSuffix.Text, this.txtCoreModelSuffix.Text);
+
+            FillInTab(result);
+        }
+
+        private void Core_CreateDAL()
+        {
+            Dictionary<string, string> result = AspNetCoreHelper.CreateDAL(this.txtCoreNameSpace.Text, this.txtCoreDalSuffix.Text, this.txtCoreModelSuffix.Text);
+
+            FillInTab(result);
+        }
+
+        private void Core_CreateOther()
+        {
+            Dictionary<string, string> result = AspNetCoreHelper.CreateOther(this.txtCoreNameSpace.Text);
+
+            FillInTab(result);
+        }
+
+        private void Core_CreateCopyClass()
+        {
+            if (this.tbResult.TabPages.Count > 0)
+            {
+                string text = (this.tbResult.TabPages[this.tbResult.SelectedIndex].Controls[0] as TextBox).Text;
+
+                // 只拷贝类代码
+                Regex regex = new Regex(@"\{\s+(?<text>[\s\S]+)\s+\}\s{0,}$");
+                string data = regex.Match(text).Groups["text"].Value;
+
+                // 处理 text
+                Clipboard.SetText(data);
+            }
+        }
+
+        private void Core_CreateCopyFullClass()
+        {
+            if (this.tbResult.TabPages.Count > 0)
+            {
+                Clipboard.SetText((this.tbResult.TabPages[this.tbResult.SelectedIndex].Controls[0] as TextBox).Text);
+            }
+        }
+
+        private void Core_SaveFile()
+        {
+            // 打包当前数据到zip并保存
+            if (tbResult.TabPages.Count > 0)
+            {
+                Dictionary<string, string> fileDic = new Dictionary<string, string>();
+                foreach (TabPage item in tbResult.TabPages)
+                {
+                    string key = item.Text;
+                    string text = (item.Controls[0] as TextBox).Text;
+
+                    if (!fileDic.ContainsKey(key + ".cs"))
+                    {
+                        fileDic.Add(key + ".cs", text);
+                    }
+                }
+
+                if (fileDic.Count > 0)
+                {
+                    var data = ZipHelper.Zip(fileDic);
+
+                    SaveFileDialog dialog = new SaveFileDialog();
+                    dialog.Filter = "压缩文件|*.zip";
+                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        string fileName = dialog.FileName;
+                        if (!fileName.EndsWith(".zip"))
+                        {
+                            fileName += ".zip";
+                        }
+
+                        File.WriteAllBytes(fileName, data);
+                    }
+                }
+            }
+        }
+
+        private void FillInTab(Dictionary<string, string> result)
+        {
+            tbResult.TabPages.Clear();
+            foreach (var item in result)
+            {
+                TextBox textBox = new TextBox();
+                textBox.Location = new System.Drawing.Point(6, 6);
+                textBox.Multiline = true;
+                textBox.Size = new System.Drawing.Size(1022, 498);
+                textBox.TabIndex = 0;
+                textBox.ScrollBars = ScrollBars.Vertical;
+                textBox.Text = item.Value;
+
+                TabPage tb = new TabPage();
+                tb.Text = item.Key;
+                tb.Controls.Add(textBox);
+
+                tbResult.TabPages.Add(tb);
             }
         }
     }

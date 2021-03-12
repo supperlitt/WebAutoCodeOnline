@@ -138,14 +138,35 @@
             this.btnTest4 = new System.Windows.Forms.Button();
             this.btnTest3 = new System.Windows.Forms.Button();
             this.btnTest2 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.txtCoreDalSuffix = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtCoreModelSuffix = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtCoreNameSpace = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tbResult = new System.Windows.Forms.TabControl();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnSaveFile = new System.Windows.Forms.Button();
+            this.btnCopyFullClass = new System.Windows.Forms.Button();
+            this.btnCopyClass = new System.Windows.Forms.Button();
+            this.btnOther = new System.Windows.Forms.Button();
+            this.btnDAL = new System.Windows.Forms.Button();
+            this.btnApiController = new System.Windows.Forms.Button();
+            this.btnModel = new System.Windows.Forms.Button();
             this.btnBefore = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnSaveProgress = new System.Windows.Forms.Button();
             this.btnImportProgress = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnNextMulTable = new System.Windows.Forms.Button();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
+            this.btnReturn = new System.Windows.Forms.Button();
+            this.chkQueryModel = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -167,6 +188,9 @@
             this.groupBox9.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.tbResult.SuspendLayout();
+            this.tabPage9.SuspendLayout();
             this.SuspendLayout();
             // 
             // rbtnMySql
@@ -237,6 +261,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -369,7 +394,7 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(117, 21);
             this.txtPwd.TabIndex = 1;
-            this.txtPwd.Text = "123456";
+            this.txtPwd.Text = "QAZ123wsx!@#";
             // 
             // label2
             // 
@@ -1335,6 +1360,26 @@
             this.btnTest2.UseVisualStyleBackColor = true;
             this.btnTest2.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(113, 65);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(62, 23);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "Controller";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(27, 65);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(62, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "View";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
             // btnTest
             // 
             this.btnTest.Location = new System.Drawing.Point(113, 27);
@@ -1354,6 +1399,178 @@
             this.btnGenerate.Text = "Model";
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.chkQueryModel);
+            this.tabPage6.Controls.Add(this.txtCoreDalSuffix);
+            this.tabPage6.Controls.Add(this.label16);
+            this.tabPage6.Controls.Add(this.txtCoreModelSuffix);
+            this.tabPage6.Controls.Add(this.label17);
+            this.tabPage6.Controls.Add(this.txtCoreNameSpace);
+            this.tabPage6.Controls.Add(this.label18);
+            this.tabPage6.Controls.Add(this.tbResult);
+            this.tabPage6.Controls.Add(this.btnSaveFile);
+            this.tabPage6.Controls.Add(this.btnCopyFullClass);
+            this.tabPage6.Controls.Add(this.btnCopyClass);
+            this.tabPage6.Controls.Add(this.btnOther);
+            this.tabPage6.Controls.Add(this.btnDAL);
+            this.tabPage6.Controls.Add(this.btnApiController);
+            this.tabPage6.Controls.Add(this.btnModel);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(1054, 599);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = " asp.net core ";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // txtCoreDalSuffix
+            // 
+            this.txtCoreDalSuffix.Location = new System.Drawing.Point(591, 62);
+            this.txtCoreDalSuffix.Name = "txtCoreDalSuffix";
+            this.txtCoreDalSuffix.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreDalSuffix.TabIndex = 12;
+            this.txtCoreDalSuffix.Text = "DAL";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(526, 65);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(59, 12);
+            this.label16.TabIndex = 8;
+            this.label16.Text = "DAL后缀：";
+            // 
+            // txtCoreModelSuffix
+            // 
+            this.txtCoreModelSuffix.Location = new System.Drawing.Point(835, 18);
+            this.txtCoreModelSuffix.Name = "txtCoreModelSuffix";
+            this.txtCoreModelSuffix.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreModelSuffix.TabIndex = 13;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(764, 21);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(71, 12);
+            this.label17.TabIndex = 9;
+            this.label17.Text = "Model后缀：";
+            // 
+            // txtCoreNameSpace
+            // 
+            this.txtCoreNameSpace.Location = new System.Drawing.Point(591, 18);
+            this.txtCoreNameSpace.Name = "txtCoreNameSpace";
+            this.txtCoreNameSpace.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreNameSpace.TabIndex = 14;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(520, 21);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(65, 12);
+            this.label18.TabIndex = 10;
+            this.label18.Text = "命名空间：";
+            // 
+            // tbResult
+            // 
+            this.tbResult.Controls.Add(this.tabPage9);
+            this.tbResult.Location = new System.Drawing.Point(6, 93);
+            this.tbResult.Name = "tbResult";
+            this.tbResult.SelectedIndex = 0;
+            this.tbResult.Size = new System.Drawing.Size(1042, 500);
+            this.tbResult.TabIndex = 4;
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.textBox1);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(1034, 474);
+            this.tabPage9.TabIndex = 0;
+            this.tabPage9.Text = "Default";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 6);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1022, 498);
+            this.textBox1.TabIndex = 0;
+            // 
+            // btnSaveFile
+            // 
+            this.btnSaveFile.Location = new System.Drawing.Point(230, 64);
+            this.btnSaveFile.Name = "btnSaveFile";
+            this.btnSaveFile.Size = new System.Drawing.Size(101, 23);
+            this.btnSaveFile.TabIndex = 1;
+            this.btnSaveFile.Text = "SaveFile";
+            this.btnSaveFile.UseVisualStyleBackColor = true;
+            this.btnSaveFile.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnCopyFullClass
+            // 
+            this.btnCopyFullClass.Location = new System.Drawing.Point(104, 64);
+            this.btnCopyFullClass.Name = "btnCopyFullClass";
+            this.btnCopyFullClass.Size = new System.Drawing.Size(101, 23);
+            this.btnCopyFullClass.TabIndex = 1;
+            this.btnCopyFullClass.Text = "CopyFullClass";
+            this.btnCopyFullClass.UseVisualStyleBackColor = true;
+            this.btnCopyFullClass.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnCopyClass
+            // 
+            this.btnCopyClass.Location = new System.Drawing.Point(10, 64);
+            this.btnCopyClass.Name = "btnCopyClass";
+            this.btnCopyClass.Size = new System.Drawing.Size(76, 23);
+            this.btnCopyClass.TabIndex = 1;
+            this.btnCopyClass.Text = "CopyClass";
+            this.btnCopyClass.UseVisualStyleBackColor = true;
+            this.btnCopyClass.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnOther
+            // 
+            this.btnOther.Location = new System.Drawing.Point(400, 21);
+            this.btnOther.Name = "btnOther";
+            this.btnOther.Size = new System.Drawing.Size(62, 23);
+            this.btnOther.TabIndex = 1;
+            this.btnOther.Text = "Other";
+            this.btnOther.UseVisualStyleBackColor = true;
+            this.btnOther.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnDAL
+            // 
+            this.btnDAL.Location = new System.Drawing.Point(192, 21);
+            this.btnDAL.Name = "btnDAL";
+            this.btnDAL.Size = new System.Drawing.Size(62, 23);
+            this.btnDAL.TabIndex = 1;
+            this.btnDAL.Text = "DAL";
+            this.btnDAL.UseVisualStyleBackColor = true;
+            this.btnDAL.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnApiController
+            // 
+            this.btnApiController.Location = new System.Drawing.Point(278, 21);
+            this.btnApiController.Name = "btnApiController";
+            this.btnApiController.Size = new System.Drawing.Size(94, 23);
+            this.btnApiController.TabIndex = 2;
+            this.btnApiController.Text = "ApiController";
+            this.btnApiController.UseVisualStyleBackColor = true;
+            this.btnApiController.Click += new System.EventHandler(this.btnCore_Click);
+            // 
+            // btnModel
+            // 
+            this.btnModel.Location = new System.Drawing.Point(104, 21);
+            this.btnModel.Name = "btnModel";
+            this.btnModel.Size = new System.Drawing.Size(62, 23);
+            this.btnModel.TabIndex = 3;
+            this.btnModel.Text = "Model";
+            this.btnModel.UseVisualStyleBackColor = true;
+            this.btnModel.Click += new System.EventHandler(this.btnCore_Click);
             // 
             // btnBefore
             // 
@@ -1377,7 +1594,7 @@
             // 
             // btnSaveProgress
             // 
-            this.btnSaveProgress.Location = new System.Drawing.Point(400, 651);
+            this.btnSaveProgress.Location = new System.Drawing.Point(827, 651);
             this.btnSaveProgress.Name = "btnSaveProgress";
             this.btnSaveProgress.Size = new System.Drawing.Size(75, 23);
             this.btnSaveProgress.TabIndex = 4;
@@ -1387,7 +1604,7 @@
             // 
             // btnImportProgress
             // 
-            this.btnImportProgress.Location = new System.Drawing.Point(508, 651);
+            this.btnImportProgress.Location = new System.Drawing.Point(935, 651);
             this.btnImportProgress.Name = "btnImportProgress";
             this.btnImportProgress.Size = new System.Drawing.Size(75, 23);
             this.btnImportProgress.TabIndex = 4;
@@ -1395,25 +1612,39 @@
             this.btnImportProgress.UseVisualStyleBackColor = true;
             this.btnImportProgress.Click += new System.EventHandler(this.btnImportProgress_Click);
             // 
-            // button1
+            // btnNextMulTable
             // 
-            this.button1.Location = new System.Drawing.Point(27, 65);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(62, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "View";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnGenerate_Click);
+            this.btnNextMulTable.Location = new System.Drawing.Point(274, 651);
+            this.btnNextMulTable.Name = "btnNextMulTable";
+            this.btnNextMulTable.Size = new System.Drawing.Size(120, 23);
+            this.btnNextMulTable.TabIndex = 4;
+            this.btnNextMulTable.Text = "下一步(多表core）";
+            this.btnNextMulTable.UseVisualStyleBackColor = true;
+            this.btnNextMulTable.Click += new System.EventHandler(this.btnNextMulTable_Click);
             // 
-            // button2
+            // printDialog1
             // 
-            this.button2.Location = new System.Drawing.Point(113, 65);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(62, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Controller";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btnGenerate_Click);
+            this.printDialog1.UseEXDialog = true;
+            // 
+            // btnReturn
+            // 
+            this.btnReturn.Location = new System.Drawing.Point(418, 651);
+            this.btnReturn.Name = "btnReturn";
+            this.btnReturn.Size = new System.Drawing.Size(63, 23);
+            this.btnReturn.TabIndex = 4;
+            this.btnReturn.Text = "返回";
+            this.btnReturn.UseVisualStyleBackColor = true;
+            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
+            // 
+            // chkQueryModel
+            // 
+            this.chkQueryModel.AutoSize = true;
+            this.chkQueryModel.Location = new System.Drawing.Point(16, 25);
+            this.chkQueryModel.Name = "chkQueryModel";
+            this.chkQueryModel.Size = new System.Drawing.Size(78, 16);
+            this.chkQueryModel.TabIndex = 15;
+            this.chkQueryModel.Text = "查询Model";
+            this.chkQueryModel.UseVisualStyleBackColor = true;
             // 
             // MainFrm
             // 
@@ -1422,6 +1653,8 @@
             this.ClientSize = new System.Drawing.Size(1086, 686);
             this.Controls.Add(this.btnImportProgress);
             this.Controls.Add(this.btnSaveProgress);
+            this.Controls.Add(this.btnReturn);
+            this.Controls.Add(this.btnNextMulTable);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnBefore);
             this.Controls.Add(this.tabControl1);
@@ -1462,6 +1695,11 @@
             this.groupBox6.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.tbResult.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.tabPage9.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1586,6 +1824,27 @@
         private System.Windows.Forms.RadioButton rbtn_web_asp_net;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnNextMulTable;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.Button btnDAL;
+        private System.Windows.Forms.Button btnApiController;
+        private System.Windows.Forms.Button btnModel;
+        private System.Windows.Forms.TabControl tbResult;
+        private System.Windows.Forms.TabPage tabPage9;
+        private System.Windows.Forms.Button btnOther;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.PrintDialog printDialog1;
+        private System.Windows.Forms.Button btnCopyClass;
+        private System.Windows.Forms.Button btnCopyFullClass;
+        private System.Windows.Forms.TextBox txtCoreDalSuffix;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtCoreModelSuffix;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtCoreNameSpace;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button btnSaveFile;
+        private System.Windows.Forms.Button btnReturn;
+        private System.Windows.Forms.CheckBox chkQueryModel;
     }
 }
 
