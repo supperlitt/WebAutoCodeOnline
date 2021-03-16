@@ -143,6 +143,7 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.chkQueryModel = new System.Windows.Forms.CheckBox();
             this.txtCoreDalSuffix = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txtCoreModelSuffix = new System.Windows.Forms.TextBox();
@@ -166,7 +167,6 @@
             this.btnNextMulTable = new System.Windows.Forms.Button();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.btnReturn = new System.Windows.Forms.Button();
-            this.chkQueryModel = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -394,7 +394,6 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(117, 21);
             this.txtPwd.TabIndex = 1;
-            this.txtPwd.Text = "QAZ123wsx!@#";
             // 
             // label2
             // 
@@ -1425,6 +1424,16 @@
             this.tabPage6.Text = " asp.net core ";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // chkQueryModel
+            // 
+            this.chkQueryModel.AutoSize = true;
+            this.chkQueryModel.Location = new System.Drawing.Point(16, 25);
+            this.chkQueryModel.Name = "chkQueryModel";
+            this.chkQueryModel.Size = new System.Drawing.Size(78, 16);
+            this.chkQueryModel.TabIndex = 15;
+            this.chkQueryModel.Text = "查询Model";
+            this.chkQueryModel.UseVisualStyleBackColor = true;
+            // 
             // txtCoreDalSuffix
             // 
             this.txtCoreDalSuffix.Location = new System.Drawing.Point(591, 62);
@@ -1635,16 +1644,6 @@
             this.btnReturn.Text = "返回";
             this.btnReturn.UseVisualStyleBackColor = true;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
-            // 
-            // chkQueryModel
-            // 
-            this.chkQueryModel.AutoSize = true;
-            this.chkQueryModel.Location = new System.Drawing.Point(16, 25);
-            this.chkQueryModel.Name = "chkQueryModel";
-            this.chkQueryModel.Size = new System.Drawing.Size(78, 16);
-            this.chkQueryModel.TabIndex = 15;
-            this.chkQueryModel.Text = "查询Model";
-            this.chkQueryModel.UseVisualStyleBackColor = true;
             // 
             // MainFrm
             // 
