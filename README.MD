@@ -4,8 +4,9 @@
 	多种生成方式：可以用sql生成，可以接入数据库服务器生成。
 参考网址：https://www.cnblogs.com/Supperlitt/p/11171799.html
 
-调整说明：·
-2019-7-12 1.增加AutoDB对MSSQL的支持
+调整说明：·  
+2019-7-12 1.增加AutoDB对MSSQL的支持  
+2021-3-12 1.增加对asp.net core的支持 WinGenerateCodeDB,（主界面，选中多张表，点击下一步(多表core)即可开始生成和打包成zip）  
 
 ![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_1.png)
 ![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/db_2.png)
