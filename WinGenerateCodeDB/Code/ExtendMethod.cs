@@ -306,12 +306,12 @@ namespace WinGenerateCodeDB.Code
             {
                 case "int":
                 case "tinyint":
-                    //return string.Format("Convert.ToInt32({0})", name);
+                //return string.Format("Convert.ToInt32({0})", name);
                 case "bigint":
-                    //return string.Format("Convert.ToInt64({0})", name);
+                //return string.Format("Convert.ToInt64({0})", name);
                 case "datetime":
                 case "date":
-                    //return string.Format("Convert.ToDateTime({0})", name);
+                //return string.Format("Convert.ToDateTime({0})", name);
                 case "varchar":
                 case "nvarchar":
                 case "char":
@@ -355,6 +355,35 @@ namespace WinGenerateCodeDB.Code
                 default:
                     return "string.Empty";
             }
+        }
+
+        public static string ToKeyId(this List<SqlColumnInfo> colList)
+        {
+            string keyId_str = "DefaultKeyId";
+            var keyInfo = colList.Find(p => p.IsMainKey);
+            if (keyInfo != null)
+            {
+                keyId_str = keyInfo.Name;
+            }
+
+            return keyId_str;
+        }
+
+        public static string ToKeyIdDbType(this List<SqlColumnInfo> colList)
+        {
+            string key_type = "varchar";
+            var keyInfo = colList.Find(p => p.IsMainKey);
+            if (keyInfo != null)
+            {
+                key_type = keyInfo.DbType.ToString();
+            }
+
+            return key_type;
+        }
+
+        public static List<SqlColumnInfo> ToNotMainIdList(this List<SqlColumnInfo> colList)
+        {
+            return colList.FindAll(p => !p.IsMainKey);
         }
     }
 }

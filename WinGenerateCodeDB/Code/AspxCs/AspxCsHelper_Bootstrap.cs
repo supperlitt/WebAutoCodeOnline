@@ -8,23 +8,23 @@ namespace WinGenerateCodeDB.Code
 {
     public class AspxCsHelper_Bootstrap
     {
-        public static string CreateASPXCS()
+        public static string CreateASPXCS(string name_space, string table_name, int action, List<SqlColumnInfo> colList, string model_name, string dal_name)
         {
             StringBuilder aspxcsContent = new StringBuilder();
-            aspxcsContent.Append(CreateCSHead());
-            aspxcsContent.Append(CreatePageLoad());
-            aspxcsContent.Append(CreateLoadData());
-            aspxcsContent.Append(CreateAddData());
-            aspxcsContent.Append(CreateEditData());
-            aspxcsContent.Append(CreateBatEditData());
-            aspxcsContent.Append(CreateDeleteData());
-            aspxcsContent.Append(CreateDownAndDownAll());
+            aspxcsContent.Append(CreateCSHead(name_space, table_name));
+            aspxcsContent.Append(CreatePageLoad(action));
+            aspxcsContent.Append(CreateLoadData(action, colList, dal_name));
+            aspxcsContent.Append(CreateAddData(action, colList, table_name, model_name, dal_name));
+            aspxcsContent.Append(CreateEditData(action, colList, table_name, model_name, dal_name));
+            aspxcsContent.Append(CreateBatEditData(action, colList, table_name, model_name, dal_name));
+            aspxcsContent.Append(CreateDeleteData(action, table_name, dal_name));
+            aspxcsContent.Append(CreateDownAndDownAll(action, colList, table_name, model_name, dal_name));
             aspxcsContent.Append(CreateBottom());
 
             return aspxcsContent.ToString();
         }
 
-        private static string CreateCSHead()
+        private static string CreateCSHead(string name_space, string table_name)
         {
             return string.Format(@"using System;
 using System.Collections.Generic;
@@ -38,10 +38,10 @@ using System.Text;
 namespace {0}
 {{
     public partial class {1} : System.Web.UI.Page
-    {{", PageCache.NameSpaceStr, PageCache.TableName_UI);
+    {{", name_space, table_name);
         }
 
-        private static string CreatePageLoad()
+        private static string CreatePageLoad(int action)
         {
             string template = @"
         protected void Page_Load(object sender, EventArgs e)
@@ -63,7 +63,7 @@ namespace {0}
                     case ""loaddata"":
                         LoadData();
                         break;");
-            if (PageCache.GetCmd("添加") != null)
+            if ((action | (int)action_type.add) == (int)action_type.add)
             {
                 content.Append(@"
                     case ""add"":
@@ -71,7 +71,7 @@ namespace {0}
                         break;");
             }
 
-            if (PageCache.GetCmd("编辑") != null)
+            if ((action | (int)action_type.edit) == (int)action_type.edit)
             {
                 content.Append(@"
                     case ""edit"":
@@ -79,7 +79,7 @@ namespace {0}
                         break;");
             }
 
-            if (PageCache.GetCmd("批量编辑") != null)
+            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 content.Append(@"
                     case ""batedit"":
@@ -87,7 +87,7 @@ namespace {0}
                         break;");
             }
 
-            if (PageCache.GetCmd("删除") != null)
+            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 content.Append(@"
                     case ""delete"":
@@ -96,7 +96,8 @@ namespace {0}
             }
 
             StringBuilder elseContent = new StringBuilder();
-            if (PageCache.GetCmd("导出全部") != null || PageCache.GetCmd("导出选中") != null)
+            if ((action | (int)action_type.export_all) == (int)action_type.export_all ||
+                (action | (int)action_type.export_select) == (int)action_type.export_select)
             {
                 elseContent.AppendFormat(@"
             else{{
@@ -106,14 +107,14 @@ namespace {0}
                     {0}
                     {1}
                 }}
-            }}", PageCache.GetCmd("导出选中") != null ? "case \"down\":\r\n\t\t\t\tDown();\r\n\t\t\t\tbreak;" : "",
-               PageCache.GetCmd("导出全部") != null ? "case \"downall\":\r\n\t\t\t\tDownAll();\r\n\t\t\t\tbreak;" : "");
+            }}", (action | (int)action_type.export_select) == (int)action_type.export_select ? "case \"down\":\r\n\t\t\t\tDown();\r\n\t\t\t\tbreak;" : "",
+               (action | (int)action_type.export_all) == (int)action_type.export_all ? "case \"downall\":\r\n\t\t\t\tDownAll();\r\n\t\t\t\tbreak;" : "");
             }
 
             return string.Format(template, content.ToString(), elseContent.ToString());
         }
 
-        private static string CreateLoadData()
+        private static string CreateLoadData(int action, List<SqlColumnInfo> colList, string dal_name)
         {
             string template = @"
         private void LoadData()
@@ -133,55 +134,51 @@ namespace {0}
 ";
             StringBuilder searchContent = new StringBuilder();
             StringBuilder searchStrContent = new StringBuilder();
-            var showModel = PageCache.GetCmd("主显示");
-            if (showModel != null)
+            if ((action | (int)action_type.query_all) == (int)action_type.query_all)
             {
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
                         item.DbType.ToLower() == "int" ||
                         item.DbType.ToLower() == "bigint" ||
                         item.DbType.ToLower() == "tinyint")
                     {
-                        searchContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", attribute);
+                        searchContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", item.Name);
                         if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            searchContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", attribute);
-                            searchContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", attribute);
+                            searchContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
+                            searchContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
                         else
                         {
-                            searchContent.AppendFormat("\t\t\tint {0} = 0;\r\n", attribute);
-                            searchContent.AppendFormat("\t\t\tif(!int.TryParse({0}Str, out {0}))\r\n", attribute);
+                            searchContent.AppendFormat("\t\t\tint {0} = 0;\r\n", item.Name);
+                            searchContent.AppendFormat("\t\t\tif(!int.TryParse({0}Str, out {0}))\r\n", item.Name);
                             searchContent.Append("\t\t\t{\r\n");
-                            searchContent.AppendFormat("\t\t\t\t{0} = -1;\r\n", attribute);
+                            searchContent.AppendFormat("\t\t\t\t{0} = -1;\r\n", item.Name);
                             searchContent.Append("\t\t\t}\r\n");
                         }
                     }
                     else
                     {
-                        searchContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", attribute);
+                        searchContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", item.Name);
                     }
 
-                    searchStrContent.AppendFormat(" {0},", attribute);
+                    searchStrContent.AppendFormat(" {0},", item.Name);
                 }
 
                 StringBuilder encodeContent = new StringBuilder();
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    if (item.DbType == "varchar")
+                    if (item.DbType == "varchar" || item.DbType == "nvarchar" || item.DbType == "text")
                     {
-                        string attribute = item.ColName;
-
-                        encodeContent.AppendLine(string.Format("\t\t\tlist.ForEach(p => p.{0} = HttpUtility.HtmlEncode(p.{0}));", attribute));
+                        encodeContent.AppendLine(string.Format("\t\t\tlist.ForEach(p => p.{0} = HttpUtility.HtmlEncode(p.{0}));", item.Name));
                     }
                 }
 
                 // 移除最后的逗号
                 string searchStrCount = searchStrContent.Length > 0 ? searchStrContent.ToString().Substring(0, searchStrContent.Length - 1) : searchStrContent.ToString();
-                return string.Format(template, searchContent.ToString(), PageCache.TableName_DAL, searchStrContent.ToString(), searchStrCount, encodeContent.ToString());
+                return string.Format(template, searchContent.ToString(), dal_name, searchStrContent.ToString(), searchStrCount, encodeContent.ToString());
             }
             else
             {
@@ -189,40 +186,37 @@ namespace {0}
             }
         }
 
-        private static string CreateAddData()
+        private static string CreateAddData(int action, List<SqlColumnInfo> colList, string table_name, string model_name, string dal_name)
         {
             StringBuilder addContent = new StringBuilder();
             StringBuilder createModel = new StringBuilder();
-            var addModel = PageCache.GetCmd("添加");
-            if (addModel != null)
+            if ((action | (int)action_type.add) == (int)action_type.add)
             {
-                foreach (var item in addModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-                    string eval_attribute = item.ColName;
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
                         item.DbType.ToLower() == "int" ||
                         item.DbType.ToLower() == "tinyint")
                     {
-                        addContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtAdd{0}\"]);\r\n", attribute);
+                        addContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtAdd{0}\"]);\r\n", item.Name);
                         if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            addContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", attribute);
-                            addContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", attribute);
+                            addContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
+                            addContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
                         else
                         {
-                            addContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", attribute);
-                            addContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", attribute);
+                            addContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", item.Name);
+                            addContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
 
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(attribute, item.DbType));
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                     else
                     {
-                        addContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtAdd{1}\"]);\r\n", attribute, attribute);
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(attribute, item.DbType));
+                        addContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtAdd{1}\"]);\r\n", item.Name, item.Name);
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                 }
 
@@ -239,7 +233,7 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template, addContent.ToString(), PageCache.TableName_Model, createModel.ToString(), PageCache.TableName_DAL, PageCache.TableName);
+                return string.Format(template, addContent.ToString(), model_name, createModel.ToString(), dal_name, table_name);
             }
             else
             {
@@ -247,42 +241,39 @@ namespace {0}
             }
         }
 
-        private static string CreateEditData()
+        private static string CreateEditData(int action, List<SqlColumnInfo> colList, string table_name, string model_name, string dal_name)
         {
             StringBuilder editContent = new StringBuilder();
             StringBuilder createModel = new StringBuilder();
-            editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{0}\"]);\r\n", PageCache.KeyId);
-            createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", PageCache.KeyId, ExtendMethod.ToStringToType(PageCache.KeyId, PageCache.KeyId_DbType));
-            var editModel = PageCache.GetCmd("编辑");
-            if (editModel != null)
+            editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{0}\"]);\r\n", colList.ToKeyId());
+            createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", colList.ToKeyId(), ExtendMethod.ToStringToType(colList.ToKeyId(), colList.ToKeyIdDbType()));
+            if ((action | (int)action_type.edit) == (int)action_type.edit)
             {
-                foreach (var item in editModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-                    string eval_attribute = item.ColName;
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
                         item.DbType.ToLower() == "int" ||
                         item.DbType.ToLower() == "tinyint")
                     {
-                        editContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtEdit{0}\"]);\r\n", attribute);
+                        editContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtEdit{0}\"]);\r\n", item.Name);
                         if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            editContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", attribute);
-                            editContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", attribute);
+                            editContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
+                            editContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
                         else
                         {
-                            editContent.AppendFormat("\t\t\tint {0} = 0;\r\n", attribute);
-                            editContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", attribute);
+                            editContent.AppendFormat("\t\t\tint {0} = 0;\r\n", item.Name);
+                            editContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
 
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(attribute, item.DbType));
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                     else
                     {
-                        editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{1}\"]);\r\n", attribute, attribute);
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(eval_attribute, item.DbType));
+                        editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{1}\"]);\r\n", item.Name, item.Name);
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                 }
 
@@ -299,7 +290,7 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template, editContent.ToString(), PageCache.TableName_Model, createModel.ToString(), PageCache.TableName_DAL, PageCache.TableName);
+                return string.Format(template, editContent.ToString(), model_name, createModel.ToString(), dal_name, table_name);
             }
             else
             {
@@ -307,42 +298,39 @@ namespace {0}
             }
         }
 
-        private static string CreateBatEditData()
+        private static string CreateBatEditData(int action, List<SqlColumnInfo> colList, string table_name, string model_name, string dal_name)
         {
             StringBuilder batEditContent = new StringBuilder();
             StringBuilder createModel = new StringBuilder();
-            batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", PageCache.KeyId);
-            batEditContent.AppendFormat(@"           List<string> idList = {0}.Split(new char[]{{','}}, StringSplitOptions.RemoveEmptyEntries).ToList();{1}", PageCache.KeyId, Environment.NewLine);
-            var batEditModel = PageCache.GetCmd("批量编辑");
-            if (batEditModel != null)
+            batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", colList.ToKeyId());
+            batEditContent.AppendFormat(@"           List<string> idList = {0}.Split(new char[]{{','}}, StringSplitOptions.RemoveEmptyEntries).ToList();{1}", colList.ToKeyId(), Environment.NewLine);
+            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
-                foreach (var item in batEditModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-                    string eval_attribute = item.ColName;
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
                         item.DbType.ToLower() == "int" ||
                         item.DbType.ToLower() == "tinyint")
                     {
-                        batEditContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", attribute);
+                        batEditContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", item.Name);
                         if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            batEditContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", attribute);
-                            batEditContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", attribute);
+                            batEditContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
+                            batEditContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
                         else
                         {
-                            batEditContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", attribute);
-                            batEditContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", attribute);
+                            batEditContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", item.Name);
+                            batEditContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
                         }
 
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(eval_attribute, item.DbType));
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                     else
                     {
-                        batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", attribute);
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", eval_attribute, ExtendMethod.ToStringToType(eval_attribute, item.DbType));
+                        batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", item.Name);
+                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType(item.Name, item.DbType));
                     }
                 }
 
@@ -359,7 +347,7 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template, batEditContent.ToString(), PageCache.TableName_Model, createModel.ToString(), PageCache.TableName_DAL, PageCache.TableName);
+                return string.Format(template, batEditContent.ToString(), model_name, createModel.ToString(), dal_name, table_name);
             }
             else
             {
@@ -367,10 +355,9 @@ namespace {0}
             }
         }
 
-        private static string CreateDeleteData()
+        private static string CreateDeleteData(int action, string table_name, string dal_name)
         {
-            var deleteModel = PageCache.GetCmd("删除");
-            if (deleteModel != null)
+            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 StringBuilder batContent = new StringBuilder();
                 batContent.Append("            string ids = HttpUtility.UrlDecode(Request[\"ids\"]);\r\n");
@@ -387,7 +374,7 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template, batContent.ToString(), PageCache.TableName_DAL, PageCache.TableName);
+                return string.Format(template, batContent.ToString(), dal_name, table_name);
             }
             else
             {
@@ -395,11 +382,11 @@ namespace {0}
             }
         }
 
-        private static string CreateDownAndDownAll()
+        private static string CreateDownAndDownAll(int action, List<SqlColumnInfo> colList, string table_name, string model_name, string dal_name)
         {
-            var down_all_Model = PageCache.GetCmd("导出全部");
-            var down_select_Model = PageCache.GetCmd("导出选中");
-            if (down_all_Model != null || down_select_Model != null)
+            var down_all_Model = (action | (int)action_type.export_all) == (int)action_type.export_all;
+            var down_select_Model = (action | (int)action_type.export_select) == (int)action_type.export_select;
+            if (down_all_Model || down_select_Model)
             {
                 StringBuilder resultContent = new StringBuilder();
 
@@ -408,34 +395,32 @@ namespace {0}
                 {
                     StringBuilder searchContent = new StringBuilder();
                     StringBuilder searchStrContent = new StringBuilder();
-                    foreach (var item in down_all_Model.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        string attribute = item.AttrName;
-                        string eval_attribute = item.ColName;
                         if (item.DbType.ToLower() == "datetime" ||
                             item.DbType.ToLower() == "date" ||
                             item.DbType.ToLower() == "int" ||
                             item.DbType.ToLower() == "bigint" ||
                             item.DbType.ToLower() == "tinyint")
                         {
-                            searchContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", attribute);
+                            searchContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", item.Name);
                             if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                             {
-                                searchContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", attribute);
-                                searchContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", attribute);
+                                searchContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
+                                searchContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
                             }
                             else
                             {
-                                searchContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", attribute);
-                                searchContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", attribute);
+                                searchContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", item.Name);
+                                searchContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
                             }
                         }
                         else
                         {
-                            searchContent.AppendFormat("            string {0} = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", attribute);
+                            searchContent.AppendFormat("            string {0} = HttpUtility.UrlDecode(Request[\"txtSearch{0}\"]);\r\n", item.Name);
                         }
 
-                        searchStrContent.AppendFormat(" {0},", attribute);
+                        searchStrContent.AppendFormat(" {0},", item.Name);
                     }
 
                     // 移除最后的逗号
@@ -446,17 +431,17 @@ namespace {0}
 
                     StringBuilder content = new StringBuilder();
                     content.Append("<table border='1'><thead><tr>");
-                    foreach (var item in down_all_Model.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        content.AppendFormat("<th>{0}</th>", item.TitleName);
+                        content.AppendFormat("<th>{0}</th>", item.Comment);
                     }
 
                     content.Append("</tr></thead>");
 
                     StringBuilder appendFormat = new StringBuilder();
-                    foreach (var item in down_all_Model.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        appendFormat.AppendFormat(@"                content.AppendFormat(""<td>{{0}}</td>"", list[i].{0});{1}", item.AttrName, Environment.NewLine);
+                        appendFormat.AppendFormat(@"                content.AppendFormat(""<td>{{0}}</td>"", list[i].{0});{1}", item.Name, Environment.NewLine);
                     }
 
                     string template = @"
@@ -496,12 +481,12 @@ namespace {0}
         }}";
 
                     // TODO
-                    resultContent.AppendFormat(template, batContent.ToString(), PageCache.TableName_DAL, PageCache.TableName_Model, content.ToString(), appendFormat.ToString(), searchStrCount);
+                    resultContent.AppendFormat(template, batContent.ToString(), dal_name, model_name, content.ToString(), appendFormat.ToString(), searchStrCount);
                 }
                 #endregion
 
                 #region 导出选中
-                if (down_select_Model != null)
+                if (down_select_Model)
                 {
                     StringBuilder batContent = new StringBuilder();
                     batContent.Append("            string ids = HttpUtility.UrlDecode(Request[\"ids\"]);\r\n");
@@ -509,17 +494,17 @@ namespace {0}
 
                     StringBuilder content = new StringBuilder();
                     content.Append("<table border='1'><thead><tr>");
-                    foreach (var item in down_select_Model.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        content.AppendFormat("<th>{0}</th>", item.TitleName);
+                        content.AppendFormat("<th>{0}</th>", item.Comment);
                     }
 
                     content.Append("</tr></thead>");
 
                     StringBuilder appendFormat = new StringBuilder();
-                    foreach (var item in down_select_Model.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        appendFormat.AppendFormat(@"                content.AppendFormat(""<td>{{0}}</td>"", list[i].{0});{1}", item.AttrName, Environment.NewLine);
+                        appendFormat.AppendFormat(@"                content.AppendFormat(""<td>{{0}}</td>"", list[i].{0});{1}", item.Name, Environment.NewLine);
                     }
 
                     string template = @"
@@ -558,7 +543,7 @@ namespace {0}
         }}";
 
                     // TODO
-                    resultContent.AppendFormat(template, batContent.ToString(), PageCache.TableName_DAL, PageCache.TableName_Model, content.ToString(), appendFormat.ToString());
+                    resultContent.AppendFormat(template, batContent.ToString(), dal_name, model_name, content.ToString(), appendFormat.ToString());
                 }
                 #endregion
 

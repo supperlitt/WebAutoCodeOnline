@@ -165,6 +165,11 @@ namespace WinGenerateCodeDB.Cache
             UIType = uiType;
         }
 
+        public static void SetModelType(int model_type)
+        {
+            ModelStyle = model_type;
+        }
+
         public static void SetWebType(int webType)
         {
             WebType = webType;
