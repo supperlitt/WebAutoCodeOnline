@@ -18,7 +18,7 @@ namespace WinGenerateCodeDB.Code
             this.model_suffix = model_suffix;
         }
 
-        public string CreateModel(string table_name, List<SqlColumnInfo> colList, bool add_display_model = false)
+        public string CreateModel(string table_name, List<SqlColumnInfo> colList, bool add_display_model = false, bool isCodeSplit = true)
         {
             this.model_name = table_name + model_suffix;
 
@@ -49,6 +49,10 @@ namespace WinGenerateCodeDB.Code
                     SqlTool.GetFormatString(item.DbType),
                     item.Name,
                     SqlTool.GetDefaultValueStr(item.DbType));
+                if (isCodeSplit && i < (colList.Count - 1))
+                {
+                    content.AppendLine();
+                }
             }
 
             content.AppendLine("\t}");
@@ -69,6 +73,11 @@ namespace WinGenerateCodeDB.Code
                         SqlTool.GetFormatString(item.DbType),
                         item.Name,
                         SqlTool.GetDefaultValueStr(item.DbType));
+
+                    if (isCodeSplit && i < (colList.Count - 1))
+                    {
+                        content.AppendLine();
+                    }
                 }
 
                 content.AppendLine("\t\tpublic string ids { get; set; } = string.Empty;");
@@ -89,6 +98,11 @@ namespace WinGenerateCodeDB.Code
                         SqlTool.GetFormatString(item.DbType),
                         item.Name,
                         SqlTool.GetDefaultValueStr(item.DbType));
+
+                    if (isCodeSplit && i < (colList.Count - 1))
+                    {
+                        content.AppendLine();
+                    }
                 }
 
                 content.AppendLine("\t\tpublic int page { get; set; } = 0;");

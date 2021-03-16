@@ -1005,7 +1005,7 @@ namespace WinGenerateCodeDB
 
         private void Core_CreateModel()
         {
-            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked);
+            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked, this.chkIsSplit.Checked);
 
             FillInTab(result);
         }
@@ -1099,7 +1099,7 @@ namespace WinGenerateCodeDB
                 TextBox textBox = new TextBox();
                 textBox.Location = new System.Drawing.Point(6, 6);
                 textBox.Multiline = true;
-                textBox.Size = new System.Drawing.Size(1022, 498);
+                textBox.Size = new System.Drawing.Size(1022, 462);
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
                 textBox.Text = item.Value;

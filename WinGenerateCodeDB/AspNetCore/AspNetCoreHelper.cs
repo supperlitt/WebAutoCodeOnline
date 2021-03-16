@@ -31,15 +31,15 @@ namespace WinGenerateCodeDB
             }
         }
 
-        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel)
+        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel, bool isCodeSplit)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             ModelHelper_DefaultCore helper = new ModelHelper_DefaultCore(name_space, model_suffix);
             foreach (var item in tbDic)
             {
-                string text = helper.CreateModel(item.Key, item.Value, isAddQueryModel);
+                string text = helper.CreateModel(item.Key, item.Value, isAddQueryModel, isCodeSplit);
 
-                result.Add(item.Key, text);
+                result.Add(item.Key + model_suffix, text);
             }
 
             return result;
@@ -53,7 +53,7 @@ namespace WinGenerateCodeDB
             {
                 string text = helper.CreateDAL(item.Key, item.Value);
 
-                result.Add(item.Key, text);
+                result.Add(item.Key + dal_suffix, text);
             }
 
             return result;
@@ -67,7 +67,7 @@ namespace WinGenerateCodeDB
             {
                 string text = helper.CreateApiController(item.Key, item.Value);
 
-                result.Add(item.Key, text);
+                result.Add(item.Key.ToFirstUpper() + "Controller", text);
             }
 
             return result;

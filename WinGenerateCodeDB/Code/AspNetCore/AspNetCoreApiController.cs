@@ -51,11 +51,11 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApiAuth.Controllers
+namespace {0}.Controllers
 {{
     [ApiController]
-    public class {0}Controller : ControllerBase
-    {{", table_name.ToFirstUpper());
+    public class {1}Controller : ControllerBase
+    {{", name_space, table_name.ToFirstUpper());
         }
 
         public string CreateAddMethod()
@@ -217,7 +217,7 @@ namespace WebApiAuth.Controllers
                 string template = @"
         [Route(""{0}/batedit"")]
         [HttpPost]
-        public result_info<object> batedit_{0}([FromBody] bitedit_{1} model)
+        public result_info<object> batedit_{0}([FromBody] batedit_{1} model)
         {{
             if (model != null)
             {{

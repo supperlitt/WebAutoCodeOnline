@@ -167,6 +167,7 @@
             this.btnNextMulTable = new System.Windows.Forms.Button();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.btnReturn = new System.Windows.Forms.Button();
+            this.chkIsSplit = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1401,6 +1402,7 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.chkIsSplit);
             this.tabPage6.Controls.Add(this.chkQueryModel);
             this.tabPage6.Controls.Add(this.txtCoreDalSuffix);
             this.tabPage6.Controls.Add(this.label16);
@@ -1427,25 +1429,27 @@
             // chkQueryModel
             // 
             this.chkQueryModel.AutoSize = true;
-            this.chkQueryModel.Location = new System.Drawing.Point(16, 25);
+            this.chkQueryModel.Checked = true;
+            this.chkQueryModel.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkQueryModel.Location = new System.Drawing.Point(16, 6);
             this.chkQueryModel.Name = "chkQueryModel";
-            this.chkQueryModel.Size = new System.Drawing.Size(78, 16);
+            this.chkQueryModel.Size = new System.Drawing.Size(102, 16);
             this.chkQueryModel.TabIndex = 15;
-            this.chkQueryModel.Text = "查询Model";
+            this.chkQueryModel.Text = "包含查询Model";
             this.chkQueryModel.UseVisualStyleBackColor = true;
             // 
             // txtCoreDalSuffix
             // 
-            this.txtCoreDalSuffix.Location = new System.Drawing.Point(591, 62);
+            this.txtCoreDalSuffix.Location = new System.Drawing.Point(962, 18);
             this.txtCoreDalSuffix.Name = "txtCoreDalSuffix";
-            this.txtCoreDalSuffix.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreDalSuffix.Size = new System.Drawing.Size(76, 21);
             this.txtCoreDalSuffix.TabIndex = 12;
             this.txtCoreDalSuffix.Text = "DAL";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(526, 65);
+            this.label16.Location = new System.Drawing.Point(897, 21);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(59, 12);
             this.label16.TabIndex = 8;
@@ -1453,15 +1457,15 @@
             // 
             // txtCoreModelSuffix
             // 
-            this.txtCoreModelSuffix.Location = new System.Drawing.Point(835, 18);
+            this.txtCoreModelSuffix.Location = new System.Drawing.Point(796, 18);
             this.txtCoreModelSuffix.Name = "txtCoreModelSuffix";
-            this.txtCoreModelSuffix.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreModelSuffix.Size = new System.Drawing.Size(76, 21);
             this.txtCoreModelSuffix.TabIndex = 13;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(764, 21);
+            this.label17.Location = new System.Drawing.Point(725, 21);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(71, 12);
             this.label17.TabIndex = 9;
@@ -1471,7 +1475,7 @@
             // 
             this.txtCoreNameSpace.Location = new System.Drawing.Point(591, 18);
             this.txtCoreNameSpace.Name = "txtCoreNameSpace";
-            this.txtCoreNameSpace.Size = new System.Drawing.Size(130, 21);
+            this.txtCoreNameSpace.Size = new System.Drawing.Size(109, 21);
             this.txtCoreNameSpace.TabIndex = 14;
             // 
             // label18
@@ -1508,12 +1512,12 @@
             this.textBox1.Location = new System.Drawing.Point(6, 6);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1022, 498);
+            this.textBox1.Size = new System.Drawing.Size(1022, 462);
             this.textBox1.TabIndex = 0;
             // 
             // btnSaveFile
             // 
-            this.btnSaveFile.Location = new System.Drawing.Point(230, 64);
+            this.btnSaveFile.Location = new System.Drawing.Point(745, 64);
             this.btnSaveFile.Name = "btnSaveFile";
             this.btnSaveFile.Size = new System.Drawing.Size(101, 23);
             this.btnSaveFile.TabIndex = 1;
@@ -1523,7 +1527,7 @@
             // 
             // btnCopyFullClass
             // 
-            this.btnCopyFullClass.Location = new System.Drawing.Point(104, 64);
+            this.btnCopyFullClass.Location = new System.Drawing.Point(617, 64);
             this.btnCopyFullClass.Name = "btnCopyFullClass";
             this.btnCopyFullClass.Size = new System.Drawing.Size(101, 23);
             this.btnCopyFullClass.TabIndex = 1;
@@ -1533,7 +1537,7 @@
             // 
             // btnCopyClass
             // 
-            this.btnCopyClass.Location = new System.Drawing.Point(10, 64);
+            this.btnCopyClass.Location = new System.Drawing.Point(522, 64);
             this.btnCopyClass.Name = "btnCopyClass";
             this.btnCopyClass.Size = new System.Drawing.Size(76, 23);
             this.btnCopyClass.TabIndex = 1;
@@ -1543,7 +1547,7 @@
             // 
             // btnOther
             // 
-            this.btnOther.Location = new System.Drawing.Point(400, 21);
+            this.btnOther.Location = new System.Drawing.Point(339, 50);
             this.btnOther.Name = "btnOther";
             this.btnOther.Size = new System.Drawing.Size(62, 23);
             this.btnOther.TabIndex = 1;
@@ -1553,7 +1557,7 @@
             // 
             // btnDAL
             // 
-            this.btnDAL.Location = new System.Drawing.Point(192, 21);
+            this.btnDAL.Location = new System.Drawing.Point(129, 50);
             this.btnDAL.Name = "btnDAL";
             this.btnDAL.Size = new System.Drawing.Size(62, 23);
             this.btnDAL.TabIndex = 1;
@@ -1563,7 +1567,7 @@
             // 
             // btnApiController
             // 
-            this.btnApiController.Location = new System.Drawing.Point(278, 21);
+            this.btnApiController.Location = new System.Drawing.Point(216, 50);
             this.btnApiController.Name = "btnApiController";
             this.btnApiController.Size = new System.Drawing.Size(94, 23);
             this.btnApiController.TabIndex = 2;
@@ -1573,7 +1577,7 @@
             // 
             // btnModel
             // 
-            this.btnModel.Location = new System.Drawing.Point(104, 21);
+            this.btnModel.Location = new System.Drawing.Point(16, 50);
             this.btnModel.Name = "btnModel";
             this.btnModel.Size = new System.Drawing.Size(62, 23);
             this.btnModel.TabIndex = 3;
@@ -1644,6 +1648,18 @@
             this.btnReturn.Text = "返回";
             this.btnReturn.UseVisualStyleBackColor = true;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
+            // 
+            // chkIsSplit
+            // 
+            this.chkIsSplit.AutoSize = true;
+            this.chkIsSplit.Checked = true;
+            this.chkIsSplit.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIsSplit.Location = new System.Drawing.Point(16, 28);
+            this.chkIsSplit.Name = "chkIsSplit";
+            this.chkIsSplit.Size = new System.Drawing.Size(72, 16);
+            this.chkIsSplit.TabIndex = 15;
+            this.chkIsSplit.Text = "代码间距";
+            this.chkIsSplit.UseVisualStyleBackColor = true;
             // 
             // MainFrm
             // 
@@ -1844,6 +1860,7 @@
         private System.Windows.Forms.Button btnSaveFile;
         private System.Windows.Forms.Button btnReturn;
         private System.Windows.Forms.CheckBox chkQueryModel;
+        private System.Windows.Forms.CheckBox chkIsSplit;
     }
 }
 
