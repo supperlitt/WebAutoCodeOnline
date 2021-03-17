@@ -8,20 +8,20 @@ namespace WinGenerateCodeDB.Code
 {
     public class MvcViewHelper_Bootstrap
     {
-        public static string CreateView()
+        public static string CreateView(string name_space, string table_name, int action, List<SqlColumnInfo> colList, string model_name, string dal_name)
         {
             StringBuilder aspxContent = new StringBuilder();
             aspxContent.Append(CreatePageHead());
-            aspxContent.Append(CreateHeader());
-            aspxContent.Append(CreateBodyHead());
-            aspxContent.Append(CreateSearchContent());
-            aspxContent.Append(CreateCmdToolBar());
-            aspxContent.Append(CreateDataGrid());
-            aspxContent.Append(CreateDialog());
+            aspxContent.Append(CreateHeader(table_name));
+            aspxContent.Append(CreateBodyHead(table_name));
+            aspxContent.Append(CreateSearchContent(action, colList));
+            aspxContent.Append(CreateCmdToolBar(action));
+            aspxContent.Append(CreateDataGrid(action, colList));
+            aspxContent.Append(CreateDialog(action, colList));
             aspxContent.Append(CreateNotifyMsg());
             aspxContent.Append(CreateJsDateFormat());
-            aspxContent.Append(CreateJsOperation());
-            aspxContent.Append(CreateJsLoad());
+            aspxContent.Append(CreateJsOperation(action, colList, table_name));
+            aspxContent.Append(CreateJsLoad(action, colList, table_name));
             aspxContent.Append(CreateBottomContent());
 
             return aspxContent.ToString();
@@ -38,7 +38,7 @@ namespace WinGenerateCodeDB.Code
 ";
         }
 
-        private static string CreateHeader()
+        private static string CreateHeader(string table_name)
         {
             return string.Format(@"
 <head>
@@ -54,27 +54,26 @@ namespace WinGenerateCodeDB.Code
     <script src=""http://cdn.bootcss.com/bootstrap-datetimepicker/2.1.30/js/bootstrap-datetimepicker.min.js""></script>
     <script src=""http://cdn.bootcss.com/bootstrap-datetimepicker/2.1.30/js/locales/bootstrap-datetimepicker.zh-CN.js""></script>
 </head>
-", PageCache.TiTle);
+", table_name);
         }
 
-        private static string CreateBodyHead()
+        private static string CreateBodyHead(string table_name)
         {
             return string.Format(@"
 <body>
     <div class=""container"">
         <h2>{0}
         </h2>
-", PageCache.TiTle);
+", table_name);
         }
 
-        private static string CreateSearchContent()
+        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList)
         {
             StringBuilder searchContent = new StringBuilder();
             int index = 0;
-            var showModel = PageCache.GetCmd("主显示");
-            if (showModel != null)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
                     if (index % 3 == 0)
                     {
@@ -93,7 +92,6 @@ namespace WinGenerateCodeDB.Code
 
                     if (item.DbType.ToLower() == "datetime")
                     {
-                        string attribute = item.AttrName;
                         searchContent.AppendFormat(@"
             <div class=""col-md-4"">
                 {1}：<input size=""10"" type=""text"" value="""" id=""txtSearch{0}"" placeholder=""选择指定日期"">
@@ -105,11 +103,10 @@ namespace WinGenerateCodeDB.Code
                         autoclose: true //选择日期后自动关闭 
                     }});
                 </script>
-            </div>", attribute, item.TitleName);
+            </div>", item.Name, item.Comment);
                     }
                     else if (item.DbType.ToLower() == "date")
                     {
-                        string attribute = item.AttrName;
                         searchContent.AppendFormat(@"
             <div class=""col-md-4"">
                 {1}：<input size=""10"" type=""text"" value="""" id=""txtSearch{0}"" placeholder=""选择指定日期"">
@@ -123,15 +120,14 @@ namespace WinGenerateCodeDB.Code
                         loadMsg(1, pageSize);
                     }});
                 </script>
-            </div>", attribute, item.TitleName);
+            </div>", item.Name, item.Comment);
                     }
                     else
                     {
-                        string attribute = item.AttrName;
                         searchContent.AppendFormat(@"
             <div class=""col-md-4"">
                 <label for=""txtSearch{0}"">{1}：</label><input type=""text"" id=""txtSearch{0}"" />
-            </div>", attribute, item.TitleName);
+            </div>", item.Name, item.Comment);
                     }
 
                     index++;
@@ -176,53 +172,53 @@ namespace WinGenerateCodeDB.Code
             }
         }
 
-        private static string CreateCmdToolBar()
+        private static string CreateCmdToolBar(int action)
         {
             int itemCount = 0;
             StringBuilder toolBarContent = new StringBuilder();
-            if (PageCache.GetCmd("添加") != null)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""新增"" onclick='newModel();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("编辑") != null)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""编辑"" onclick='editModel();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("批量编辑") != null)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""批量编辑"" onclick='batEditModel();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("删除") != null)
+            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""删除"" onclick='destroyModel();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("删除选中") != null)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""删除选中"" onclick='destroyBatModel();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("导出选中") != null)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""选中导出"" onclick='selectExport();' />");
                 itemCount++;
             }
 
-            if (PageCache.GetCmd("导出全部") != null)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""导出全部"" onclick='exportAll();' />");
@@ -250,7 +246,7 @@ namespace WinGenerateCodeDB.Code
             }
         }
 
-        private static string CreateDataGrid()
+        private static string CreateDataGrid(int action, List<SqlColumnInfo> colList)
         {
             // singleselect=""true""
             string template = @"
@@ -268,15 +264,12 @@ namespace WinGenerateCodeDB.Code
             StringBuilder tbodyContent = new StringBuilder();
             tbodyContent.Append(@"
                     <th><input type=""checkbox"" id=""chkAll"" onclick=""checkAll();"" /></th>");
-            var showModel = PageCache.GetCmd("主显示");
-            if (showModel != null)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-
                     tbodyContent.AppendFormat(@"
-                    <th>{0}</th>", item.TitleName);
+                    <th>{0}</th>", item.Comment);
                 }
 
                 return string.Format(template, tbodyContent.ToString());
@@ -292,13 +285,12 @@ namespace WinGenerateCodeDB.Code
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private static string CreateDialog()
+        private static string CreateDialog(int action, List<SqlColumnInfo> colList)
         {
             StringBuilder dialogContent = new StringBuilder();
             int addWidth = 400;
             #region 添加
-            var addModel = PageCache.GetCmd("添加");
-            if (addModel != null)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -336,14 +328,14 @@ namespace WinGenerateCodeDB.Code
                 // <=8 单列， <=18&&>8 双列，>18 三列
                 int index = 0;
                 StringBuilder content = new StringBuilder();
-                if (addModel.AttrList.Count > 18)
+                if (colList.ToNotMainIdList().Count > 18)
                 {
                     #region 三列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in addModel.AttrList)
+                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -352,15 +344,13 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-4"">
                                 <label for=""txtAdd{0}"">{1}:</label>
                                 <input type=""text"" id=""txtAdd{0}"" name=""txtAdd{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -386,14 +376,14 @@ namespace WinGenerateCodeDB.Code
 
                     addWidth *= 3;
                 }
-                else if (addModel.AttrList.Count <= 18 & addModel.AttrList.Count > 8)
+                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
                 {
                     #region 二列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in addModel.AttrList)
+                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -402,15 +392,13 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-6"">
                                 <label for=""txtAdd{0}"">{1}:</label>
                                 <input type=""text"" id=""txtAdd{0}"" name=""txtAdd{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -434,12 +422,11 @@ namespace WinGenerateCodeDB.Code
                 {
                     #region 一列
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in addModel.AttrList)
+                            <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
-                        string attribute = item.AttrName;
 
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
@@ -447,7 +434,7 @@ namespace WinGenerateCodeDB.Code
                             <div class=""col-md-12"">
                                 <label for=""txtAdd{0}"">{1}:</label>
                                 <input type=""text"" id=""txtAdd{0}"" name=""txtAdd{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         content.Append(@"
                         </div>");
@@ -463,8 +450,7 @@ namespace WinGenerateCodeDB.Code
 
             int editWidth = 400;
             #region 编辑
-            var editModel = PageCache.GetCmd("编辑");
-            if (editModel != null)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -501,15 +487,15 @@ namespace WinGenerateCodeDB.Code
 
                 int index = 0;
                 StringBuilder content = new StringBuilder();
-                if (editModel.AttrList.Count > 18)
+                if (colList.ToNotMainIdList().Count > 18)
                 {
                     #region 三列
                     content.Append(@"
                         <div class=""row form-group"">");
 
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtEdit{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in editModel.AttrList)
+                            <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -518,15 +504,13 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-4"">
                                 <label for=""txtEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtEdit{0}"" name=""txtEdit{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -552,15 +536,15 @@ namespace WinGenerateCodeDB.Code
 
                     editWidth *= 3;
                 }
-                else if (editModel.AttrList.Count <= 18 & editModel.AttrList.Count > 8)
+                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
                 {
                     #region 二列
                     content.Append(@"
                         <div class=""row form-group"">");
 
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtEdit{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in editModel.AttrList)
+                            <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -569,15 +553,13 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-6"">
                                 <label for=""txtEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtEdit{0}"" name=""txtEdit{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -605,13 +587,11 @@ namespace WinGenerateCodeDB.Code
 
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />
-                        </div>", PageCache.KeyId);
-                    foreach (var item in editModel.AttrList)
+                        </div>", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
-
-                        string attribute = item.AttrName;
 
                         // 初始化form显示数据
                         // &#12288; 占一个中文字符
@@ -619,7 +599,7 @@ namespace WinGenerateCodeDB.Code
                             <div class=""col-md-12"">
                                 <label for=""txtEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtEdit{0}"" name=""txtEdit{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                         content.Append(@"
@@ -636,8 +616,7 @@ namespace WinGenerateCodeDB.Code
 
             int batEditWidth = 400;
             #region 批量编辑
-            var batEditModel = PageCache.GetCmd("批量编辑");
-            if (batEditModel != null)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -673,14 +652,14 @@ namespace WinGenerateCodeDB.Code
         </div>";
                 int index = 1;
                 StringBuilder content = new StringBuilder();
-                if (batEditModel.AttrList.Count > 18)
+                if (colList.ToNotMainIdList().Count > 18)
                 {
                     #region 三列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in batEditModel.AttrList)
+                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -689,14 +668,12 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-4"">
                                 <label for=""txtBatEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -722,14 +699,14 @@ namespace WinGenerateCodeDB.Code
 
                     batEditWidth *= 3;
                 }
-                else if (batEditModel.AttrList.Count <= 18 & batEditModel.AttrList.Count > 8)
+                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
                 {
                     #region 二列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", PageCache.KeyId);
-                    foreach (var item in batEditModel.AttrList)
+                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -738,14 +715,12 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                         }
 
-                        string attribute = item.AttrName;
-
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-6"">
                                 <label for=""txtBatEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}"" />
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;"));
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
 
                         index++;
                     }
@@ -771,20 +746,18 @@ namespace WinGenerateCodeDB.Code
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" /></div>", PageCache.KeyId);
-                    foreach (var item in batEditModel.AttrList)
+                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" /></div>", colList.ToKeyId());
+                    foreach (var item in colList.ToNotMainIdList())
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
-
-                        string attribute = item.AttrName;
 
                         // &#12288; 占一个中文字符
                         content.AppendFormat(@"
                             <div class=""col-md-12"">
                                 <label for=""txtBatEdit{0}"">{1}:</label>
                                 <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}""/>
-                            </div>", attribute, item.TitleName.PadLeftStr(4, "&emsp;")); // &ensp;  &emsp; &#12288;
+                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;")); // &ensp;  &emsp; &#12288;
 
                         content.Append(@"
                         </div>");
@@ -799,7 +772,6 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             return dialogContent.ToString();
-            //}
         }
 
         private static string CreateNotifyMsg()
@@ -830,53 +802,51 @@ namespace WinGenerateCodeDB.Code
 ";
         }
 
-        private static string CreateJsOperation()
+        private static string CreateJsOperation(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder content = new StringBuilder(@"
 
         <script type=""text/javascript"">");
 
             #region edit
-            var editModel = PageCache.GetCmd("编辑");
-            if (editModel != null)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 // 定义变量
                 StringBuilder editDefineVarContent = new StringBuilder();
-                editDefineVarContent.AppendFormat(@"var txtEdit{0} = """";", PageCache.KeyId);
+                editDefineVarContent.AppendFormat(@"var txtEdit{0} = """";", colList.ToKeyId());
 
                 // 读取变量值
                 StringBuilder editReadToVarContent = new StringBuilder();
-                editReadToVarContent.AppendFormat(@"txtEdit{0} = $(this).val();", PageCache.KeyId);
+                editReadToVarContent.AppendFormat(@"txtEdit{0} = $(this).val();", colList.ToKeyId());
 
                 // 变量值 赋值到 内容中
                 StringBuilder editVarToUIContent = new StringBuilder();
-                editVarToUIContent.AppendFormat(@"$(""#txtEdit{0}"").val(txtEdit{0});", PageCache.KeyId);
+                editVarToUIContent.AppendFormat(@"$(""#txtEdit{0}"").val(txtEdit{0});", colList.ToKeyId());
 
                 // 初始化提交的参数
                 StringBuilder editSubmitContent = new StringBuilder();
-                editSubmitContent.AppendFormat(@"var txtEdit{0} = $(""#txtEdit{0}"").val();", PageCache.KeyId);
+                editSubmitContent.AppendFormat(@"var txtEdit{0} = $(""#txtEdit{0}"").val();", colList.ToKeyId());
 
                 // 提交的post字符串内容
                 StringBuilder editpostDataContent = new StringBuilder("var postData = ");
-                editpostDataContent.AppendFormat(@"""txtEdit{0}="" + encodeURI(txtEdit{0}) ", PageCache.KeyId);
+                editpostDataContent.AppendFormat(@"""txtEdit{0}="" + encodeURI(txtEdit{0}) ", colList.ToKeyId());
 
                 int index = 0;
-                foreach (var item in editModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
                     editDefineVarContent.AppendFormat(@"
-                var txtEdit{0} = """";", attribute);
+                var txtEdit{0} = """";", item.Name);
 
                     editReadToVarContent.AppendFormat(@"
-                        txtEdit{0} = $(this).attr(""tag_{0}"");", attribute);
+                        txtEdit{0} = $(this).attr(""tag_{0}"");", item.Name);
 
                     editVarToUIContent.AppendFormat(@"
-                    $(""#txtEdit{0}"").val(txtEdit{0});", attribute);
+                    $(""#txtEdit{0}"").val(txtEdit{0});", item.Name);
 
                     editSubmitContent.AppendFormat(@"
-                var txtEdit{0} = $(""#txtEdit{0}"").val();", attribute);
+                var txtEdit{0} = $(""#txtEdit{0}"").val();", item.Name);
 
-                    editpostDataContent.AppendFormat(@" + ""&txtEdit{0}="" + encodeURI(txtEdit{0})", attribute);
+                    editpostDataContent.AppendFormat(@" + ""&txtEdit{0}="" + encodeURI(txtEdit{0})", item.Name);
 
                     index++;
                 }
@@ -933,30 +903,28 @@ namespace WinGenerateCodeDB.Code
                     editVarToUIContent.ToString(),
                     editSubmitContent.ToString(),
                     editpostDataContent.ToString(),
-                    PageCache.TableName);
+                    table_name);
             }
             #endregion
 
             #region add
-            var addModel = PageCache.GetCmd("添加");
-            if (addModel != null)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder addPostDataContent = new StringBuilder("var postData = ");
                 int index = 0;
-                foreach (var item in addModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
                     addContent.AppendFormat(@"
-                var txtAdd{0} = $(""#txtAdd{0}"").val();", attribute);
+                var txtAdd{0} = $(""#txtAdd{0}"").val();", item.Name);
 
                     if (index == 0)
                     {
-                        addPostDataContent.AppendFormat("\"txtAdd{0}=\" + encodeURI(txtAdd{0}) ", attribute);
+                        addPostDataContent.AppendFormat("\"txtAdd{0}=\" + encodeURI(txtAdd{0}) ", item.Name);
                     }
                     else
                     {
-                        addPostDataContent.AppendFormat(" + \"&txtAdd{0}=\" + encodeURI(txtAdd{0})", attribute);
+                        addPostDataContent.AppendFormat(" + \"&txtAdd{0}=\" + encodeURI(txtAdd{0})", item.Name);
                     }
 
                     index++;
@@ -995,13 +963,12 @@ namespace WinGenerateCodeDB.Code
                 }});
             }}", addContent.ToString(),
                addPostDataContent.ToString(),
-               PageCache.TableName);
+               table_name);
             }
             #endregion
 
             #region del
-            var deleteModel = PageCache.GetCmd("删除");
-            if (deleteModel != null)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 string template = string.Format(@"
 
@@ -1049,31 +1016,27 @@ namespace WinGenerateCodeDB.Code
                 }}else{{
                     alert(""请勾选进行删除！"");
                 }}
-            }}", PageCache.TableName,
-                PageCache.KeyId);
+            }}", table_name,
+                colList.ToKeyId());
                 content.Append(template);
             }
             #endregion
 
             #region bat edit
-            var batEdit = PageCache.GetCmd("批量编辑");
-            if (batEdit != null)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
-                string keyAttribute = PageCache.KeyId;
-
                 StringBuilder batEditContent = new StringBuilder();
-                batEditContent.AppendFormat("var txtBatEdit{0} = $(\"#txtBatEdit{0}\").val();\r\n", keyAttribute);
+                batEditContent.AppendFormat("var txtBatEdit{0} = $(\"#txtBatEdit{0}\").val();\r\n", colList.ToKeyId());
 
                 StringBuilder batEditPostDataContent = new StringBuilder("var postData = ");
-                batEditPostDataContent.AppendFormat("\"txtBatEdit{0}=\" + encodeURI(txtBatEdit{0}) ", keyAttribute);
+                batEditPostDataContent.AppendFormat("\"txtBatEdit{0}=\" + encodeURI(txtBatEdit{0}) ", colList.ToKeyId());
 
                 int index = 0;
-                foreach (var item in batEdit.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
                     batEditContent.AppendFormat(@"
-                var txtBatEdit{0} = $(""#txtBatEdit{0}"").val();", attribute);
-                    batEditPostDataContent.AppendFormat(" + \"&txtBatEdit{0}=\" + encodeURI(txtBatEdit{0})", attribute);
+                var txtBatEdit{0} = $(""#txtBatEdit{0}"").val();", item.Name);
+                    batEditPostDataContent.AppendFormat(" + \"&txtBatEdit{0}=\" + encodeURI(txtBatEdit{0})", item.Name);
 
                     index++;
                 }
@@ -1122,44 +1085,41 @@ namespace WinGenerateCodeDB.Code
                         $(""#batEdit_Modal"").modal('hide');      // close the dialog
                     }}
                 }});
-            }}", PageCache.KeyId,
+            }}", colList.ToKeyId(),
                     batEditContent.ToString(),
                     batEditPostDataContent.ToString(),
-                    PageCache.TableName);
+                    table_name);
             }
 
             #endregion
 
             #region export all
 
-            var exportall = PageCache.GetCmd("导出全部");
-            if (exportall != null)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in exportall.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-
                     // 找到一个
                     coditionContent.AppendFormat(@"
-                var txtSearch{0} = $(""#txtSearch{0}"").val();", attribute);
+                var txtSearch{0} = $(""#txtSearch{0}"").val();", item.Name);
 
                     // var pagePost = "&xxx=" + xxx + "&yyy=" +yyy;
                     if (index == 0)
                     {
-                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
                     else
                     {
-                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
 
                     index++;
                 }
 
-                if (exportall.AttrList.Count == 0)
+                if (colList.ToNotMainIdList().Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }
@@ -1175,7 +1135,7 @@ namespace WinGenerateCodeDB.Code
                 {1}
                 {2}
                 document.location=""/{0}/downall?"" + pageData.replace(""+"",""%2b"");
-            }}", PageCache.TableName,
+            }}", table_name,
                coditionContent.ToString(),
                pagePost.ToString());
             }
@@ -1184,34 +1144,31 @@ namespace WinGenerateCodeDB.Code
 
             #region export part
 
-            var exportselect = PageCache.GetCmd("导出选中");
-            if (exportselect != null)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in exportselect.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-
                     // 找到一个
                     coditionContent.AppendFormat(@"
-                var txtSearch{0} = $(""#txtSearch{0}"").val();", attribute);
+                var txtSearch{0} = $(""#txtSearch{0}"").val();", item.Name);
 
                     // var pagePost = "&xxx=" + xxx + "&yyy=" +yyy;
                     if (index == 0)
                     {
-                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
                     else
                     {
-                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
 
                     index++;
                 }
 
-                if (exportselect.AttrList.Count == 0)
+                if (colList.ToNotMainIdList().Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }
@@ -1237,7 +1194,7 @@ namespace WinGenerateCodeDB.Code
                     document.location=""/{0}/down?ids="" + ids;
                 }}
             }}
-", PageCache.TableName);
+", table_name);
             }
 
             #endregion
@@ -1248,7 +1205,7 @@ namespace WinGenerateCodeDB.Code
             return content.ToString();
         }
 
-        private static string CreateJsLoad()
+        private static string CreateJsLoad(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder jsContent = new StringBuilder();
             string template = @"
@@ -1365,24 +1322,20 @@ namespace WinGenerateCodeDB.Code
             int index = 0;
             StringBuilder coditionContent = new StringBuilder();
             StringBuilder pagePost = new StringBuilder();
-            var showModel = PageCache.GetCmd("主显示");
-            if (showModel != null)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.AttrName;
-
-                    // 找到一个
                     coditionContent.AppendFormat(@"
-                var txtSearch{0} = $(""#txtSearch{0}"").val();", attribute);
+                var txtSearch{0} = $(""#txtSearch{0}"").val();", item.Name);
 
                     if (index == 0)
                     {
-                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("var pageData = \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
                     else
                     {
-                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", attribute);
+                        pagePost.AppendFormat("+ \"&txtSearch{0}=\" + txtSearch{0}", item.Name);
                     }
 
                     index++;
@@ -1392,16 +1345,15 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder tagContent = new StringBuilder();
                 tagContent.Append(@"var attr = """);
                 index = 0;
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    var attribute = item.AttrName;
                     if (index == 0)
                     {
-                        tagContent.AppendFormat(@" tag_{0}='"" + model.{0} + ""'"" ", attribute);
+                        tagContent.AppendFormat(@" tag_{0}='"" + model.{0} + ""'"" ", item.Name);
                     }
                     else
                     {
-                        tagContent.AppendFormat(@" + "" tag_{0}='"" + model.{0} + ""'"" ", attribute);
+                        tagContent.AppendFormat(@" + "" tag_{0}='"" + model.{0} + ""'"" ", item.Name);
                     }
 
                     index++;
@@ -1419,16 +1371,16 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder showContent = new StringBuilder();
                 showContent.AppendFormat(@"
                             {1}
-                            content += ""<td><input type=\""checkbox\"" id=\""chk"" + model.{0} + ""\"" value=\"""" + model.{0} + ""\"" "" + attr + "" /></td>"";", PageCache.KeyId, tagContent.ToString());
-                foreach (var item in showModel.AttrList)
+                            content += ""<td><input type=\""checkbox\"" id=\""chk"" + model.{0} + ""\"" value=\"""" + model.{0} + ""\"" "" + attr + "" /></td>"";", colList.ToKeyId(), tagContent.ToString());
+                foreach (var item in colList.ToNotMainIdList())
                 {
                     showContent.AppendFormat(@"
-                            content += ""<td>"" + model.{0} + ""</td>"";", item.AttrName);
+                            content += ""<td>"" + model.{0} + ""</td>"";", item.Name);
                 }
 
-                int colspanCount = showModel.AttrList.Count;
+                int colspanCount = colList.ToNotMainIdList().Count;
                 pagePost.Append(";");
-                if (showModel.AttrList.Count == 0)
+                if (colList.ToNotMainIdList().Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }
@@ -1437,7 +1389,7 @@ namespace WinGenerateCodeDB.Code
                     colspanCount,
                     coditionContent,
                     pagePost,
-                    PageCache.TableName,
+                    table_name,
                     showContent.ToString());
 
                 return jsContent.ToString();

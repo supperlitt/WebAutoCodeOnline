@@ -83,7 +83,7 @@ namespace WinGenerateCodeDB.Code
     </div>
 ";
             StringBuilder searchContent = new StringBuilder();
-            if ((action | (int)action_type.query_list) == (int)action_type.query_list)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 foreach (var attr in colList.ToNotMainIdList())
                 {
@@ -101,37 +101,37 @@ namespace WinGenerateCodeDB.Code
             StringBuilder toolBarContent = new StringBuilder(@"
 <div id=""toolbar"">
 ");
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-add"" plain=""true"" onclick=""newModel()"">新增</a>");
             }
 
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-edit"" plain=""true"" onclick=""editModel()"">编辑</a>");
             }
 
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) ==(int)action_type.bat_edit)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-edit"" plain=""true"" onclick=""batEditModel()"">批量编辑</a>");
             }
 
-            if ((action | (int)action_type.delete) == (int)action_type.delete)
+            if ((action & (int)action_type.delete) ==(int)action_type.delete)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyModel()"">删除</a>");
             }
 
-            if ((action | (int)action_type.bat_delete) == (int)action_type.bat_delete)
+            if ((action & (int)action_type.bat_delete) ==(int)action_type.bat_delete)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyBatModel()"">删除</a>");
             }
 
-            if ((action | (int)action_type.export_all) == (int)action_type.export_all)
+            if ((action & (int)action_type.export_all) ==(int)action_type.export_all)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""exportAll()"">导出全部</a>");
             }
 
-            if ((action | (int)action_type.export_select) == (int)action_type.export_select)
+            if ((action & (int)action_type.export_select) ==(int)action_type.export_select)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""selectExport()"">导出选中</a>");
             }
@@ -145,7 +145,7 @@ namespace WinGenerateCodeDB.Code
         private static string CreateDataGrid(int action, List<SqlColumnInfo> colList, string table_name)
         {
             // singleselect=""true""
-            if ((action | (int)action_type.query_list) == (int)action_type.query_list)
+            if ((action & (int)action_type.query_list) ==(int)action_type.query_list)
             {
                 string template = @"
     <table id=""dg"" class=""easyui-datagrid"" style=""width: 1200px; height: auto"" url="""" pagination=""true"" 
@@ -182,7 +182,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dialogContent = new StringBuilder();
 
             #region 添加
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) ==(int)action_type.add)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -220,7 +220,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region 编辑
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) ==(int)action_type.edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -259,7 +259,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region 批量编辑
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) ==(int)action_type.bat_edit)
             {
                 string template = @"
     <div id=""dlg-batedit"" class=""easyui-dialog"" style=""width: 400px; height: 240px; padding: 10px 20px""
@@ -350,7 +350,7 @@ namespace WinGenerateCodeDB.Code
     <script type=""text/javascript"">");
 
             #region edit
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) ==(int)action_type.edit)
             {
                 StringBuilder editSubmitContent = new StringBuilder();
 
@@ -434,7 +434,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region add
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) ==(int)action_type.add)
             {
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder postDataContent = new StringBuilder("var postData = ");
@@ -501,7 +501,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action | (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.real_delete) ==(int)action_type.real_delete)
             {
                 string template = string.Format(@"
 
@@ -538,7 +538,7 @@ namespace WinGenerateCodeDB.Code
 
             #region bat edit
 
-            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.bat_real_delete) ==(int)action_type.bat_real_delete)
             {
                 StringBuilder batEditContent = new StringBuilder();
                 batEditContent.AppendFormat("\t\t\tvar txtBatEdit{0} = $(\"#txtBatEdit{0}\").textbox(\"getValue\");\r\n", colList.ToKeyId());
@@ -616,7 +616,7 @@ namespace WinGenerateCodeDB.Code
 
             #region export
 
-            if ((action | (int)action_type.export_all) == (int)action_type.export_all)
+            if ((action & (int)action_type.export_all) ==(int)action_type.export_all)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
@@ -663,7 +663,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region select export
-            if ((action | (int)action_type.export_select) == (int)action_type.export_select)
+            if ((action & (int)action_type.export_select) ==(int)action_type.export_select)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
@@ -762,7 +762,7 @@ namespace WinGenerateCodeDB.Code
             int index = 0;
             StringBuilder coditionContent = new StringBuilder();
             StringBuilder pagePost = new StringBuilder();
-            if ((action | (int)action_type.query_list) == (int)action_type.query_list)
+            if ((action & (int)action_type.query_list) ==(int)action_type.query_list)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {

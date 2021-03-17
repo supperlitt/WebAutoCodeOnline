@@ -63,7 +63,7 @@ namespace {0}
                     case ""loaddata"":
                         LoadData();
                         break;");
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 content.Append(@"
                     case ""add"":
@@ -71,7 +71,7 @@ namespace {0}
                         break;");
             }
 
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 content.Append(@"
                     case ""edit"":
@@ -79,7 +79,7 @@ namespace {0}
                         break;");
             }
 
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 content.Append(@"
                     case ""batedit"":
@@ -87,7 +87,7 @@ namespace {0}
                         break;");
             }
 
-            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 content.Append(@"
                     case ""delete"":
@@ -96,7 +96,7 @@ namespace {0}
             }
 
             StringBuilder elseContent = new StringBuilder();
-            if ((action | (int)action_type.export_all) == (int)action_type.export_all ||
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all ||
                 (action | (int)action_type.export_select) == (int)action_type.export_select)
             {
                 elseContent.AppendFormat(@"
@@ -134,7 +134,7 @@ namespace {0}
 ";
             StringBuilder searchContent = new StringBuilder();
             StringBuilder searchStrContent = new StringBuilder();
-            if ((action | (int)action_type.query_all) == (int)action_type.query_all)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {
@@ -190,7 +190,7 @@ namespace {0}
         {
             StringBuilder addContent = new StringBuilder();
             StringBuilder createModel = new StringBuilder();
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {
@@ -247,7 +247,7 @@ namespace {0}
             StringBuilder createModel = new StringBuilder();
             editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{0}\"]);\r\n", colList.ToKeyId());
             createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", colList.ToKeyId(), ExtendMethod.ToStringToType(colList.ToKeyId(), colList.ToKeyIdDbType()));
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {
@@ -304,7 +304,7 @@ namespace {0}
             StringBuilder createModel = new StringBuilder();
             batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", colList.ToKeyId());
             batEditContent.AppendFormat(@"           List<string> idList = {0}.Split(new char[]{{','}}, StringSplitOptions.RemoveEmptyEntries).ToList();{1}", colList.ToKeyId(), Environment.NewLine);
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {
@@ -357,7 +357,7 @@ namespace {0}
 
         private static string CreateDeleteData(int action, string table_name, string dal_name)
         {
-            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 StringBuilder batContent = new StringBuilder();
                 batContent.Append("            string ids = HttpUtility.UrlDecode(Request[\"ids\"]);\r\n");

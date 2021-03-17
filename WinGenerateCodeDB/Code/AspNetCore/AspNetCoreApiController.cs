@@ -285,7 +285,7 @@ namespace {0}.Controllers
 
                 display_{1} result = new display_{1}();
                 result.item_count = count;
-                result.page_count = (int)Math.Ceiling((double)count / model.pageSize);
+                result.page_count =if ((action & (int)Math.Ceiling((double)count / model.pageSize);
                 result.list.AddRange(list);
 
                 return result_info<display_{1}>.Success(result);

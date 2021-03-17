@@ -8,23 +8,23 @@ namespace WinGenerateCodeDB.Code
 {
     public class DALHelper_EasyUI_MySql
     {
-        public static string CreateDAL()
+        public static string CreateDAL(string name_space, string table_name, List<SqlColumnInfo> colList, int action, string dal_name, string model_name, string db_name)
         {
             StringBuilder dalContent = new StringBuilder();
-            dalContent.Append(CreateDALHeader());
-            dalContent.Append(CreateAddMethod());
-            dalContent.Append(CreateEditMethod());
-            dalContent.Append(CreateBatEditMethod());
-            dalContent.Append(CreateDeleteMethod());
-            dalContent.Append(CreateQueryListMethod());
-            dalContent.Append(CreateGetAllAndPart());
+            dalContent.Append(CreateDALHeader(name_space, dal_name));
+            dalContent.Append(CreateAddMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateEditMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateBatEditMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateDeleteMethod(action, table_name, colList, db_name));
+            dalContent.Append(CreateQueryListMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateGetAllAndPart(action, table_name, colList, model_name, db_name));
 
             dalContent.Append(CreateBottom());
 
             return dalContent.ToString();
         }
 
-        public static string CreateDALHeader()
+        public static string CreateDALHeader(string name_space, string dal_name)
         {
             return string.Format(@"using System;
 using System.Collections.Generic;
@@ -35,34 +35,32 @@ using System.Linq;
 namespace {0}
 {{
     public class {1}
-    {{", PageCache.NameSpaceStr, PageCache.TableName_DAL);
+    {{", name_space, dal_name);
         }
 
-        public static string CreateAddMethod()
+        public static string CreateAddMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
         {
-            var addModel = PageCache.GetCmd("添加");
-            if (addModel != null)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder valueContent = new StringBuilder(") values (");
                 StringBuilder addparamsContent = new StringBuilder("List<MySqlParameter> listParams = new List<MySqlParameter>();\r\n");
-                addContent.AppendFormat("string insertSql = \"insert into {0}(", PageCache.TableName);
+                addContent.AppendFormat("string insertSql = \"insert into {0}(", table_name);
                 int index = 0;
-                foreach (var item in addModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.ColName;
                     if (index == 0)
                     {
-                        addContent.Append(attribute);
-                        valueContent.Append("@" + attribute);
+                        addContent.Append(item.Name);
+                        valueContent.Append("@" + item.Name);
                     }
                     else
                     {
-                        addContent.Append(" ," + attribute);
-                        valueContent.Append(" ,@" + attribute);
+                        addContent.Append(" ," + item.Name);
+                        valueContent.Append(" ,@" + item.Name);
                     }
 
-                    addparamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", attribute, item.DbType.ToMySqlDbType());
+                    addparamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
 
                     index++;
                 }
@@ -81,11 +79,11 @@ namespace {0}
 ";
 
                 return string.Format(template,
-                    PageCache.TableName_Model,
+                    model_name,
                     addContent.ToString(),
                     addparamsContent.ToString(),
-                    PageCache.DatabaseName,
-                    PageCache.TableName);
+                    db_name,
+                    table_name);
             }
             else
             {
@@ -93,35 +91,33 @@ namespace {0}
             }
         }
 
-        public static string CreateEditMethod()
+        public static string CreateEditMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
         {
-            var editModel = PageCache.GetCmd("编辑");
-            if (editModel != null)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 StringBuilder updateContent = new StringBuilder("string updateSql = \"update ");
-                updateContent.AppendFormat(" {0} set ", PageCache.TableName);
+                updateContent.AppendFormat(" {0} set ", table_name);
                 StringBuilder updateParamsContent = new StringBuilder("List<MySqlParameter> listParams = new List<MySqlParameter>();\r\n");
 
                 int index = 0;
-                foreach (var item in editModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.ColName;
                     if (index == 0)
                     {
-                        updateContent.AppendFormat("{0}=@{0}", attribute);
+                        updateContent.AppendFormat("{0}=@{0}", item.Name);
                     }
                     else
                     {
-                        updateContent.AppendFormat(",{0}=@{0}", attribute);
+                        updateContent.AppendFormat(",{0}=@{0}", item.Name);
                     }
 
-                    updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", attribute, item.DbType.ToMySqlDbType());
+                    updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
                     index++;
                 }
 
                 updateContent.Append(" where ");
-                updateContent.AppendFormat(" {0}=@{0} \";", PageCache.KeyId);
-                updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{2} }});\r\n", PageCache.KeyId, PageCache.KeyId_DbType.ToMySqlDbType(), PageCache.KeyId);
+                updateContent.AppendFormat(" {0}=@{0} \";", colList.ToKeyId());
+                updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{2} }});\r\n", colList.ToKeyId(), colList.ToKeyIdDbType().ToMySqlDbType(), colList.ToKeyId());
 
                 string template = @"
         public bool Update{4}({0} model)
@@ -135,11 +131,11 @@ namespace {0}
         }}
 ";
                 return string.Format(template,
-                    PageCache.TableName_Model,
+                    model_name,
                     updateContent.ToString(),
                     updateParamsContent.ToString(),
-                    PageCache.DatabaseName,
-                    PageCache.TableName);
+                    db_name,
+                    table_name);
             }
             else
             {
@@ -147,35 +143,33 @@ namespace {0}
             }
         }
 
-        public static string CreateBatEditMethod()
+        public static string CreateBatEditMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
         {
-            var batEditModel = PageCache.GetCmd("批量编辑");
-            if (batEditModel != null)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 StringBuilder updateContent = new StringBuilder(@"string updateSql = string.Format(""update ");
-                updateContent.AppendFormat(" {0} set ", PageCache.TableName);
+                updateContent.AppendFormat(" {0} set ", table_name);
                 StringBuilder updateParamsContent = new StringBuilder("List<MySqlParameter> listParams = new List<MySqlParameter>();\r\n");
 
                 int index = 0;
-                foreach (var item in batEditModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.ColName;
                     if (index == 0)
                     {
-                        updateContent.AppendFormat("{0}=@{0}", attribute);
+                        updateContent.AppendFormat("{0}=@{0}", item.Name);
                     }
                     else
                     {
-                        updateContent.AppendFormat(",{0}=@{0}", attribute);
+                        updateContent.AppendFormat(",{0}=@{0}", item.Name);
                     }
 
-                    updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", attribute, item.DbType.ToMySqlDbType());
+                    updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
                     index++;
                 }
 
                 updateContent.Append(" where ");
-                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", PageCache.KeyId);
-                updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{2} }});\r\n", PageCache.KeyId, PageCache.KeyId_DbType.ToMySqlDbType(), PageCache.KeyId);
+                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", colList.ToKeyId());
+                updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = model.{2} }});\r\n", colList.ToKeyId(), colList.ToKeyIdDbType().ToMySqlDbType(), colList.ToKeyId());
 
                 string template = @"
         public bool BatUpdate{4}(List<string> list, {0} model)
@@ -192,11 +186,11 @@ namespace {0}
         }}
 ";
                 return string.Format(template,
-                    PageCache.TableName_Model,
+                    model_name,
                     updateContent.ToString(),
                     updateParamsContent.ToString(),
-                    PageCache.DatabaseName,
-                    PageCache.TableName);
+                    db_name,
+                    table_name);
             }
             else
             {
@@ -204,14 +198,13 @@ namespace {0}
             }
         }
 
-        public static string CreateDeleteMethod()
+        public static string CreateDeleteMethod(int action, string table_name, List<SqlColumnInfo> colList, string db_name)
         {
-            var deleteModel = PageCache.GetCmd("删除");
-            if (deleteModel != null)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 StringBuilder deleteContent = new StringBuilder();
-                deleteContent.AppendFormat(@"string deleteSql = string.Format(""delete from {0} ", PageCache.TableName);
-                deleteContent.AppendFormat(" where {0} in ({{0}})\", idStr);", PageCache.KeyId);
+                deleteContent.AppendFormat(@"string deleteSql = string.Format(""delete from {0} ", table_name);
+                deleteContent.AppendFormat(" where {0} in ({{0}})\", idStr);", colList.ToKeyId());
 
                 string template = @"
         public bool Delete{0}(List<string> list)
@@ -227,9 +220,9 @@ namespace {0}
         }}
 ";
                 return string.Format(template,
-                    PageCache.TableName,
+                    table_name,
                     deleteContent.ToString(),
-                    PageCache.DatabaseName);
+                    db_name);
             }
             else
             {
@@ -237,62 +230,60 @@ namespace {0}
             }
         }
 
-        public static string CreateQueryListMethod()
+        public static string CreateQueryListMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
         {
-            var showModel = PageCache.GetCmd("主显示");
-            if (showModel != null)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 StringBuilder queryWhereContent = new StringBuilder();
                 StringBuilder queryListParams = new StringBuilder();
                 int index = 0;
-                foreach (var item in showModel.AttrList)
+                foreach (var item in colList.ToNotMainIdList())
                 {
-                    string attribute = item.ColName;
-                    queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), attribute);
+                    queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
 
                     if (index == 0)
                     {
                         if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint" || item.DbType.ToLower() == "decimal" || item.DbType.ToLower() == "float" || item.DbType.ToLower() == "double")
                         {
-                            queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", attribute);
+                            queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "tinyint")
                         {
-                            queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", attribute);
+                            queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            queryWhereContent.AppendFormat("if ({0} != DateTime.MinValue)\r\n", attribute);
+                            queryWhereContent.AppendFormat("if ({0} != DateTime.MinValue)\r\n", item.Name);
                         }
                         else
                         {
-                            queryWhereContent.AppendFormat("if (!string.IsNullOrEmpty({0}))\r\n", attribute);
+                            queryWhereContent.AppendFormat("if (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                         }
                     }
                     else
                     {
                         if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint" || item.DbType.ToLower() == "decimal" || item.DbType.ToLower() == "float" || item.DbType.ToLower() == "double")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", attribute);
+                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "tinyint")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", attribute);
+                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", attribute);
+                            queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
                         }
                         else
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", attribute);
+                            queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                         }
                     }
 
                     queryWhereContent.Append("\t\t\t{\r\n");
-                    queryWhereContent.AppendFormat("\t\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", attribute, item.DbType.ToMySqlDbType());
+                    queryWhereContent.AppendFormat("\t\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
 
-                    queryWhereContent.AppendFormat("\t\t\t\twhereStr += \" and {0}=@{0} \";\r\n", attribute);
+                    queryWhereContent.AppendFormat("\t\t\t\twhereStr += \" and {0}=@{0} \";\r\n", item.Name);
                     queryWhereContent.Append("\t\t\t}\r\n");
                     queryWhereContent.AppendLine();
 
@@ -300,18 +291,12 @@ namespace {0}
                 }
 
                 StringBuilder selectSqlContent = new StringBuilder();
-                selectSqlContent.Append("\tstring selectSql = string.Format(@\"select * from " + PageCache.TableName + " where 1=1 {0} limit {1},{2};\", whereStr, ((page - 1) * pageSize), pageSize);\r\n");
+                selectSqlContent.Append("\tstring selectSql = string.Format(@\"select * from " + table_name + " where 1=1 {0} limit {1},{2};\", whereStr, ((page - 1) * pageSize), pageSize);\r\n");
 
                 var assignContent = new StringBuilder();
-                if (!showModel.AttrList.Exists(p => p.ColName == PageCache.KeyId))
+                foreach (var item in colList)
                 {
-                    assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", PageCache.KeyId, ExtendMethod.ToDefaultValue(PageCache.KeyId_DbType), ExtendMethod.ToDefaultDBValue(PageCache.KeyId_DbType, PageCache.KeyId));
-                }
-
-                foreach (var item in showModel.AttrList)
-                {
-                    string attribute = item.ColName;
-                    assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", attribute, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, attribute));
+                    assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", item.Name, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, item.Name));
                 }
 
                 string template = @"
@@ -353,13 +338,13 @@ namespace {0}
 
                 string queryCountParams = queryListParams.Length > 0 ? queryListParams.ToString().Substring(0, queryListParams.Length - 1) : queryListParams.ToString();
                 return string.Format(template,
-                    PageCache.TableName_Model,
+                    model_name,
                     queryListParams.ToString(),
                     queryWhereContent.ToString(),
-                    PageCache.DatabaseName,
+                    db_name,
                     queryCountParams,
                     assignContent.ToString(),
-                    PageCache.TableName,
+                    table_name,
                     selectSqlContent.ToString());
             }
             else
@@ -368,67 +353,66 @@ namespace {0}
             }
         }
 
-        public static string CreateGetAllAndPart()
+        public static string CreateGetAllAndPart(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
         {
-            var down_allModel = PageCache.GetCmd("导出全部");
-            var down_selelctModel = PageCache.GetCmd("导出选中");
-            if (down_allModel != null || down_selelctModel != null)
+            var down_allModel = (action | (int)action_type.export_all) == (int)action_type.export_all;
+            var down_selelctModel = (action | (int)action_type.export_select) == (int)action_type.export_select;
+            if (down_allModel || down_selelctModel)
             {
                 StringBuilder down_allModel_Str = new StringBuilder();
                 #region 导出全部
-                if (down_allModel != null)
+                if (down_allModel)
                 {
                     StringBuilder queryWhereContent = new StringBuilder();
                     StringBuilder queryListParams = new StringBuilder();
                     int index = 0;
-                    foreach (var item in down_allModel.AttrList)
+                    foreach (var item in colList.ToNotMainIdList())
                     {
-                        string attribute = item.ColName;
-                        queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), attribute);
+                        queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
 
                         if (index == 0)
                         {
                             if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint")
                             {
-                                queryWhereContent.AppendFormat("if ({0} > 0)\r\n", attribute);
+                                queryWhereContent.AppendFormat("if ({0} > 0)\r\n", item.Name);
                             }
                             else if (item.DbType.ToLower() == "tinyint")
                             {
-                                queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", attribute);
+                                queryWhereContent.AppendFormat("if ({0} >= 0)\r\n", item.Name);
                             }
                             else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                             {
-                                queryWhereContent.AppendFormat("if ({0} != DateTime.MinValue)\r\n", attribute);
+                                queryWhereContent.AppendFormat("if ({0} != DateTime.MinValue)\r\n", item.Name);
                             }
                             else
                             {
-                                queryWhereContent.AppendFormat("if (!string.IsNullOrEmpty({0}))\r\n", attribute);
+                                queryWhereContent.AppendFormat("if (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                             }
                         }
                         else
                         {
                             if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint")
                             {
-                                queryWhereContent.AppendFormat("\t\t\tif ({0} > 0)\r\n", attribute);
+                                queryWhereContent.AppendFormat("\t\t\tif ({0} > 0)\r\n", item.Name);
                             }
                             else if (item.DbType.ToLower() == "tinyint")
                             {
-                                queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", attribute);
+                                queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
                             }
                             else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                             {
-                                queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", attribute);
+                                queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
                             }
                             else
                             {
-                                queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", attribute);
+                                queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                             }
                         }
 
                         queryWhereContent.Append("            {\r\n");
-                        queryWhereContent.AppendFormat("                listParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", attribute, item.DbType.ToMySqlDbType());
+                        queryWhereContent.AppendFormat("                listParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
 
-                        queryWhereContent.AppendFormat("                whereStr += \" and {0}=@{0} \";\r\n", attribute);
+                        queryWhereContent.AppendFormat("                whereStr += \" and {0}=@{0} \";\r\n", item.Name);
                         queryWhereContent.Append("            }\r\n");
                         queryWhereContent.AppendLine();
 
@@ -436,10 +420,9 @@ namespace {0}
                     }
 
                     var assignContent = new StringBuilder();
-                    foreach (var item in down_allModel.AttrList)
+                    foreach (var item in colList)
                     {
-                        string attribute = item.ColName;
-                        assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", attribute, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, attribute));
+                        assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", item.Name, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, item.Name));
                     }
 
                     string template = @"
@@ -469,29 +452,28 @@ namespace {0}
 
                     string queryCountParams = queryListParams.Length > 0 ? queryListParams.ToString().Substring(0, queryListParams.Length - 1) : queryListParams.ToString();
                     down_allModel_Str.AppendFormat(template,
-                        PageCache.TableName_Model,
+                        model_name,
                         queryWhereContent.ToString(),
-                        PageCache.DatabaseName,
+                        db_name,
                         queryCountParams,
                         assignContent.ToString(),
-                        PageCache.TableName);
+                        table_name);
                 }
                 #endregion
 
                 StringBuilder down_selectModel_Str = new StringBuilder();
                 #region 导出选中
-                if (down_selelctModel != null)
+                if (down_selelctModel)
                 {
                     StringBuilder selectSqlContent = new StringBuilder();
                     selectSqlContent.Append("            string selectSql = string.Format(@\"select * from\r\n");
-                    selectSqlContent.Append("            " + PageCache.TableName + " where " + PageCache.KeyId + " in ({1})\r\n");
+                    selectSqlContent.Append("            " + table_name + " where " + colList.ToKeyId() + " in ({1})\r\n");
                     selectSqlContent.Append("            {0};\", whereStr, idArrayStr);\r\n");
 
                     var assignContent = new StringBuilder();
-                    foreach (var item in down_selelctModel.AttrList)
+                    foreach (var item in colList)
                     {
-                        string attribute = item.ColName;
-                        assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", attribute, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, attribute));
+                        assignContent.AppendFormat("                        model.{0} = sqldr[\"{0}\"] == DBNull.Value ? {1} : {2};\r\n", item.Name, ExtendMethod.ToDefaultValue(item.DbType), ExtendMethod.ToDefaultDBValue(item.DbType, item.Name));
                     }
 
                     string template = @"
@@ -521,8 +503,8 @@ namespace {0}
 
 ";
                     down_selectModel_Str.AppendFormat(template,
-                        PageCache.TableName_Model,
-                        PageCache.DatabaseName,
+                        model_name,
+                        db_name,
                         assignContent.ToString(),
                         selectSqlContent.ToString());
                 }

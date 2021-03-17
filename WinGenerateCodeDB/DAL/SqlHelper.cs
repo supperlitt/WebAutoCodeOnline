@@ -965,7 +965,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(connString, CommandType.StoredProcedure, "GetOrderCount");
+        ///  int orderCount =if ((action & (int)ExecuteScalar(connString, CommandType.StoredProcedure, "GetOrderCount");
         /// </remarks> 
         /// <param name="connectionString">一个有效的数据库连接字符串</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -982,7 +982,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(connString, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(connString, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
         /// </remarks> 
         /// <param name="connectionString">一个有效的数据库连接字符串</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -1009,7 +1009,7 @@ namespace WinGenerateCodeDB
         /// 此方法不提供访问存储过程输出参数和返回值参数. 
         /// 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(connString, "GetOrderCount", 24, 36); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(connString, "GetOrderCount", 24, 36); 
         /// </remarks> 
         /// <param name="connectionString">一个有效的数据库连接字符串</param> 
         /// <param name="spName">存储过程名称</param> 
@@ -1044,7 +1044,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(conn, CommandType.StoredProcedure, "GetOrderCount"); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(conn, CommandType.StoredProcedure, "GetOrderCount"); 
         /// </remarks> 
         /// <param name="connection">一个有效的数据库连接对象</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -1061,7 +1061,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(conn, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(conn, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
         /// </remarks> 
         /// <param name="connection">一个有效的数据库连接对象</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -1097,7 +1097,7 @@ namespace WinGenerateCodeDB
         /// 此方法不提供访问存储过程输出参数和返回值参数. 
         /// 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(conn, "GetOrderCount", 24, 36); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(conn, "GetOrderCount", 24, 36); 
         /// </remarks> 
         /// <param name="connection">一个有效的数据库连接对象</param> 
         /// <param name="spName">存储过程名称</param> 
@@ -1132,7 +1132,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(trans, CommandType.StoredProcedure, "GetOrderCount"); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(trans, CommandType.StoredProcedure, "GetOrderCount"); 
         /// </remarks> 
         /// <param name="transaction">一个有效的连接事务</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -1149,7 +1149,7 @@ namespace WinGenerateCodeDB
         /// </summary> 
         /// <remarks> 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(trans, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(trans, CommandType.StoredProcedure, "GetOrderCount", new SqlParameter("@prodid", 24)); 
         /// </remarks> 
         /// <param name="transaction">一个有效的连接事务</param> 
         /// <param name="commandType">命令类型 (存储过程,命令文本或其它)</param> 
@@ -1181,7 +1181,7 @@ namespace WinGenerateCodeDB
         /// 此方法不提供访问存储过程输出参数和返回值参数. 
         /// 
         /// 示例:  
-        ///  int orderCount = (int)ExecuteScalar(trans, "GetOrderCount", 24, 36); 
+        ///  int orderCount =if ((action & (int)ExecuteScalar(trans, "GetOrderCount", 24, 36); 
         /// </remarks> 
         /// <param name="transaction">一个有效的连接事务</param> 
         /// <param name="spName">存储过程名称</param> 

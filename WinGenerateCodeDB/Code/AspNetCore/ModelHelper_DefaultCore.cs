@@ -18,7 +18,7 @@ namespace WinGenerateCodeDB.Code
             this.model_suffix = model_suffix;
         }
 
-        public string CreateModel(string table_name, List<SqlColumnInfo> colList, bool add_display_model = false, bool isCodeSplit = true)
+        public string CreateModel(string table_name, List<SqlColumnInfo> colList, bool add_display_model = false)
         {
             this.model_name = table_name + model_suffix;
 
@@ -37,11 +37,13 @@ namespace WinGenerateCodeDB.Code
 
             content.AppendFormat("\tpublic class {0}\r\n", model_name);
             content.AppendLine("\t{");
+            bool isCodeSplit = false;
             for (int i = 0; i < colList.Count; i++)
             {
                 var item = colList[i];
                 if (!string.IsNullOrEmpty(item.Comment))
                 {
+                    isCodeSplit = true;
                     content.Append(CommentTool.CreateComment(item.Comment, 2));
                 }
 

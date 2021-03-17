@@ -8,15 +8,15 @@ namespace WinGenerateCodeDB.Code
 {
     public class FactoryHelper_Dapper_MySql
     {
-        public static string CreateFactory()
+        public static string CreateFactory(string name_space, string db_name)
         {
             StringBuilder facContent = new StringBuilder();
-            facContent.Append(CreateFactoryCode());
+            facContent.Append(CreateFactoryCode(name_space, db_name));
 
             return facContent.ToString();
         }
 
-        private static string CreateFactoryCode()
+        private static string CreateFactoryCode(string name_space, string db_name)
         {
             string template = @"using MySql.Data.MySqlClient;
 using System;
@@ -39,7 +39,7 @@ namespace {0}
     }}
 }}";
 
-            return string.Format(template, PageCache.NameSpaceStr, PageCache.DatabaseName);
+            return string.Format(template, name_space, db_name);
         }
     }
 }

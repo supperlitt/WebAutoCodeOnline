@@ -32,7 +32,7 @@ namespace WinGenerateCodeDB
             }
         }
 
-        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel, bool isCodeSplit)
+        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             foreach (var item in tbDic)
@@ -53,44 +53,6 @@ namespace WinGenerateCodeDB
 
                 result.Add(item.Key + model_suffix, text);
             }
-
-            return result;
-        }
-
-        public static Dictionary<string, string> CreateDAL(string name_space, string dal_suffix, string model_suffix)
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            DALHelper_DapperCore helper = new DALHelper_DapperCore(db_name, name_space, dal_suffix, model_suffix);
-            foreach (var item in tbDic)
-            {
-                string text = helper.CreateDAL(item.Key, item.Value);
-
-                result.Add(item.Key + dal_suffix, text);
-            }
-
-            return result;
-        }
-
-        public static Dictionary<string, string> CreateApiController(string name_space, string dal_suffix, string model_suffix)
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            AspNetCoreApiController helper = new AspNetCoreApiController(name_space, dal_suffix, model_suffix);
-            foreach (var item in tbDic)
-            {
-                string text = helper.CreateApiController(item.Key, item.Value);
-
-                result.Add(item.Key.ToFirstUpper() + "Controller", text);
-            }
-
-            return result;
-        }
-
-        public static Dictionary<string, string> CreateOther(string name_space)
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            AspNetCoreOther helper = new AspNetCoreOther(name_space);
-            result.Add("ConnectionFactory", helper.CreateFactory(db_name));
-            result.Add("result_info", helper.CreateResultInfo());
 
             return result;
         }
@@ -132,6 +94,112 @@ namespace WinGenerateCodeDB
                 }
 
                 result.Add(item.Key + ".aspx.cs", text);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<string, string> CreateDAL(string name_space, string model_staff, string dal_staff, int action)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var item in tbDic)
+            {
+                string text = string.Empty;
+                if (PageCache.DbTool == 0 && PageCache.UIType == 0 && PageCache.DbType == 0)
+                {
+                    // easyui mysql
+                    text = DALHelper_EasyUI_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                }
+                else if (PageCache.DbTool == 0 && PageCache.UIType == 0 && PageCache.DbType == 1)
+                {
+                    // easyui mssql
+                    text = DALHelper_EasyUI_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                }
+                else if (PageCache.DbTool == 0 && PageCache.UIType == 1 && PageCache.DbType == 0)
+                {
+                    // bootstarp mysql
+                    text = DALHelper_Bootstrap_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                }
+                else if (PageCache.DbTool == 0 && PageCache.UIType == 1 && PageCache.DbType == 1)
+                {
+                    // bootstarp mssql
+                    text = DALHelper_Bootstrap_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                }
+                else if (PageCache.DbTool == 1)
+                {
+                    text = DALHelper_Dapper.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                }
+
+                result.Add(item.Key + dal_staff + ".cs", text);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<string, string> CreateFactory(string name_space)
+        {
+            string text = string.Empty;
+            if (PageCache.DbTool == 0 && PageCache.DbType == 0)
+            {
+                text = FactoryHelper_MySql.CreateFactory(name_space, db_name);
+            }
+            else if (PageCache.DbTool == 0 && PageCache.DbType == 1)
+            {
+                text = FactoryHelper_MsSql.CreateFactory(name_space, db_name);
+            }
+            else if (PageCache.DbTool == 1 && PageCache.DbType == 0)
+            {
+                text = FactoryHelper_Dapper_MySql.CreateFactory(name_space, db_name);
+            }
+            else if (PageCache.DbTool == 1 && PageCache.DbType == 1)
+            {
+                text = FactoryHelper_Dapper_MsSql.CreateFactory(name_space, db_name);
+            }
+
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            result.Add("ConnectionFactory.cs", text);
+
+            return result;
+        }
+
+        public static Dictionary<string, string> CreateConfig()
+        {
+            string text = ConfigHelper.GetConnectStringConfig(db_name, PageCache.ConnectionString);
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            result.Add("Web.config", text);
+
+            return result;
+        }
+
+        public static Dictionary<string, string> CreateView(string name_space, string model_staff, string dal_staff, string ui_staff, int action)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var item in tbDic)
+            {
+                string text = string.Empty;
+                if (PageCache.UIType == 0)
+                {
+                    text = MvcViewHelper_EasyUI.CreateView(name_space, item.Key, action, item.Value, item.Key + model_staff, item.Key + dal_staff);
+                }
+                else if (PageCache.UIType == 1)
+                {
+                    text = MvcViewHelper_Bootstrap.CreateView(name_space, item.Key, action, item.Value, item.Key + model_staff, item.Key + dal_staff);
+                }
+
+                result.Add(item.Key + ui_staff + ".shtml", text);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<string, string> CreateController(string name_space, string model_staff, string dal_staff, int action)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var item in tbDic)
+            {
+                string text = MvcControllerHelper.CreateController(name_space, item.Key, action, item.Value, item.Key + model_staff, item.Key + dal_staff);
+
+                result.Add(item.Key + dal_staff + ".cs", text);
             }
 
             return result;

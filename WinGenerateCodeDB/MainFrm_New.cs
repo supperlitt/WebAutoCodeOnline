@@ -54,6 +54,27 @@ namespace WinGenerateCodeDB
             {
                 this.tabControl1.TabPages.RemoveAt(1);
             } while (this.tabControl1.TabPages.Count > 1);
+
+            // 初始化 chkActionList
+            var values = Enum.GetValues(typeof(action_type));
+            foreach (var item in values)
+            {
+                if ((int)(action_type)item == 0)
+                {
+                    continue;
+                }
+
+                if ((action_type)item == action_type.add ||
+                    (action_type)item == action_type.edit ||
+                    (action_type)item == action_type.query_list)
+                {
+                    chkActionList.Items.Add(item, true);
+                }
+                else
+                {
+                    chkActionList.Items.Add(item, false);
+                }
+            }
         }
 
         private void InitListViewColumns()
@@ -188,7 +209,6 @@ namespace WinGenerateCodeDB
                 SetColumnsList(list);
 
                 PageCache.SetTable(this.tablename);
-                PageCache.SetColumnList(list, isImport);
             }
         }
 
@@ -292,161 +312,153 @@ namespace WinGenerateCodeDB
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             PageCache.SetUIType(this.rbtnEasyUI.Checked ? 0 : 1);
-            PageCache.SetDbTool(this.rbtn_Sql.Checked ? 0 : this.rbtn_ORM_Dapper.Checked ? 1 : this.rbtn_NHibernate.Checked ? 2 : 3);
-            PageCache.SetWebType(this.rbtn_web_asp_net.Checked ? 0 : this.rbtn_web_mvc.Checked ? 1 : 2);
-            PageCache.SetModelType(this.rbtn_attr_attr.Checked ? 0 : this.rbtn_attr_lowStart.Checked ? 1 : 2);
+            PageCache.SetDbTool(this.rbtn_Sql.Checked ? 0 : 1);
+            PageCache.SetModelType(this.rbtn_attr_field.Checked ? 0 : this.rbtn_attr_lowStart.Checked ? 1 : 2);
             PageCache.SetParamValue(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.txtDalSuffix.Text, this.txtUISuffix.Text);
 
+            int action = 0;
+            foreach (object ci in this.chkActionList.CheckedItems)
+            {
+                action = (action | (int)(action_type)ci);
+            }
+
             Button btn = sender as Button;
-            string action = btn.Text;
-            switch (action)
+            string name = btn.Text;
+            switch (name)
             {
                 case "Model":
                     AspNet_CreateModel();
                     break;
                 case "Aspx":
-                    AspNet_CreateAspx();
+                    AspNet_CreateAspx(action);
                     break;
                 case "Aspx.cs":
-                    AspNet_CreateAspxcs();
+                    AspNet_CreateAspxcs(action);
+                    break;
+                case "DAL":
+                    AspNet_CreateDAL(action);
+                    break;
+                case "Factory":
+                    AspNet_CreateFactory();
+                    break;
+                case "Config":
+                    AspNet_CreateConfig();
+                    break;
+                case "View":
+                    AspNet_CreateView(action);
+                    break;
+                case "Controller":
+                    AspNet_CreateController(action);
+                    break;
+                case "CopyClass":
+                    AspNet_CopyClass();
+                    break;
+                case "CopyFullClass":
+                    AspNet_CopyFullClass();
+                    break;
+                case "SaveFile":
+                    AspNet_SaveFile();
                     break;
             }
+        }
 
-            if (btn.Text == "Model")
+        private void AspNet_SaveFile()
+        {
+            // 打包当前数据到zip并保存
+            if (tbAspNet.TabPages.Count > 0)
             {
-            }
-            else if (btn.Text == "Aspx")
-            {
-            }
-            else if (btn.Text == "Aspx.cs")
-            {
-            }
-            else if (btn.Text == "DAL")
-            {
-                #region DAL
-                int uitype = PageCache.UIType;
-                int dbtype = PageCache.DbType;
-                int dbtool = PageCache.DbTool;
-                if (dbtool == 0)
+                Dictionary<string, string> fileDic = new Dictionary<string, string>();
+                foreach (TabPage item in tbAspNet.TabPages)
                 {
-                    if (uitype == 0)
-                    {
-                        // easyui
-                        if (dbtype == 0)
-                        {
-                            // mysql
-                            string modelStr = DALHelper_EasyUI_MySql.CreateDAL();
-                        }
-                        else if (dbtype == 1)
-                        {
-                            // mssql
-                            string modelStr = DALHelper_EasyUI_MsSql.CreateDAL();
-                        }
-                    }
-                    else if (uitype == 1)
-                    {
-                        // bootstarp
-                        if (dbtype == 0)
-                        {
-                            // mysql
-                            string modelStr = DALHelper_Bootstrap_MySql.CreateDAL();
-                        }
-                        else if (dbtype == 1)
-                        {
-                            // mssql
-                            string modelStr = DALHelper_Bootstrap_MsSql.CreateDAL();
-                        }
-                    }
-                }
-                else if (dbtool == 1)
-                {
-                    string modelStr = DALHelper_Dapper.CreateDAL();
-                }
-                #endregion
-            }
-            else if (btn.Text == "Factory")
-            {
-                #region Factory
-                int dbtype = PageCache.DbType;
-                int dbtool = PageCache.DbTool;
-                if (dbtool == 0)
-                {
-                    if (dbtype == 0)
-                    {
-                        // mysql
-                        string modelStr = FactoryHelper_MySql.CreateFactory();
-                    }
-                    else if (dbtype == 1)
-                    {
-                        // mysql
-                        string modelStr = FactoryHelper_MsSql.CreateFactory();
-                    }
-                }
-                else if (dbtool == 1)
-                {
-                    if (dbtype == 0)
-                    {
-                        // mysql
-                        string modelStr = FactoryHelper_Dapper_MySql.CreateFactory();
-                    }
-                    else if (dbtype == 1)
-                    {
-                        // mysql
-                        string modelStr = FactoryHelper_Dapper_MsSql.CreateFactory();
-                    }
-                }
-                #endregion
-            }
-            else if (btn.Text == "Config")
-            {
-                #region Config
-                int uitype = PageCache.UIType;
-                int dbtype = PageCache.DbType;
-                if (uitype == 0)
-                {
-                    // easyui
-                    if (dbtype == 0)
-                    {
-                        // mysql
-                        string modelStr = ConfigHelper.GetConnectStringConfig();
-                    }
-                }
-                else if (uitype == 1)
-                {
-                    // bootstarp
-                    if (dbtype == 0)
-                    {
-                        // mysql
-                        string modelStr = ConfigHelper.GetConnectStringConfig();
-                    }
-                }
-                #endregion
-            }
-            else if (btn.Text == "View")
-            {
-                #region View
-                int webType = PageCache.WebType;
-                int uiType = PageCache.UIType;
-                if (webType == 1)
-                {
-                    if (uiType == 0)
-                    {
-                        string viewStr = MvcViewHelper_EasyUI.CreateView();
-                    }
-                    else if (uiType == 1)
-                    {
-                        string viewStr = MvcViewHelper_Bootstrap.CreateView();
-                    }
+                    string key = item.Text;
+                    string text = (item.Controls[0] as TextBox).Text;
 
+                    if (!fileDic.ContainsKey(key + ".cs"))
+                    {
+                        fileDic.Add(key + ".cs", text);
+                    }
                 }
-                #endregion
+
+                if (fileDic.Count > 0)
+                {
+                    var data = ZipHelper.Zip(fileDic);
+
+                    SaveFileDialog dialog = new SaveFileDialog();
+                    dialog.Filter = "压缩文件|*.zip";
+                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        string fileName = dialog.FileName;
+                        if (!fileName.EndsWith(".zip"))
+                        {
+                            fileName += ".zip";
+                        }
+
+                        File.WriteAllBytes(fileName, data);
+                    }
+                }
             }
-            else if (btn.Text == "Controller")
+        }
+
+        private void AspNet_CopyFullClass()
+        {
+            if (this.tbAspNet.TabPages.Count > 0)
             {
-                #region Controller
-                string controllerStr = MvcControllerHelper.CreateController();
-                #endregion
+                string text = (this.tbAspNet.TabPages[this.tbAspNet.SelectedIndex].Controls[0] as TextBox).Text;
+
+                // 处理 text
+                Clipboard.SetText(text);
             }
+        }
+
+        private void AspNet_CopyClass()
+        {
+            if (this.tbAspNet.TabPages.Count > 0)
+            {
+                string text = (this.tbAspNet.TabPages[this.tbAspNet.SelectedIndex].Controls[0] as TextBox).Text;
+
+                // 只拷贝类代码
+                Regex regex = new Regex(@"\{\s+(?<text>[\s\S]+)\s+\}\s{0,}$");
+                string data = regex.Match(text).Groups["text"].Value;
+
+                // 处理 text
+                Clipboard.SetText(data);
+            }
+        }
+
+        private void AspNet_CreateView(int action)
+        {
+            Dictionary<string, string> result = AspNetHelper.CreateView(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.txtDalSuffix.Text, this.txtUISuffix.Text, action);
+
+            FillInTab_AspNet(result, tbAspNet);
+        }
+
+        private void AspNet_CreateController(int action)
+        {
+            Dictionary<string, string> result = AspNetHelper.CreateController(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.txtDalSuffix.Text, action);
+
+            FillInTab_AspNet(result, tbAspNet);
+        }
+
+        private void AspNet_CreateConfig()
+        {
+            Dictionary<string, string> result = AspNetHelper.CreateConfig();
+
+            FillInTab_AspNet(result, tbAspNet);
+        }
+
+        private void AspNet_CreateFactory()
+        {
+            Dictionary<string, string> result = AspNetHelper.CreateFactory(this.txtNameSpace.Text);
+
+            FillInTab_AspNet(result, tbAspNet);
+        }
+
+        private void AspNet_CreateDAL(int action)
+        {
+            Dictionary<string, string> result = AspNetHelper.CreateDAL(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.txtDalSuffix.Text, action);
+
+            FillInTab_AspNet(result, tbAspNet);
+
         }
 
         private void btmExport_Click(object sender, EventArgs e)
@@ -488,25 +500,23 @@ namespace WinGenerateCodeDB
 
         private void AspNet_CreateModel()
         {
-            Dictionary<string, string> result = AspNetHelper.CreateModel(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.chkQueryModel.Checked, this.chkIsSplit.Checked);
+            Dictionary<string, string> result = AspNetHelper.CreateModel(this.txtNameSpace.Text, this.txtModelSuffix.Text);
 
-            FillInTab(result, tbAspNet);
+            FillInTab_AspNet(result, tbAspNet);
         }
 
-        private void AspNet_CreateAspx()
+        private void AspNet_CreateAspx(int action)
         {
-            int action = (int)(action_type.add | action_type.edit | action_type.query_all);
             Dictionary<string, string> result = AspNetHelper.CreateAspx(this.txtNameSpace.Text, this.txtModelSuffix.Text, action);
 
-            FillInTab(result, tbAspNet);
+            FillInTab_AspNet(result, tbAspNet);
         }
 
-        private void AspNet_CreateAspxcs()
+        private void AspNet_CreateAspxcs(int action)
         {
-            int action = (int)(action_type.add | action_type.edit | action_type.query_all);
             Dictionary<string, string> result = AspNetHelper.CreateAspxcs(this.txtNameSpace.Text, this.txtModelSuffix.Text, this.txtDalSuffix.Text, action);
 
-            FillInTab(result, tbAspNet);
+            FillInTab_AspNet(result, tbAspNet);
         }
 
         #endregion
@@ -544,7 +554,7 @@ namespace WinGenerateCodeDB
 
         private void Core_CreateModel()
         {
-            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked, this.chkIsSplit.Checked);
+            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked);
 
             FillInTab(result, tbAspNetCore);
         }
@@ -640,6 +650,27 @@ namespace WinGenerateCodeDB
                 textBox.Location = new System.Drawing.Point(6, 6);
                 textBox.Multiline = true;
                 textBox.Size = new System.Drawing.Size(1022, 462);
+                textBox.TabIndex = 0;
+                textBox.ScrollBars = ScrollBars.Vertical;
+                textBox.Text = item.Value;
+
+                TabPage tb = new TabPage();
+                tb.Text = item.Key;
+                tb.Controls.Add(textBox);
+
+                tabControl.TabPages.Add(tb);
+            }
+        }
+
+        private void FillInTab_AspNet(Dictionary<string, string> result, TabControl tabControl)
+        {
+            tabControl.TabPages.Clear();
+            foreach (var item in result)
+            {
+                TextBox textBox = new TextBox();
+                textBox.Location = new System.Drawing.Point(6, 6);
+                textBox.Multiline = true;
+                textBox.Size = new System.Drawing.Size(660, 479);
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
                 textBox.Text = item.Value;

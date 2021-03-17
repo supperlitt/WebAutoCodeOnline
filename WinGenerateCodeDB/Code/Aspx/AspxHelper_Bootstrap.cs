@@ -70,7 +70,7 @@ namespace WinGenerateCodeDB.Code
         {
             StringBuilder searchContent = new StringBuilder();
             int index = 0;
-            if ((action | (int)action_type.query_list) == (int)action_type.query_list)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {
@@ -175,49 +175,49 @@ namespace WinGenerateCodeDB.Code
         {
             int itemCount = 0;
             StringBuilder toolBarContent = new StringBuilder();
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""新增"" onclick='newModel();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""编辑"" onclick='editModel();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""批量编辑"" onclick='batEditModel();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""删除"" onclick='destroyModel();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""删除选中"" onclick='destroyBatModel();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.export_select) == (int)action_type.export_select)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""选中导出"" onclick='selectExport();' />");
                 itemCount++;
             }
 
-            if ((action | (int)action_type.export_all) == (int)action_type.export_all)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""导出全部"" onclick='exportAll();' />");
@@ -282,7 +282,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dialogContent = new StringBuilder();
             int addWidth = 400;
             #region 添加
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -442,7 +442,7 @@ namespace WinGenerateCodeDB.Code
 
             int editWidth = 400;
             #region 编辑
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -608,7 +608,7 @@ namespace WinGenerateCodeDB.Code
 
             int batEditWidth = 400;
             #region 批量编辑
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -802,7 +802,7 @@ namespace WinGenerateCodeDB.Code
         <script type=""text/javascript"">");
 
             #region edit
-            if ((action | (int)action_type.edit) == (int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 // 定义变量
                 StringBuilder editDefineVarContent = new StringBuilder();
@@ -901,7 +901,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region add
-            if ((action | (int)action_type.add) == (int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder addPostDataContent = new StringBuilder("var postData = ");
@@ -961,7 +961,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action | (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 string template = string.Format(@"
 
@@ -1016,7 +1016,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region bat edit
-            if ((action | (int)action_type.bat_edit) == (int)action_type.bat_edit)
+            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
             {
                 StringBuilder batEditContent = new StringBuilder();
                 batEditContent.AppendFormat("var txtBatEdit{0} = $(\"#txtBatEdit{0}\").val();\r\n", colList.ToKeyId());
@@ -1088,7 +1088,7 @@ namespace WinGenerateCodeDB.Code
 
             #region export all
 
-            if ((action | (int)action_type.export_all) == (int)action_type.export_all)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
@@ -1137,7 +1137,7 @@ namespace WinGenerateCodeDB.Code
 
             #region export part
 
-            if ((action | (int)action_type.export_select) == (int)action_type.export_select)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
@@ -1315,7 +1315,7 @@ namespace WinGenerateCodeDB.Code
             int index = 0;
             StringBuilder coditionContent = new StringBuilder();
             StringBuilder pagePost = new StringBuilder();
-            if ((action | (int)action_type.query_list) == (int)action_type.query_list)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 foreach (var item in colList.ToNotMainIdList())
                 {

@@ -31,13 +31,13 @@ namespace WinGenerateCodeDB
             }
         }
 
-        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel, bool isCodeSplit)
+        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             ModelHelper_DefaultCore helper = new ModelHelper_DefaultCore(name_space, model_suffix);
             foreach (var item in tbDic)
             {
-                string text = helper.CreateModel(item.Key, item.Value, isAddQueryModel, isCodeSplit);
+                string text = helper.CreateModel(item.Key, item.Value, isAddQueryModel);
 
                 result.Add(item.Key + model_suffix, text);
             }

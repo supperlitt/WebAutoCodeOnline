@@ -66,21 +66,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.txtNameSpace = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.rbtn_web_html = new System.Windows.Forms.RadioButton();
-            this.rbtn_web_mvc = new System.Windows.Forms.RadioButton();
-            this.rbtn_web_asp_net = new System.Windows.Forms.RadioButton();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.rbtn_attr_lowStart = new System.Windows.Forms.RadioButton();
             this.rbtn_attr_attr = new System.Windows.Forms.RadioButton();
-            this.rbtn_field = new System.Windows.Forms.RadioButton();
+            this.rbtn_attr_field = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.rbtn_Layui = new System.Windows.Forms.RadioButton();
             this.rbtnBootstrap = new System.Windows.Forms.RadioButton();
             this.rbtnEasyUI = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.rbtn_EF = new System.Windows.Forms.RadioButton();
-            this.rbtn_NHibernate = new System.Windows.Forms.RadioButton();
             this.rbtn_ORM_Dapper = new System.Windows.Forms.RadioButton();
             this.rbtn_Sql = new System.Windows.Forms.RadioButton();
             this.btmExport = new System.Windows.Forms.Button();
@@ -93,7 +86,6 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.chkIsSplit = new System.Windows.Forms.CheckBox();
             this.chkQueryModel = new System.Windows.Forms.CheckBox();
             this.txtCoreDalSuffix = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -118,6 +110,7 @@
             this.btnNextMulTable = new System.Windows.Forms.Button();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.btnReturn = new System.Windows.Forms.Button();
+            this.chkActionList = new System.Windows.Forms.CheckedListBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -129,7 +122,6 @@
             this.tbAspNet.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            this.groupBox12.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -237,7 +229,7 @@
             this.groupBox4.Size = new System.Drawing.Size(366, 266);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "表";
+            this.groupBox4.Text = "表 - 支持多选";
             // 
             // lstTables
             // 
@@ -385,11 +377,11 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.chkActionList);
             this.tabPage4.Controls.Add(this.btnCopyFullClass_aspnet);
             this.tabPage4.Controls.Add(this.btnCopyClass_aspnet);
             this.tabPage4.Controls.Add(this.tbAspNet);
             this.tabPage4.Controls.Add(this.groupBox7);
-            this.tabPage4.Controls.Add(this.groupBox12);
             this.tabPage4.Controls.Add(this.groupBox11);
             this.tabPage4.Controls.Add(this.groupBox9);
             this.tabPage4.Controls.Add(this.groupBox6);
@@ -417,6 +409,7 @@
             this.btnCopyFullClass_aspnet.TabIndex = 11;
             this.btnCopyFullClass_aspnet.Text = "CopyFullClass";
             this.btnCopyFullClass_aspnet.UseVisualStyleBackColor = true;
+            this.btnCopyFullClass_aspnet.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // btnCopyClass_aspnet
             // 
@@ -426,6 +419,7 @@
             this.btnCopyClass_aspnet.TabIndex = 12;
             this.btnCopyClass_aspnet.Text = "CopyClass";
             this.btnCopyClass_aspnet.UseVisualStyleBackColor = true;
+            this.btnCopyClass_aspnet.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // tbAspNet
             // 
@@ -452,7 +446,7 @@
             this.txtTemp.Location = new System.Drawing.Point(6, 6);
             this.txtTemp.Multiline = true;
             this.txtTemp.Name = "txtTemp";
-            this.txtTemp.Size = new System.Drawing.Size(663, 493);
+            this.txtTemp.Size = new System.Drawing.Size(663, 479);
             this.txtTemp.TabIndex = 0;
             // 
             // groupBox7
@@ -465,7 +459,7 @@
             this.groupBox7.Controls.Add(this.label8);
             this.groupBox7.Controls.Add(this.txtNameSpace);
             this.groupBox7.Controls.Add(this.label7);
-            this.groupBox7.Location = new System.Drawing.Point(699, 182);
+            this.groupBox7.Location = new System.Drawing.Point(699, 234);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(340, 105);
             this.groupBox7.TabIndex = 8;
@@ -536,58 +530,11 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "命名空间：";
             // 
-            // groupBox12
-            // 
-            this.groupBox12.Controls.Add(this.rbtn_web_html);
-            this.groupBox12.Controls.Add(this.rbtn_web_mvc);
-            this.groupBox12.Controls.Add(this.rbtn_web_asp_net);
-            this.groupBox12.Location = new System.Drawing.Point(898, 464);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(141, 129);
-            this.groupBox12.TabIndex = 6;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Web窗体选择";
-            // 
-            // rbtn_web_html
-            // 
-            this.rbtn_web_html.AutoSize = true;
-            this.rbtn_web_html.Enabled = false;
-            this.rbtn_web_html.Location = new System.Drawing.Point(24, 94);
-            this.rbtn_web_html.Name = "rbtn_web_html";
-            this.rbtn_web_html.Size = new System.Drawing.Size(47, 16);
-            this.rbtn_web_html.TabIndex = 0;
-            this.rbtn_web_html.TabStop = true;
-            this.rbtn_web_html.Text = "html";
-            this.rbtn_web_html.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_web_mvc
-            // 
-            this.rbtn_web_mvc.AutoSize = true;
-            this.rbtn_web_mvc.Location = new System.Drawing.Point(24, 62);
-            this.rbtn_web_mvc.Name = "rbtn_web_mvc";
-            this.rbtn_web_mvc.Size = new System.Drawing.Size(89, 16);
-            this.rbtn_web_mvc.TabIndex = 0;
-            this.rbtn_web_mvc.TabStop = true;
-            this.rbtn_web_mvc.Text = "asp.net mvc";
-            this.rbtn_web_mvc.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_web_asp_net
-            // 
-            this.rbtn_web_asp_net.AutoSize = true;
-            this.rbtn_web_asp_net.Checked = true;
-            this.rbtn_web_asp_net.Location = new System.Drawing.Point(24, 31);
-            this.rbtn_web_asp_net.Name = "rbtn_web_asp_net";
-            this.rbtn_web_asp_net.Size = new System.Drawing.Size(65, 16);
-            this.rbtn_web_asp_net.TabIndex = 0;
-            this.rbtn_web_asp_net.TabStop = true;
-            this.rbtn_web_asp_net.Text = "asp.net";
-            this.rbtn_web_asp_net.UseVisualStyleBackColor = true;
-            // 
             // groupBox11
             // 
             this.groupBox11.Controls.Add(this.rbtn_attr_lowStart);
             this.groupBox11.Controls.Add(this.rbtn_attr_attr);
-            this.groupBox11.Controls.Add(this.rbtn_field);
+            this.groupBox11.Controls.Add(this.rbtn_attr_field);
             this.groupBox11.Location = new System.Drawing.Point(699, 464);
             this.groupBox11.Name = "groupBox11";
             this.groupBox11.Size = new System.Drawing.Size(183, 129);
@@ -600,10 +547,10 @@
             this.rbtn_attr_lowStart.AutoSize = true;
             this.rbtn_attr_lowStart.Location = new System.Drawing.Point(24, 66);
             this.rbtn_attr_lowStart.Name = "rbtn_attr_lowStart";
-            this.rbtn_attr_lowStart.Size = new System.Drawing.Size(95, 16);
+            this.rbtn_attr_lowStart.Size = new System.Drawing.Size(119, 16);
             this.rbtn_attr_lowStart.TabIndex = 0;
             this.rbtn_attr_lowStart.TabStop = true;
-            this.rbtn_attr_lowStart.Text = "字段小写开头";
+            this.rbtn_attr_lowStart.Text = "使用字段小写开头";
             this.rbtn_attr_lowStart.UseVisualStyleBackColor = true;
             // 
             // rbtn_attr_attr
@@ -611,123 +558,86 @@
             this.rbtn_attr_attr.AutoSize = true;
             this.rbtn_attr_attr.Location = new System.Drawing.Point(24, 97);
             this.rbtn_attr_attr.Name = "rbtn_attr_attr";
-            this.rbtn_attr_attr.Size = new System.Drawing.Size(107, 16);
+            this.rbtn_attr_attr.Size = new System.Drawing.Size(119, 16);
             this.rbtn_attr_attr.TabIndex = 0;
-            this.rbtn_attr_attr.TabStop = true;
-            this.rbtn_attr_attr.Text = "使用属性初始化";
+            this.rbtn_attr_attr.Text = "使用属性初始化值";
             this.rbtn_attr_attr.UseVisualStyleBackColor = true;
             // 
-            // rbtn_field
+            // rbtn_attr_field
             // 
-            this.rbtn_field.AutoSize = true;
-            this.rbtn_field.Checked = true;
-            this.rbtn_field.Location = new System.Drawing.Point(24, 31);
-            this.rbtn_field.Name = "rbtn_field";
-            this.rbtn_field.Size = new System.Drawing.Size(107, 16);
-            this.rbtn_field.TabIndex = 0;
-            this.rbtn_field.TabStop = true;
-            this.rbtn_field.Text = "使用字段默认值";
-            this.rbtn_field.UseVisualStyleBackColor = true;
+            this.rbtn_attr_field.AutoSize = true;
+            this.rbtn_attr_field.Checked = true;
+            this.rbtn_attr_field.Location = new System.Drawing.Point(24, 31);
+            this.rbtn_attr_field.Name = "rbtn_attr_field";
+            this.rbtn_attr_field.Size = new System.Drawing.Size(107, 16);
+            this.rbtn_attr_field.TabIndex = 0;
+            this.rbtn_attr_field.TabStop = true;
+            this.rbtn_attr_field.Text = "使用字段下划线";
+            this.rbtn_attr_field.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
-            this.groupBox9.Controls.Add(this.rbtn_Layui);
             this.groupBox9.Controls.Add(this.rbtnBootstrap);
             this.groupBox9.Controls.Add(this.rbtnEasyUI);
-            this.groupBox9.Location = new System.Drawing.Point(892, 302);
+            this.groupBox9.Location = new System.Drawing.Point(892, 354);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(154, 156);
+            this.groupBox9.Size = new System.Drawing.Size(154, 93);
             this.groupBox9.TabIndex = 4;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "前端样式选择";
             // 
-            // rbtn_Layui
-            // 
-            this.rbtn_Layui.AutoSize = true;
-            this.rbtn_Layui.Enabled = false;
-            this.rbtn_Layui.Location = new System.Drawing.Point(20, 118);
-            this.rbtn_Layui.Name = "rbtn_Layui";
-            this.rbtn_Layui.Size = new System.Drawing.Size(53, 16);
-            this.rbtn_Layui.TabIndex = 1;
-            this.rbtn_Layui.Text = "Layui";
-            this.rbtn_Layui.UseVisualStyleBackColor = true;
-            // 
             // rbtnBootstrap
             // 
             this.rbtnBootstrap.AutoSize = true;
-            this.rbtnBootstrap.Location = new System.Drawing.Point(20, 77);
+            this.rbtnBootstrap.Checked = true;
+            this.rbtnBootstrap.Location = new System.Drawing.Point(20, 65);
             this.rbtnBootstrap.Name = "rbtnBootstrap";
             this.rbtnBootstrap.Size = new System.Drawing.Size(77, 16);
             this.rbtnBootstrap.TabIndex = 0;
+            this.rbtnBootstrap.TabStop = true;
             this.rbtnBootstrap.Text = "Bootstrap";
             this.rbtnBootstrap.UseVisualStyleBackColor = true;
             // 
             // rbtnEasyUI
             // 
             this.rbtnEasyUI.AutoSize = true;
-            this.rbtnEasyUI.Checked = true;
             this.rbtnEasyUI.Location = new System.Drawing.Point(20, 34);
             this.rbtnEasyUI.Name = "rbtnEasyUI";
             this.rbtnEasyUI.Size = new System.Drawing.Size(59, 16);
             this.rbtnEasyUI.TabIndex = 0;
-            this.rbtnEasyUI.TabStop = true;
             this.rbtnEasyUI.Text = "EasyUI";
             this.rbtnEasyUI.UseVisualStyleBackColor = true;
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.rbtn_EF);
-            this.groupBox6.Controls.Add(this.rbtn_NHibernate);
             this.groupBox6.Controls.Add(this.rbtn_ORM_Dapper);
             this.groupBox6.Controls.Add(this.rbtn_Sql);
-            this.groupBox6.Location = new System.Drawing.Point(699, 302);
+            this.groupBox6.Location = new System.Drawing.Point(699, 354);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(155, 156);
+            this.groupBox6.Size = new System.Drawing.Size(155, 93);
             this.groupBox6.TabIndex = 5;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "数据处理选择";
             // 
-            // rbtn_EF
-            // 
-            this.rbtn_EF.AutoSize = true;
-            this.rbtn_EF.Enabled = false;
-            this.rbtn_EF.Location = new System.Drawing.Point(20, 131);
-            this.rbtn_EF.Name = "rbtn_EF";
-            this.rbtn_EF.Size = new System.Drawing.Size(35, 16);
-            this.rbtn_EF.TabIndex = 0;
-            this.rbtn_EF.Text = "EF";
-            this.rbtn_EF.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_NHibernate
-            // 
-            this.rbtn_NHibernate.AutoSize = true;
-            this.rbtn_NHibernate.Enabled = false;
-            this.rbtn_NHibernate.Location = new System.Drawing.Point(20, 97);
-            this.rbtn_NHibernate.Name = "rbtn_NHibernate";
-            this.rbtn_NHibernate.Size = new System.Drawing.Size(83, 16);
-            this.rbtn_NHibernate.TabIndex = 0;
-            this.rbtn_NHibernate.Text = "NHibernate";
-            this.rbtn_NHibernate.UseVisualStyleBackColor = true;
-            // 
             // rbtn_ORM_Dapper
             // 
             this.rbtn_ORM_Dapper.AutoSize = true;
+            this.rbtn_ORM_Dapper.Checked = true;
             this.rbtn_ORM_Dapper.Location = new System.Drawing.Point(20, 65);
             this.rbtn_ORM_Dapper.Name = "rbtn_ORM_Dapper";
             this.rbtn_ORM_Dapper.Size = new System.Drawing.Size(89, 16);
             this.rbtn_ORM_Dapper.TabIndex = 0;
+            this.rbtn_ORM_Dapper.TabStop = true;
             this.rbtn_ORM_Dapper.Text = "ORM(Dapper)";
             this.rbtn_ORM_Dapper.UseVisualStyleBackColor = true;
             // 
             // rbtn_Sql
             // 
             this.rbtn_Sql.AutoSize = true;
-            this.rbtn_Sql.Checked = true;
             this.rbtn_Sql.Location = new System.Drawing.Point(20, 34);
             this.rbtn_Sql.Name = "rbtn_Sql";
             this.rbtn_Sql.Size = new System.Drawing.Size(65, 16);
             this.rbtn_Sql.TabIndex = 0;
-            this.rbtn_Sql.TabStop = true;
             this.rbtn_Sql.Text = "Sql语句";
             this.rbtn_Sql.UseVisualStyleBackColor = true;
             // 
@@ -737,9 +647,9 @@
             this.btmExport.Name = "btmExport";
             this.btmExport.Size = new System.Drawing.Size(62, 23);
             this.btmExport.TabIndex = 0;
-            this.btmExport.Text = "导出";
+            this.btmExport.Text = "SaveFile";
             this.btmExport.UseVisualStyleBackColor = true;
-            this.btmExport.Click += new System.EventHandler(this.btmExport_Click);
+            this.btmExport.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // btnTest5
             // 
@@ -823,7 +733,6 @@
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.chkIsSplit);
             this.tabPage6.Controls.Add(this.chkQueryModel);
             this.tabPage6.Controls.Add(this.txtCoreDalSuffix);
             this.tabPage6.Controls.Add(this.label16);
@@ -847,24 +756,12 @@
             this.tabPage6.Text = " asp.net core ";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // chkIsSplit
-            // 
-            this.chkIsSplit.AutoSize = true;
-            this.chkIsSplit.Checked = true;
-            this.chkIsSplit.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkIsSplit.Location = new System.Drawing.Point(16, 28);
-            this.chkIsSplit.Name = "chkIsSplit";
-            this.chkIsSplit.Size = new System.Drawing.Size(72, 16);
-            this.chkIsSplit.TabIndex = 15;
-            this.chkIsSplit.Text = "代码间距";
-            this.chkIsSplit.UseVisualStyleBackColor = true;
-            // 
             // chkQueryModel
             // 
             this.chkQueryModel.AutoSize = true;
             this.chkQueryModel.Checked = true;
             this.chkQueryModel.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkQueryModel.Location = new System.Drawing.Point(16, 6);
+            this.chkQueryModel.Location = new System.Drawing.Point(16, 17);
             this.chkQueryModel.Name = "chkQueryModel";
             this.chkQueryModel.Size = new System.Drawing.Size(102, 16);
             this.chkQueryModel.TabIndex = 15;
@@ -980,7 +877,7 @@
             // 
             // btnOther
             // 
-            this.btnOther.Location = new System.Drawing.Point(339, 50);
+            this.btnOther.Location = new System.Drawing.Point(378, 50);
             this.btnOther.Name = "btnOther";
             this.btnOther.Size = new System.Drawing.Size(62, 23);
             this.btnOther.TabIndex = 1;
@@ -1000,7 +897,7 @@
             // 
             // btnApiController
             // 
-            this.btnApiController.Location = new System.Drawing.Point(216, 50);
+            this.btnApiController.Location = new System.Drawing.Point(239, 50);
             this.btnApiController.Name = "btnApiController";
             this.btnApiController.Size = new System.Drawing.Size(94, 23);
             this.btnApiController.TabIndex = 2;
@@ -1060,9 +957,9 @@
             // 
             this.btnNextMulTable.Location = new System.Drawing.Point(150, 651);
             this.btnNextMulTable.Name = "btnNextMulTable";
-            this.btnNextMulTable.Size = new System.Drawing.Size(120, 23);
+            this.btnNextMulTable.Size = new System.Drawing.Size(146, 23);
             this.btnNextMulTable.TabIndex = 4;
-            this.btnNextMulTable.Text = "下一步(多表core）";
+            this.btnNextMulTable.Text = "下一步(asp.net core）";
             this.btnNextMulTable.UseVisualStyleBackColor = true;
             this.btnNextMulTable.Click += new System.EventHandler(this.btnNextMulTable_Click);
             // 
@@ -1072,13 +969,23 @@
             // 
             // btnReturn
             // 
-            this.btnReturn.Location = new System.Drawing.Point(303, 651);
+            this.btnReturn.Location = new System.Drawing.Point(326, 651);
             this.btnReturn.Name = "btnReturn";
             this.btnReturn.Size = new System.Drawing.Size(63, 23);
             this.btnReturn.TabIndex = 4;
             this.btnReturn.Text = "返回";
             this.btnReturn.UseVisualStyleBackColor = true;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
+            // 
+            // chkActionList
+            // 
+            this.chkActionList.ColumnWidth = 150;
+            this.chkActionList.FormattingEnabled = true;
+            this.chkActionList.Location = new System.Drawing.Point(692, 16);
+            this.chkActionList.MultiColumn = true;
+            this.chkActionList.Name = "chkActionList";
+            this.chkActionList.Size = new System.Drawing.Size(347, 212);
+            this.chkActionList.TabIndex = 13;
             // 
             // MainFrm_New
             // 
@@ -1108,8 +1015,6 @@
             this.tabPage7.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            this.groupBox12.ResumeLayout(false);
-            this.groupBox12.PerformLayout();
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
             this.groupBox9.ResumeLayout(false);
@@ -1183,24 +1088,16 @@
         private System.Windows.Forms.Button btnSaveFile;
         private System.Windows.Forms.Button btnReturn;
         private System.Windows.Forms.CheckBox chkQueryModel;
-        private System.Windows.Forms.CheckBox chkIsSplit;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.RadioButton rbtn_web_html;
-        private System.Windows.Forms.RadioButton rbtn_web_mvc;
-        private System.Windows.Forms.RadioButton rbtn_web_asp_net;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.RadioButton rbtn_attr_lowStart;
         private System.Windows.Forms.RadioButton rbtn_attr_attr;
-        private System.Windows.Forms.RadioButton rbtn_field;
+        private System.Windows.Forms.RadioButton rbtn_attr_field;
         private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.RadioButton rbtn_Layui;
         private System.Windows.Forms.RadioButton rbtnBootstrap;
         private System.Windows.Forms.RadioButton rbtnEasyUI;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.RadioButton rbtn_EF;
-        private System.Windows.Forms.RadioButton rbtn_NHibernate;
         private System.Windows.Forms.RadioButton rbtn_ORM_Dapper;
         private System.Windows.Forms.RadioButton rbtn_Sql;
         private System.Windows.Forms.GroupBox groupBox7;
@@ -1217,6 +1114,7 @@
         private System.Windows.Forms.TextBox txtTemp;
         private System.Windows.Forms.Button btnCopyFullClass_aspnet;
         private System.Windows.Forms.Button btnCopyClass_aspnet;
+        private System.Windows.Forms.CheckedListBox chkActionList;
     }
 }
 

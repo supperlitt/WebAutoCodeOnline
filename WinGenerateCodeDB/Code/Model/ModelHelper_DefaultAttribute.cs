@@ -26,25 +26,24 @@ namespace WinGenerateCodeDB.Code
             content.AppendFormat("\tpublic class {0}\r\n", model_name);
             content.AppendLine("\t{");
 
+            bool isCodeSplit = false;
             for (int i = 0; i < colList.Count; i++)
             {
                 var item = colList[i];
-                content.AppendLine();
                 if (!string.IsNullOrEmpty(item.Comment))
                 {
+                    isCodeSplit = true;
                     content.Append(CommentTool.CreateComment(item.Comment, 2));
                 }
 
-                content.AppendFormat("\t\t[DefaultValue(typeof({0}), \"{1}\")]\r\n",
+                content.AppendFormat("\t\tpublic {0} {1} {{ get; set; }} = {2};\r\n",
                     SqlTool.GetFormatString(item.DbType),
-                    SqlTool.GetDefaultValueAttributeStr(item.DbType));
-                content.AppendFormat("\t\tpublic {0} {1}\r\n",
-                    SqlTool.GetFormatString(item.DbType),
-                    item.Name);
-                content.AppendLine("\t\t{");
-                content.AppendLine("\t\t\tget { return this._" + item.Name + "; }");
-                content.AppendLine("\t\t\tset { this._" + item.Name + " = value; }");
-                content.AppendLine("\t\t}\r\n");
+                    item.Name,
+                    SqlTool.GetDefaultValueStr(item.DbType));
+                if (isCodeSplit && i < (colList.Count - 1))
+                {
+                    content.AppendLine();
+                }
             }
 
             content.AppendLine("\t}");
