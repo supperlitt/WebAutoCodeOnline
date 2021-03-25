@@ -270,6 +270,10 @@ namespace WinGenerateCodeDB
                     p.TabPages.AddRange(new TabPage[] { cache_tabPageList[mulIndex] });
                 }), this.tabControl1);
             }
+            else
+            {
+                MessageBox.Show("请先选中至少一张表.");
+            }
         }
 
         private void btnNext_Click(object sender, EventArgs e)
@@ -299,6 +303,10 @@ namespace WinGenerateCodeDB
                     p.TabPages.RemoveAt(0);
                     p.TabPages.AddRange(new TabPage[] { cache_tabPageList[mulIndex] });
                 }), this.tabControl1);
+            }
+            else
+            {
+                MessageBox.Show("请先选中至少一张表.");
             }
         }
 
