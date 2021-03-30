@@ -255,14 +255,15 @@ namespace WinGenerateCodeDB
 
             if (tableList.Count > 0)
             {
-                AspNetCoreHelper.InitDbName(PageCache.DatabaseName);
-                AspNetCoreHelper.InitTables(tableList);
+                Cache_Next.InitDbName(PageCache.DatabaseName);
+                Cache_Next.InitTables(tableList);
                 foreach (var tbName in tableList)
                 {
                     var list = connect.GetColumnsList(server, name, pwd, port, dbname, tbName);
-                    AspNetCoreHelper.AddColumnList(tbName, list);
+                    Cache_Next.AddColumnList(tbName, list);
                 }
 
+                AspNetCoreHelper.Init();
                 this.Invoke(new Action<TabControl>(p =>
                 {
                     int mulIndex = 2;
@@ -289,14 +290,15 @@ namespace WinGenerateCodeDB
 
             if (tableList.Count > 0)
             {
-                AspNetHelper.InitDbName(PageCache.DatabaseName);
-                AspNetHelper.InitTables(tableList);
+                Cache_Next.InitDbName(PageCache.DatabaseName);
+                Cache_Next.InitTables(tableList);
                 foreach (var tbName in tableList)
                 {
                     var list = connect.GetColumnsList(server, name, pwd, port, dbname, tbName);
-                    AspNetHelper.AddColumnList(tbName, list);
+                    Cache_Next.AddColumnList(tbName, list);
                 }
 
+                AspNetHelper.Init();
                 this.Invoke(new Action<TabControl>(p =>
                 {
                     int mulIndex = 1;
@@ -562,7 +564,7 @@ namespace WinGenerateCodeDB
 
         private void Core_CreateModel()
         {
-            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text, this.chkQueryModel.Checked);
+            Dictionary<string, string> result = AspNetCoreHelper.CreateModel(this.txtCoreNameSpace.Text, this.txtCoreModelSuffix.Text);
 
             FillInTab(result, tbAspNetCore);
         }
@@ -701,6 +703,12 @@ namespace WinGenerateCodeDB
                 textBox.SelectAll();
                 e.Handled = true;      // 不再发出“噔”的声音
             }
+        }
+
+        private void lblVm_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VMSettingFrm frm = new VMSettingFrm();
+            frm.ShowDialog();
         }
     }
 }

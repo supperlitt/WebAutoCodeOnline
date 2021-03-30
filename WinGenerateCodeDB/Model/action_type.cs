@@ -11,7 +11,7 @@ namespace WinGenerateCodeDB
         add = 1,
         bat_add = 2,
         edit = 4,
-        bat_edit = 8,
+        //bat_edit = 8, 移除掉 批量编辑
         delete = 16,
         bat_delete = 32,
         real_delete = 64,

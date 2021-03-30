@@ -16,7 +16,6 @@ namespace WinGenerateCodeDB.Code
             aspxcsContent.Append(CreateLoadData(action, colList, table_name));
             aspxcsContent.Append(CreateAddData(action, colList, table_name, model_name, dal_name));
             aspxcsContent.Append(CreateEditData(action, colList, table_name, model_name, dal_name));
-            aspxcsContent.Append(CreateBatEditData(action, colList, table_name, model_name, dal_name));
             aspxcsContent.Append(CreateDeleteData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateDownAndDownAll(action, colList, table_name, model_name, dal_name));
             aspxcsContent.Append(CreateBottom());
@@ -78,14 +77,6 @@ namespace {0}
                         break;");
             }
 
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                content.Append(@"
-                    case ""batedit"":
-                        BatEditData();
-                        break;");
-            }
-
             if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 content.Append(@"
@@ -142,7 +133,8 @@ namespace {0}
             StringBuilder searchStrContent = new StringBuilder();
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -174,7 +166,7 @@ namespace {0}
                 }
 
                 StringBuilder encodeContent = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+                foreach (var item in queryList)
                 {
                     if (item.DbType.ToLower() == "varchar" || item.DbType.ToLower() == "nvarchar" || item.DbType.ToLower() == "text")
                     {
@@ -203,7 +195,8 @@ namespace {0}
             StringBuilder createModel = new StringBuilder();
             if ((action & (int)action_type.add) == (int)action_type.add)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -266,7 +259,8 @@ namespace {0}
             {
                 editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtEdit{1}\"]);\r\n", colList.ToKeyId(), colList.ToKeyId());
                 createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", colList.ToKeyId(), ExtendMethod.ToStringToType(colList.ToKeyId(), colList.ToKeyIdDbType()));
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -310,69 +304,6 @@ namespace {0}
 
                 return string.Format(template,
                     editContent.ToString(),
-                    model_name,
-                    createModel.ToString(),
-                    dal_name,
-                    table_name);
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-        private static string CreateBatEditData(int action, List<SqlColumnInfo> colList, string table_name, string model_name, string dal_name)
-        {
-            StringBuilder batEditContent = new StringBuilder();
-            StringBuilder createModel = new StringBuilder();
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{1}\"]);\r\n", colList.ToKeyId(), colList.ToKeyId());
-                batEditContent.AppendFormat(@"           List<string> idList = {0}.Split(new char[]{{','}}, StringSplitOptions.RemoveEmptyEntries).ToList();{1}", colList.ToKeyId(), Environment.NewLine);
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    if (item.DbType.ToLower() == "datetime" ||
-                     item.DbType.ToLower() == "date" ||
-                     item.DbType.ToLower() == "int" ||
-                     item.DbType.ToLower() == "bigint" ||
-                     item.DbType.ToLower() == "tinyint")
-                    {
-                        batEditContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(Request[\"txtBatEdit{0}\"]);\r\n", item.Name);
-                        if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
-                        {
-                            batEditContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
-                            batEditContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
-                        }
-                        else
-                        {
-                            batEditContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", item.Name);
-                            batEditContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
-                        }
-
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType_ExceptIntDate(item.Name, item.DbType));
-                    }
-                    else
-                    {
-                        batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(Request[\"txtBatEdit{1}\"]);\r\n", item.Name, item.Name);
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType_ExceptIntDate(item.Name, item.DbType));
-                    }
-                }
-
-                string template = @"
-        private void BatEditData()
-        {{
-{0}
-            {1} model = new {1}();
-{2}
-            {3} dal = new {3}();
-            dal.BatUpdate{4}(idList, model);
-
-            Response.Write(""0"");
-        }}
-";
-
-                return string.Format(template,
-                    batEditContent.ToString(),
                     model_name,
                     createModel.ToString(),
                     dal_name,
@@ -462,7 +393,8 @@ namespace {0}
             return content.ToString();            
         }}";
 
-                    foreach (var item in colList.ToNotMainIdList())
+                    var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                    foreach (var item in queryList)
                     {
                         if (item.DbType.ToLower() == "datetime" ||
                             item.DbType.ToLower() == "date" ||

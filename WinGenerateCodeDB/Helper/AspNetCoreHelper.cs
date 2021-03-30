@@ -12,32 +12,20 @@ namespace WinGenerateCodeDB
         private static List<string> tableList = new List<string>();
         private static Dictionary<string, List<SqlColumnInfo>> tbDic = new Dictionary<string, List<SqlColumnInfo>>();
 
-        public static void InitDbName(string database_name)
+        public static void Init()
         {
-            db_name = database_name;
+            db_name = Cache_Next.GetDbName();
+            tableList = Cache_Next.GetTableList();
+            tbDic = Cache_Next.GetColumnAll();
         }
 
-        public static void InitTables(List<string> tbList)
-        {
-            tbDic = new Dictionary<string, List<SqlColumnInfo>>();
-            tableList = tbList;
-        }
-
-        public static void AddColumnList(string tbName, List<SqlColumnInfo> list)
-        {
-            if (!tbDic.ContainsKey(tbName))
-            {
-                tbDic.Add(tbName, list);
-            }
-        }
-
-        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix, bool isAddQueryModel)
+        public static Dictionary<string, string> CreateModel(string name_space, string model_suffix)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             ModelHelper_DefaultCore helper = new ModelHelper_DefaultCore(name_space, model_suffix);
             foreach (var item in tbDic)
             {
-                string text = helper.CreateModel(item.Key, item.Value, isAddQueryModel);
+                string text = helper.CreateModel(item.Key, item.Value);
 
                 result.Add(item.Key + model_suffix, text);
             }

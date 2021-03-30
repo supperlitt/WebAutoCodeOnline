@@ -14,10 +14,10 @@ namespace WinGenerateCodeDB.Code
             aspxContent.Append(CreatePageHead(name_space, table_name));
             aspxContent.Append(CreateHeader(table_name));
             aspxContent.Append(CreateBodyHead(table_name));
-            aspxContent.Append(CreateSearchContent(action, colList));
+            aspxContent.Append(CreateSearchContent(action, colList, table_name));
             aspxContent.Append(CreateCmdToolBar(action));
             aspxContent.Append(CreateDataGrid(action, colList));
-            aspxContent.Append(CreateDialog(action, colList));
+            aspxContent.Append(CreateDialog(action, colList, table_name));
             aspxContent.Append(CreateNotifyMsg());
             aspxContent.Append(CreateJsDateFormat());
             aspxContent.Append(CreateJsOperation(action, colList, table_name));
@@ -66,13 +66,14 @@ namespace WinGenerateCodeDB.Code
 ", table_name);
         }
 
-        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList)
+        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder searchContent = new StringBuilder();
             int index = 0;
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     if (index % 3 == 0)
                     {
@@ -189,13 +190,6 @@ namespace WinGenerateCodeDB.Code
                 itemCount++;
             }
 
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                toolBarContent.Append(@"
-            <input type=""button"" value=""批量编辑"" onclick='batEditModel();' />");
-                itemCount++;
-            }
-
             if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 toolBarContent.Append(@"
@@ -277,7 +271,7 @@ namespace WinGenerateCodeDB.Code
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private static string CreateDialog(int action, List<SqlColumnInfo> colList)
+        private static string CreateDialog(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder dialogContent = new StringBuilder();
             int addWidth = 400;
@@ -327,7 +321,9 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+
+                    var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                    foreach (var item in addList)
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -375,7 +371,8 @@ namespace WinGenerateCodeDB.Code
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                    foreach (var item in addList)
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -415,7 +412,8 @@ namespace WinGenerateCodeDB.Code
                     #region 一列
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                    foreach (var item in addList)
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
@@ -487,6 +485,7 @@ namespace WinGenerateCodeDB.Code
 
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
+                    var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
                     foreach (var item in colList.ToNotMainIdList())
                     {
                         if (index % 3 == 0 && index != 0)
@@ -536,7 +535,8 @@ namespace WinGenerateCodeDB.Code
 
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                    foreach (var item in editList)
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -580,7 +580,8 @@ namespace WinGenerateCodeDB.Code
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />
                         </div>", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                    foreach (var item in editList)
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
@@ -606,165 +607,7 @@ namespace WinGenerateCodeDB.Code
             }
             #endregion
 
-            int batEditWidth = 400;
-            #region 批量编辑
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                // 行数过多，分成两行
-                string template = @"
-
-        <!-- 模态框（Modal） -->
-        <div class=""modal fade"" id=""batEdit_Modal"" tabindex=""-1"" role=""dialog""
-            aria-labelledby=""myModalLabel"" aria-hidden=""true"">
-            <div class=""modal-dialog"" style=""width: auto; max-width: {1}px;"">
-                <div class=""modal-content"">
-                    <div class=""modal-header"">
-                        <button type=""button"" class=""close""
-                            data-dismiss=""modal"" aria-hidden=""true""></button>
-                        <h4>批量编辑</h4>
-                    </div>
-                    <div class=""modal-body"">
-                        <div class=""container"">{0}
-                        </div>
-                    </div>
-                    <div class=""modal-footer"">
-                        <button type=""button"" class=""btn btn-default"" 
-                            onclick=""saveBatEditModel()"">
-                            保存
-                        </button>
-                        <button type=""button"" class=""btn btn-default""
-                            data-dismiss=""modal"">
-                            关闭
-                        </button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal -->
-        </div>";
-                int index = 1;
-                StringBuilder content = new StringBuilder();
-                if (colList.ToNotMainIdList().Count > 18)
-                {
-                    #region 三列
-                    content.Append(@"
-                        <div class=""row form-group"">");
-                    content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
-                    {
-                        if (index % 3 == 0 && index != 0)
-                        {
-                            content.Append(@"
-                        </div>
-                        <div class=""row form-group"">");
-                        }
-
-                        // &#12288; 占一个中文字符
-                        content.AppendFormat(@"
-                            <div class=""col-md-4"">
-                                <label for=""txtBatEdit{0}"">{1}:</label>
-                                <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}"" />
-                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
-
-                        index++;
-                    }
-
-                    if (index % 3 == 0)
-                    {
-                        content.Append(@"
-                        </div>");
-                    }
-                    else if (index % 3 == 1)
-                    {
-                        content.Append(@"
-                        <div class=""col-md-8""></div>
-                        </div>");
-                    }
-                    else
-                    {
-                        content.Append(@"
-                        <div class=""col-md-4""></div>
-                        </div>");
-                    }
-                    #endregion
-
-                    batEditWidth *= 3;
-                }
-                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
-                {
-                    #region 二列
-                    content.Append(@"
-                        <div class=""row form-group"">");
-                    content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
-                    {
-                        if (index % 2 == 0 && index != 0)
-                        {
-                            content.Append(@"
-                        </div>
-                        <div class=""row form-group"">");
-                        }
-
-                        // &#12288; 占一个中文字符
-                        content.AppendFormat(@"
-                            <div class=""col-md-4"">
-                                <label for=""txtBatEdit{0}"">{1}:</label>
-                                <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}"" />
-                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"));
-
-                        index++;
-                    }
-
-                    if (index % 2 == 0)
-                    {
-                        content.Append(@"
-                        </div>");
-                    }
-                    else
-                    {
-                        content.Append(@"
-                        <div class=""col-md-4""></div>
-                        </div>");
-                    }
-                    #endregion
-
-                    batEditWidth *= 2;
-                }
-                else
-                {
-                    #region 一列
-                    content.Append(@"
-                        <div class=""row form-group"">");
-                    content.AppendFormat(@"
-                            <input type=""hidden"" id=""txtBatEdit{0}"" value="""" /></div>", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
-                    {
-                        content.Append(@"
-                        <div class=""row form-group"">");
-
-                        // &#12288; 占一个中文字符
-                        content.AppendFormat(@"
-                            <div class=""col-md-12"">
-                                <label for=""txtBatEdit{0}"">{1}:</label>
-                                <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}""/>
-                            </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;")); // &ensp;  &emsp; &#12288;
-
-                        content.Append(@"
-                        </div>");
-                    }
-                    #endregion
-
-                    batEditWidth *= 1;
-                }
-
-                dialogContent.Append(string.Format(template, content.ToString(), batEditWidth));
-            }
-            #endregion
-
             return dialogContent.ToString();
-            //}
         }
 
         private static string CreateNotifyMsg()
@@ -825,7 +668,8 @@ namespace WinGenerateCodeDB.Code
                 editpostDataContent.AppendFormat(@"""txtEdit{0}="" + encodeURI(txtEdit{0}) ", colList.ToKeyId());
 
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     editDefineVarContent.AppendFormat(@"
                 var txtEdit{0} = """";", item.Name);
@@ -906,7 +750,8 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder addPostDataContent = new StringBuilder("var postData = ");
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     addContent.AppendFormat(@"
                 var txtAdd{0} = $(""#txtAdd{0}"").val();", item.Name);
@@ -1015,77 +860,6 @@ namespace WinGenerateCodeDB.Code
             }
             #endregion
 
-            #region bat edit
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                StringBuilder batEditContent = new StringBuilder();
-                batEditContent.AppendFormat("var txtBatEdit{0} = $(\"#txtBatEdit{0}\").val();\r\n", colList.ToKeyId());
-
-                StringBuilder batEditPostDataContent = new StringBuilder("var postData = ");
-                batEditPostDataContent.AppendFormat("\"txtBatEdit{0}=\" + encodeURI(txtBatEdit{0}) ", colList.ToKeyId());
-
-                int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    batEditContent.AppendFormat(@"
-                var txtBatEdit{0} = $(""#txtBatEdit{0}"").val();", item.Name);
-                    batEditPostDataContent.AppendFormat(" + \"&txtBatEdit{0}=\" + encodeURI(txtBatEdit{0})", item.Name);
-
-                    index++;
-                }
-
-                if (batEditPostDataContent.ToString() == "var postData = ")
-                {
-                    batEditPostDataContent.Append("\"\"");
-                }
-
-                batEditPostDataContent.Append(";");
-
-                content.AppendFormat(@"
-
-            function batEditModel() {{
-                var checkCount=0;
-                var ids = """";
-                $(""#tbcontent tbody"").find(""input[type='checkbox']"").each(function () {{
-                    if ($(this)[0].checked) {{
-                        ids += $(this).val() + "","";
-                        checkCount++;
-                    }}
-                }});
-
-                if (checkCount>0) {{
-                    ids = ids.substring(0, ids.length - 1);
-                    $(""#txtBatEdit{0}"").val(ids);
-                    $(""#batEdit_Modal"").modal('show');
-                }}
-            }}
-
-            function saveBatEditModel() {{
-                {1}
-                {2}
-                $.ajax({{
-                    type: ""POST"",
-                    url: ""{3}.aspx?type=batedit"",
-                    data: postData.replace(""+"",""%2b""),
-                    success: function (msg) {{
-                        if (msg == ""0"") {{
-                            alert(""修改成功！"");
-                            loadData();
-                        }} else {{
-                            alert(msg);
-                        }}
-
-                        $(""#batEdit_Modal"").modal('hide');      // close the dialog
-                    }}
-                }});
-            }}", colList.ToKeyId(),
-                    batEditContent.ToString(),
-                    batEditPostDataContent.ToString(),
-                    table_name);
-            }
-
-            #endregion
-
             #region export all
 
             if ((action & (int)action_type.export_all) == (int)action_type.export_all)
@@ -1093,7 +867,8 @@ namespace WinGenerateCodeDB.Code
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat(@"
@@ -1142,7 +917,8 @@ namespace WinGenerateCodeDB.Code
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat(@"
@@ -1317,7 +1093,8 @@ namespace WinGenerateCodeDB.Code
             StringBuilder pagePost = new StringBuilder();
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat(@"
@@ -1339,7 +1116,7 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder tagContent = new StringBuilder();
                 tagContent.Append(@"var attr = """);
                 index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                foreach (var item in queryList)
                 {
                     if (index == 0)
                     {

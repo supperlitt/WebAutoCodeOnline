@@ -14,7 +14,7 @@ namespace WinGenerateCodeDB.Code
             aspxContent.Append(CreatePageHead(name_space, table_name));
             aspxContent.Append(CreateHeader(table_name));
             aspxContent.Append(CreateBodyHead(table_name));
-            aspxContent.Append(CreateSearchContent(action, colList));
+            aspxContent.Append(CreateSearchContent(action, colList, table_name));
             aspxContent.Append(CreateCmdToolBar(action));
             aspxContent.Append(CreateDataGrid(action, colList, table_name));
             aspxContent.Append(CreateDialog(action, colList, table_name));
@@ -73,7 +73,7 @@ namespace WinGenerateCodeDB.Code
 ", table_name);
         }
 
-        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList)
+        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList, string table_name)
         {
             string template = @"
     <div class=""demo-info"" style=""margin-bottom: 10px"">
@@ -85,7 +85,8 @@ namespace WinGenerateCodeDB.Code
             StringBuilder searchContent = new StringBuilder();
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var attr in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var attr in queryList)
                 {
                     searchContent.AppendFormat("&nbsp;&nbsp;<label for=\"txtSearch{0}\">{1}：</label><input type=\"text\" id=\"txtSearch{0}\" />", attr.Name, attr.Comment);
                 }
@@ -111,27 +112,22 @@ namespace WinGenerateCodeDB.Code
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-edit"" plain=""true"" onclick=""editModel()"">编辑</a>");
             }
 
-            if ((action & (int)action_type.bat_edit) ==(int)action_type.bat_edit)
-            {
-                toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-edit"" plain=""true"" onclick=""batEditModel()"">批量编辑</a>");
-            }
-
-            if ((action & (int)action_type.delete) ==(int)action_type.delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyModel()"">删除</a>");
             }
 
-            if ((action & (int)action_type.bat_delete) ==(int)action_type.bat_delete)
+            if ((action & (int)action_type.bat_delete) == (int)action_type.bat_delete)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyBatModel()"">删除</a>");
             }
 
-            if ((action & (int)action_type.export_all) ==(int)action_type.export_all)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""exportAll()"">导出全部</a>");
             }
 
-            if ((action & (int)action_type.export_select) ==(int)action_type.export_select)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""selectExport()"">导出选中</a>");
             }
@@ -145,7 +141,7 @@ namespace WinGenerateCodeDB.Code
         private static string CreateDataGrid(int action, List<SqlColumnInfo> colList, string table_name)
         {
             // singleselect=""true""
-            if ((action & (int)action_type.query_list) ==(int)action_type.query_list)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 string template = @"
     <table id=""dg"" class=""easyui-datagrid"" style=""width: 1200px; height: auto"" url="""" pagination=""true"" 
@@ -182,7 +178,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dialogContent = new StringBuilder();
 
             #region 添加
-            if ((action & (int)action_type.add) ==(int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -205,7 +201,8 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder content = new StringBuilder();
                 content.AppendFormat(@"        <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
 
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     // &#12288; 占一个中文字符
                     content.AppendFormat(@"
@@ -220,7 +217,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region 编辑
-            if ((action & (int)action_type.edit) ==(int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 // 行数过多，分成两行
                 string template = @"
@@ -243,7 +240,8 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder content = new StringBuilder();
                 content.AppendFormat(@"        <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
 
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     // 初始化form显示数据
                     // &#12288; 占一个中文字符
@@ -251,42 +249,6 @@ namespace WinGenerateCodeDB.Code
         <div class=""fitem"">
             <label for=""txtEdit{0}"">{1}:</label>
             <input type=""text"" id=""txtEdit{0}"" name=""txtEdit{0}"" {2} />
-        </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"), item.DbType.ToEasyUIInputClassOptStr());
-                }
-
-                dialogContent.Append(string.Format(template, table_name, content.ToString()));
-            }
-            #endregion
-
-            #region 批量编辑
-            if ((action & (int)action_type.bat_edit) ==(int)action_type.bat_edit)
-            {
-                string template = @"
-    <div id=""dlg-batedit"" class=""easyui-dialog"" style=""width: 400px; height: 240px; padding: 10px 20px""
-        closed=""true"" buttons=""#dlg-batedit-buttons"">
-        <div class=""ftitle"">
-        </div>
-        <form id=""fm-batedit"" method=""post"" enctype=""multipart/form-data"" action=""{0}.aspx?type=batedit""
-        novalidate=""novalidate"">
-{1}
-        </form>
-    </div>
-    <div id=""dlg-batedit-buttons"">
-        <a href=""javascript:void(0)"" class=""easyui-linkbutton c6"" iconcls=""icon-ok"" onclick=""saveBatEditModel()""
-            style=""width: 90px"">保 存</a> <a href=""javascript:void(0)"" class=""easyui-linkbutton""
-                iconcls=""icon-cancel"" onclick=""javascript:$('#dlg-batedit').dialog('close')"" style=""width: 90px"">
-                取 消</a>
-    </div>";
-
-                StringBuilder content = new StringBuilder();
-                content.AppendFormat(@"		<input type=""hidden"" id=""txtBatEdit{0}"" value="""" />", colList.ToKeyId());
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    // &#12288; 占一个中文字符
-                    content.AppendFormat(@"
-        <div class=""fitem"">
-            <label for=""txtBatEdit{0}"">{1}:</label>
-            <input type=""text"" id=""txtBatEdit{0}"" name=""txtBatEdit{0}"" {2} />
         </div>", item.Name, item.Comment.PadLeftStr(4, "&emsp;"), item.DbType.ToEasyUIInputClassOptStr());
                 }
 
@@ -350,7 +312,7 @@ namespace WinGenerateCodeDB.Code
     <script type=""text/javascript"">");
 
             #region edit
-            if ((action & (int)action_type.edit) ==(int)action_type.edit)
+            if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 StringBuilder editSubmitContent = new StringBuilder();
 
@@ -361,7 +323,9 @@ namespace WinGenerateCodeDB.Code
 
                 StringBuilder editContent = new StringBuilder();
                 editContent.AppendFormat(@"                    $(""#txtEdit{0}"").val(row.{0});", colList.ToKeyId());
-                foreach (var item in colList.ToNotMainIdList())
+
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     editContent.AppendFormat(@"
                     $(""#txtEdit{0}"").textbox(""setValue"", row.{0});", item.Name);
@@ -434,12 +398,13 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region add
-            if ((action & (int)action_type.add) ==(int)action_type.add)
+            if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder postDataContent = new StringBuilder("var postData = ");
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     addContent.AppendFormat("\t\t\tvar txtAdd{0} = $(\"#txtAdd{0}\").textbox(\"getValue\");\r\n", item.Name);
                     if (index == 0)
@@ -501,7 +466,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action & (int)action_type.real_delete) ==(int)action_type.real_delete)
+            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
             {
                 string template = string.Format(@"
 
@@ -536,9 +501,9 @@ namespace WinGenerateCodeDB.Code
             }
             #endregion
 
-            #region bat edit
+            #region bat delete
 
-            if ((action & (int)action_type.bat_real_delete) ==(int)action_type.bat_real_delete)
+            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
             {
                 StringBuilder batEditContent = new StringBuilder();
                 batEditContent.AppendFormat("\t\t\tvar txtBatEdit{0} = $(\"#txtBatEdit{0}\").textbox(\"getValue\");\r\n", colList.ToKeyId());
@@ -616,12 +581,14 @@ namespace WinGenerateCodeDB.Code
 
             #region export
 
-            if ((action & (int)action_type.export_all) ==(int)action_type.export_all)
+            if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat("\t\t\tvar txtSearch{0} = $(\"#txtSearch{0}\").textbox(\"getValue\");\r\n", item.Name);
@@ -663,12 +630,14 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region select export
-            if ((action & (int)action_type.export_select) ==(int)action_type.export_select)
+            if ((action & (int)action_type.export_select) == (int)action_type.export_select)
             {
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat("\t\t\tvar txtSearch{0} = $(\"#txtSearch{0}\").textbox(\"getValue\");\r\n", item.Name);
@@ -762,9 +731,10 @@ namespace WinGenerateCodeDB.Code
             int index = 0;
             StringBuilder coditionContent = new StringBuilder();
             StringBuilder pagePost = new StringBuilder();
-            if ((action & (int)action_type.query_list) ==(int)action_type.query_list)
+            if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat("\t\t\tvar txtSearch{0} = $(\"#txtSearch{0}\").val();\r\n", item.Name);

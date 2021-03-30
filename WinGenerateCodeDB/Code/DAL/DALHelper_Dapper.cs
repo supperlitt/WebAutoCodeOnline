@@ -14,7 +14,6 @@ namespace WinGenerateCodeDB.Code
             dalContent.Append(CreateDALHeader(name_space, dal_name));
             dalContent.Append(CreateAddMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateEditMethod(action, table_name, colList, model_name, db_name));
-            dalContent.Append(CreateBatEditMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateDeleteMethod(action, table_name, colList, db_name));
             dalContent.Append(CreateQueryListMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateGetAllAndPart(action, table_name, colList, model_name, db_name));
@@ -46,7 +45,8 @@ namespace {0}
                 StringBuilder valueContent = new StringBuilder(") values (");
                 addContent.AppendFormat("string insertSql = \"insert into {0}(", table_name);
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     if (index == 0)
                     {
@@ -93,6 +93,7 @@ namespace {0}
                 StringBuilder updateContent = new StringBuilder("string updateSql = \"update ");
                 updateContent.AppendFormat(" {0} set ", table_name);
                 int index = 0;
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
                 foreach (var item in colList.ToNotMainIdList())
                 {
                     if (index == 0)
@@ -117,56 +118,6 @@ namespace {0}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
                 return sqlcn.Execute(updateSql, model) > 0;
-            }}
-        }}
-";
-                return string.Format(template,
-                    table_name,
-                    updateContent.ToString(),
-                    db_name,
-                    table_name);
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-        public static string CreateBatEditMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
-        {
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                StringBuilder updateContent = new StringBuilder(@"string updateSql = string.Format(""update ");
-                updateContent.AppendFormat(" {0} set ", table_name);
-
-                int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    if (index == 0)
-                    {
-                        updateContent.AppendFormat("{0}=@{0}", item.Name);
-                    }
-                    else
-                    {
-                        updateContent.AppendFormat(",{0}=@{0}", item.Name);
-                    }
-
-                    index++;
-                }
-
-                updateContent.Append(" where ");
-                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", colList.ToKeyId());
-
-                string template = @"
-        public bool BatUpdate{3}(List<string> list, {0} model)
-        {{
-            var array = (from f in list
-                        select ""'"" + f + ""'"").ToArray();
-            string idStr = string.Join("","", array);
-			{1}
-            using (IDbConnection sqlcn = ConnectionFactory.{2})
-            {{
-                return  sqlcn.Execute(updateSql, model) > 0;
             }}
         }}
 ";
@@ -222,7 +173,8 @@ namespace {0}
                 StringBuilder queryListParams = new StringBuilder();
                 StringBuilder setInfoContent = new StringBuilder();
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
 
@@ -333,13 +285,14 @@ namespace {0}
             {
                 StringBuilder down_allModel_Str = new StringBuilder();
                 #region 导出全部
-                if (down_allModel != null)
+                if (down_allModel)
                 {
                     StringBuilder queryWhereContent = new StringBuilder();
                     StringBuilder queryListParams = new StringBuilder();
                     StringBuilder setInfoContent = new StringBuilder();
                     int index = 0;
-                    foreach (var item in colList.ToNotMainIdList())
+                    var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                    foreach (var item in queryList)
                     {
                         queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
 

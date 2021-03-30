@@ -14,6 +14,7 @@ namespace WinGenerateCodeDB.Code
         private string model_name = string.Empty;
         private string dal_name = string.Empty;
         private List<SqlColumnInfo> list = new List<SqlColumnInfo>();
+        private bool add_display_model = false;
 
         public AspNetCoreApiController(string name_space, string dal_suffix, string model_suffix)
         {
@@ -33,7 +34,7 @@ namespace WinGenerateCodeDB.Code
             dalContent.Append(CreateHeader());
             dalContent.Append(CreateAddMethod());
             dalContent.Append(CreateEditMethod());
-            dalContent.Append(CreateBatEditMethod());
+            dalContent.Append(CreateDeleteMethod());
             dalContent.Append(CreateQueryListMethod());
 
             dalContent.Append(CreateBottom());
@@ -75,7 +76,7 @@ namespace {0}.Controllers
             string template = @"
         [Route(""{0}/add"")]
         [HttpPost]
-        public result_info<object> add_{0}([FromBody] {1} model)
+        public result_info<object> add_{0}([FromBody] add_{1} model)
         {{
             if (model != null)
             {{
@@ -113,11 +114,6 @@ namespace {0}.Controllers
             StringBuilder valueContent = new StringBuilder("");
             foreach (var item in list)
             {
-                if (item.IsMainKey)
-                {
-                    continue;
-                }
-
                 valueContent.AppendFormat(@"                    {0} = model.{0},
 ", item.Name);
             }
@@ -125,7 +121,7 @@ namespace {0}.Controllers
             string template = @"
         [Route(""{0}/edit"")]
         [HttpPost]
-        public result_info<object> edit_{0}([FromBody] {1} model)
+        public result_info<object> edit_{0}([FromBody] edit_{1} model)
         {{
             if (model != null)
             {{
@@ -158,12 +154,12 @@ namespace {0}.Controllers
                 valueContent.ToString());
         }
 
-        public string CreateBatEditMethod()
+        public string CreateDeleteMethod()
         {
             StringBuilder valueContent = new StringBuilder("");
             foreach (var item in list)
             {
-                if (item.IsMainKey)
+                if (!item.IsMainKey)
                 {
                     continue;
                 }
@@ -172,19 +168,15 @@ namespace {0}.Controllers
 ", item.Name);
             }
 
-            var keyInfo = list.Find(p => p.IsMainKey);
-            if (keyInfo != null && (keyInfo.DbType.ToLower() == "int" || keyInfo.DbType.ToLower() == "bigint"))
-            {
-                string template = @"
-        [Route(""{0}/batedit"")]
+            string template = @"
+        [Route(""{0}/delete"")]
         [HttpPost]
-        public result_info<object> batedit_{0}([FromBody] batedit_{1} model)
+        public result_info<object> delete_{0}([FromBody] delete_{1} model)
         {{
             if (model != null)
             {{
-                var idList = (from f in model.ids.Split(new char[] {{ ',' }}, StringSplitOptions.RemoveEmptyEntries).ToList() select {4}.Parse(f)).ToList();
                 {2} dal = new {2}();
-                var result = dal.BatUpdate{0}(idList, new {1}()
+                var result = dal.Update{0}_delete(new {1}()
                 {{
 {3}
                 }});
@@ -205,51 +197,11 @@ namespace {0}.Controllers
         }}
 ";
 
-                return string.Format(template,
-                    table_name,
-                    model_name,
-                    dal_name,
-                    valueContent.ToString(),
-                    keyInfo.DbType.ToLower() == "int" ? "int" : "long");
-            }
-            else
-            {
-                string template = @"
-        [Route(""{0}/batedit"")]
-        [HttpPost]
-        public result_info<object> batedit_{0}([FromBody] batedit_{1} model)
-        {{
-            if (model != null)
-            {{
-                var idList = model.ids.Split(new char[] {{ ',' }}, StringSplitOptions.RemoveEmptyEntries).ToList();
-                {2} dal = new {2}();
-                var result = dal.BatUpdate{0}(idList, new {1}()
-                {{
-{3}
-                }});
-
-                if (result)
-                {{
-                    return result_info<object>.success;
-                }}
-                else
-                {{
-                    return result_info<object>.fail;
-                }}
-            }}
-            else
-            {{
-                return result_info<object>.data_null;
-            }}
-        }}
-";
-
-                return string.Format(template,
-                    table_name,
-                    model_name,
-                    dal_name,
-                    valueContent.ToString());
-            }
+            return string.Format(template,
+                table_name,
+                model_name,
+                dal_name,
+                valueContent.ToString());
         }
 
         public string CreateQueryListMethod()

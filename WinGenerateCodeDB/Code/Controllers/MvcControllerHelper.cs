@@ -16,7 +16,6 @@ namespace WinGenerateCodeDB.Code
             aspxcsContent.Append(CreateLoadData(action, colList, dal_name));
             aspxcsContent.Append(CreateAddData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateEditData(action, colList, table_name, dal_name));
-            aspxcsContent.Append(CreateBatEditData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateDeleteData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateDownAndDownAll(action, colList, table_name, dal_name, model_name));
             aspxcsContent.Append(CreateBottom());
@@ -260,79 +259,6 @@ namespace {0}.Controllers
                 return string.Format(template,
                     editStrContent.ToString(),
                     editContent.ToString(),
-                    table_name,
-                    createModel.ToString(),
-                    dal_name,
-                    table_name);
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-        private static string CreateBatEditData(int action, List<SqlColumnInfo> colList, string table_name, string dal_name)
-        {
-            StringBuilder batEditContent = new StringBuilder();
-            StringBuilder createModel = new StringBuilder();
-            StringBuilder batEditStrContent = new StringBuilder();
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(txtBatEdit{1});\r\n", colList.ToKeyId(), colList.ToKeyId());
-                batEditContent.AppendFormat(@"           List<string> idList = {0}.Split(new char[]{{','}}, StringSplitOptions.RemoveEmptyEntries).ToList();{1}", colList.ToKeyId(), Environment.NewLine);
-                batEditStrContent.AppendFormat("string txtBatEdit{0},", colList.ToKeyId());
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    if (item.DbType.ToLower() == "datetime" ||
-                     item.DbType.ToLower() == "date" ||
-                     item.DbType.ToLower() == "int" ||
-                     item.DbType.ToLower() == "bigint" ||
-                     item.DbType.ToLower() == "tinyint")
-                    {
-                        batEditContent.AppendFormat("\t\t\tstring {0}Str = HttpUtility.UrlDecode(txtBatEdit{0});\r\n", item.Name);
-                        if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
-                        {
-                            batEditContent.AppendFormat("\t\t\tDateTime {0} = DateTime.MinValue;\r\n", item.Name);
-                            batEditContent.AppendFormat("\t\t\tDateTime.TryParse({0}Str, out {0});\r\n", item.Name);
-                        }
-                        else
-                        {
-                            batEditContent.AppendFormat("\t\t\tint {0} = 0;;\r\n", item.Name);
-                            batEditContent.AppendFormat("\t\t\tint.TryParse({0}Str, out {0});\r\n", item.Name);
-                        }
-
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType_ExceptIntDate(item.Name, item.DbType));
-                    }
-                    else
-                    {
-                        batEditContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(txtBatEdit{1});\r\n", item.Name, item.Name);
-                        createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", item.Name, ExtendMethod.ToStringToType_ExceptIntDate(item.Name, item.DbType));
-                    }
-
-                    batEditStrContent.AppendFormat("string txtBatEdit{0},", item.Name);
-                }
-
-                if (batEditStrContent.Length > 0)
-                {
-                    batEditStrContent.Remove(batEditStrContent.Length - 1, 1);
-                }
-
-                string template = @"
-        [HttpPost]
-        public ActionResult batedit({0})
-        {{
-{1}
-            {2} model = new {2}();
-            {3} dal = new {3}();
-            dal.Update{4}(model);
-
-            return new ContentResult() {{ Content = ""0"" }};
-        }}
-";
-
-                return string.Format(template,
-                    batEditStrContent.ToString(),
-                    batEditContent.ToString(),
                     table_name,
                     createModel.ToString(),
                     dal_name,

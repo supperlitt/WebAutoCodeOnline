@@ -14,7 +14,6 @@ namespace WinGenerateCodeDB.Code
             dalContent.Append(CreateDALHeader(name_space, dal_name));
             dalContent.Append(CreateAddMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateEditMethod(action, table_name, colList, model_name, db_name));
-            dalContent.Append(CreateBatEditMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateDeleteMethod(action, table_name, colList, db_name));
             dalContent.Append(CreateQueryListMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateGetAllAndPart(action, table_name, colList, model_name, db_name));
@@ -47,7 +46,8 @@ namespace {0}
             if ((action & (int)action_type.add) == (int)action_type.add)
             {
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     if (index == 0)
                     {
@@ -95,7 +95,8 @@ namespace {0}
             if ((action & (int)action_type.edit) == (int)action_type.edit)
             {
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     if (index == 0)
                     {
@@ -118,56 +119,6 @@ namespace {0}
                 string template = @"
         public bool Update{0}({0} model)
         {{
-			{1}
-            {2}
-            using (SqlConnection sqlcn = ConnectionFactory.{3})
-            {{
-                return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, updateSql, listParams.ToArray()) > 0;
-            }}
-        }}
-";
-                return string.Format(template, table_name, updateContent.ToString(), updateParamsContent.ToString(), db_name);
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-        public static string CreateBatEditMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
-        {
-            StringBuilder updateContent = new StringBuilder(@"string updateSql = string.Format(""update ");
-            updateContent.AppendFormat(" {0} set ", table_name);
-            StringBuilder updateParamsContent = new StringBuilder("List<SqlParameter> listParams = new List<SqlParameter>();\r\n");
-
-            if ((action & (int)action_type.bat_edit) == (int)action_type.bat_edit)
-            {
-                int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    if (index == 0)
-                    {
-                        updateContent.AppendFormat("{0}=@{0}", item.Name);
-                    }
-                    else
-                    {
-                        updateContent.AppendFormat(",{0}=@{0}", item.Name);
-                    }
-
-                    updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new SqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", item.Name, item.DbType.ToMsSqlDbType());
-                    index++;
-                }
-
-                updateContent.Append(" where ");
-                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", colList.ToKeyId());
-                updateParamsContent.AppendFormat("\t\t\tlistParams.Add(new SqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", colList.ToKeyId(), colList.ToKeyIdDbType().ToMsSqlDbType());
-
-                string template = @"
-        public bool BatUpdate{0}(List<string> list, {0} model)
-        {{
-            var array = (from f in list
-                        select ""'"" + f + ""'"").ToArray();
-            string idStr = string.Join("","", array);
 			{1}
             {2}
             using (SqlConnection sqlcn = ConnectionFactory.{3})
@@ -213,7 +164,8 @@ namespace {0}
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
                     if (index == 0)
@@ -330,11 +282,12 @@ namespace {0}
                 StringBuilder resultContent = new StringBuilder();
 
                 #region 导出全部
-                if (down_all_Model != null)
+                if (down_all_Model)
                 {
                     StringBuilder queryWhereContent = new StringBuilder();
                     StringBuilder queryListParams = new StringBuilder();
-                    foreach (var item in colList.ToNotMainIdList())
+                    var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                    foreach (var item in queryList)
                     {
                         queryListParams.AppendFormat("{0} {1},", item.DbType.ToMsSqlClassType(), item.Name);
                         if (index == 0)

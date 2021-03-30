@@ -52,6 +52,8 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.chkActionList = new System.Windows.Forms.CheckedListBox();
             this.btnCopyFullClass_aspnet = new System.Windows.Forms.Button();
             this.btnCopyClass_aspnet = new System.Windows.Forms.Button();
             this.tbAspNet = new System.Windows.Forms.TabControl();
@@ -86,7 +88,7 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.chkQueryModel = new System.Windows.Forms.CheckBox();
+            this.lblVm = new System.Windows.Forms.LinkLabel();
             this.txtCoreDalSuffix = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txtCoreModelSuffix = new System.Windows.Forms.TextBox();
@@ -110,7 +112,6 @@
             this.btnNextMulTable = new System.Windows.Forms.Button();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.btnReturn = new System.Windows.Forms.Button();
-            this.chkActionList = new System.Windows.Forms.CheckedListBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -331,6 +332,7 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(117, 21);
             this.txtPwd.TabIndex = 1;
+            this.txtPwd.Text = "QAZ123wsx!@#";
             // 
             // label2
             // 
@@ -377,6 +379,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.linkLabel1);
             this.tabPage4.Controls.Add(this.chkActionList);
             this.tabPage4.Controls.Add(this.btnCopyFullClass_aspnet);
             this.tabPage4.Controls.Add(this.btnCopyClass_aspnet);
@@ -401,9 +404,30 @@
             this.tabPage4.Text = " asp.net ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(100, 21);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(107, 12);
+            this.linkLabel1.TabIndex = 17;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "ViewModel通用配置";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVm_LinkClicked);
+            // 
+            // chkActionList
+            // 
+            this.chkActionList.ColumnWidth = 150;
+            this.chkActionList.FormattingEnabled = true;
+            this.chkActionList.Location = new System.Drawing.Point(692, 16);
+            this.chkActionList.MultiColumn = true;
+            this.chkActionList.Name = "chkActionList";
+            this.chkActionList.Size = new System.Drawing.Size(347, 212);
+            this.chkActionList.TabIndex = 13;
+            // 
             // btnCopyFullClass_aspnet
             // 
-            this.btnCopyFullClass_aspnet.Location = new System.Drawing.Point(108, 47);
+            this.btnCopyFullClass_aspnet.Location = new System.Drawing.Point(497, 50);
             this.btnCopyFullClass_aspnet.Name = "btnCopyFullClass_aspnet";
             this.btnCopyFullClass_aspnet.Size = new System.Drawing.Size(101, 23);
             this.btnCopyFullClass_aspnet.TabIndex = 11;
@@ -413,7 +437,7 @@
             // 
             // btnCopyClass_aspnet
             // 
-            this.btnCopyClass_aspnet.Location = new System.Drawing.Point(13, 47);
+            this.btnCopyClass_aspnet.Location = new System.Drawing.Point(402, 50);
             this.btnCopyClass_aspnet.Name = "btnCopyClass_aspnet";
             this.btnCopyClass_aspnet.Size = new System.Drawing.Size(76, 23);
             this.btnCopyClass_aspnet.TabIndex = 12;
@@ -643,7 +667,7 @@
             // 
             // btmExport
             // 
-            this.btmExport.Location = new System.Drawing.Point(258, 50);
+            this.btmExport.Location = new System.Drawing.Point(614, 50);
             this.btmExport.Name = "btmExport";
             this.btmExport.Size = new System.Drawing.Size(62, 23);
             this.btmExport.TabIndex = 0;
@@ -653,7 +677,7 @@
             // 
             // btnTest5
             // 
-            this.btnTest5.Location = new System.Drawing.Point(428, 16);
+            this.btnTest5.Location = new System.Drawing.Point(614, 16);
             this.btnTest5.Name = "btnTest5";
             this.btnTest5.Size = new System.Drawing.Size(62, 23);
             this.btnTest5.TabIndex = 0;
@@ -663,7 +687,7 @@
             // 
             // btnTest4
             // 
-            this.btnTest4.Location = new System.Drawing.Point(344, 16);
+            this.btnTest4.Location = new System.Drawing.Point(536, 16);
             this.btnTest4.Name = "btnTest4";
             this.btnTest4.Size = new System.Drawing.Size(62, 23);
             this.btnTest4.TabIndex = 0;
@@ -673,7 +697,7 @@
             // 
             // btnTest3
             // 
-            this.btnTest3.Location = new System.Drawing.Point(258, 16);
+            this.btnTest3.Location = new System.Drawing.Point(402, 16);
             this.btnTest3.Name = "btnTest3";
             this.btnTest3.Size = new System.Drawing.Size(62, 23);
             this.btnTest3.TabIndex = 0;
@@ -683,7 +707,7 @@
             // 
             // btnTest2
             // 
-            this.btnTest2.Location = new System.Drawing.Point(175, 16);
+            this.btnTest2.Location = new System.Drawing.Point(320, 16);
             this.btnTest2.Name = "btnTest2";
             this.btnTest2.Size = new System.Drawing.Size(62, 23);
             this.btnTest2.TabIndex = 0;
@@ -693,7 +717,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(598, 16);
+            this.button2.Location = new System.Drawing.Point(320, 50);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(62, 23);
             this.button2.TabIndex = 0;
@@ -703,7 +727,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(514, 16);
+            this.button1.Location = new System.Drawing.Point(238, 50);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(62, 23);
             this.button1.TabIndex = 0;
@@ -713,7 +737,7 @@
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(93, 16);
+            this.btnTest.Location = new System.Drawing.Point(238, 16);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(62, 23);
             this.btnTest.TabIndex = 0;
@@ -733,7 +757,7 @@
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.chkQueryModel);
+            this.tabPage6.Controls.Add(this.lblVm);
             this.tabPage6.Controls.Add(this.txtCoreDalSuffix);
             this.tabPage6.Controls.Add(this.label16);
             this.tabPage6.Controls.Add(this.txtCoreModelSuffix);
@@ -756,17 +780,16 @@
             this.tabPage6.Text = " asp.net core ";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // chkQueryModel
+            // lblVm
             // 
-            this.chkQueryModel.AutoSize = true;
-            this.chkQueryModel.Checked = true;
-            this.chkQueryModel.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkQueryModel.Location = new System.Drawing.Point(16, 17);
-            this.chkQueryModel.Name = "chkQueryModel";
-            this.chkQueryModel.Size = new System.Drawing.Size(102, 16);
-            this.chkQueryModel.TabIndex = 15;
-            this.chkQueryModel.Text = "包含查询Model";
-            this.chkQueryModel.UseVisualStyleBackColor = true;
+            this.lblVm.AutoSize = true;
+            this.lblVm.Location = new System.Drawing.Point(14, 18);
+            this.lblVm.Name = "lblVm";
+            this.lblVm.Size = new System.Drawing.Size(107, 12);
+            this.lblVm.TabIndex = 16;
+            this.lblVm.TabStop = true;
+            this.lblVm.Text = "ViewModel通用配置";
+            this.lblVm.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVm_LinkClicked);
             // 
             // txtCoreDalSuffix
             // 
@@ -957,9 +980,9 @@
             // 
             this.btnNextMulTable.Location = new System.Drawing.Point(150, 651);
             this.btnNextMulTable.Name = "btnNextMulTable";
-            this.btnNextMulTable.Size = new System.Drawing.Size(146, 23);
+            this.btnNextMulTable.Size = new System.Drawing.Size(228, 23);
             this.btnNextMulTable.TabIndex = 4;
-            this.btnNextMulTable.Text = "下一步(asp.net core）";
+            this.btnNextMulTable.Text = "下一步(asp.net core）(目前仅mysql)";
             this.btnNextMulTable.UseVisualStyleBackColor = true;
             this.btnNextMulTable.Click += new System.EventHandler(this.btnNextMulTable_Click);
             // 
@@ -969,23 +992,13 @@
             // 
             // btnReturn
             // 
-            this.btnReturn.Location = new System.Drawing.Point(326, 651);
+            this.btnReturn.Location = new System.Drawing.Point(406, 651);
             this.btnReturn.Name = "btnReturn";
             this.btnReturn.Size = new System.Drawing.Size(63, 23);
             this.btnReturn.TabIndex = 4;
             this.btnReturn.Text = "返回";
             this.btnReturn.UseVisualStyleBackColor = true;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
-            // 
-            // chkActionList
-            // 
-            this.chkActionList.ColumnWidth = 150;
-            this.chkActionList.FormattingEnabled = true;
-            this.chkActionList.Location = new System.Drawing.Point(692, 16);
-            this.chkActionList.MultiColumn = true;
-            this.chkActionList.Name = "chkActionList";
-            this.chkActionList.Size = new System.Drawing.Size(347, 212);
-            this.chkActionList.TabIndex = 13;
             // 
             // MainFrm_New
             // 
@@ -1010,6 +1023,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.tbAspNet.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
@@ -1087,7 +1101,6 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button btnSaveFile;
         private System.Windows.Forms.Button btnReturn;
-        private System.Windows.Forms.CheckBox chkQueryModel;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox11;
@@ -1115,6 +1128,8 @@
         private System.Windows.Forms.Button btnCopyFullClass_aspnet;
         private System.Windows.Forms.Button btnCopyClass_aspnet;
         private System.Windows.Forms.CheckedListBox chkActionList;
+        private System.Windows.Forms.LinkLabel lblVm;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 

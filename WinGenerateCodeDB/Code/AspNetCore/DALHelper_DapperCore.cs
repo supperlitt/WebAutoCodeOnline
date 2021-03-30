@@ -36,7 +36,7 @@ namespace WinGenerateCodeDB.Code
             dalContent.Append(CreateDALHeader());
             dalContent.Append(CreateAddMethod());
             dalContent.Append(CreateEditMethod());
-            dalContent.Append(CreateBatEditMethod());
+            dalContent.Append(CreateDeleteMethod());
             dalContent.Append(CreateQueryListMethod());
 
             dalContent.Append(CreateBottom());
@@ -129,16 +129,14 @@ namespace {0}
                 index++;
             }
 
-            updateContent.Append(" where ");
-
             var keyInfo = list.Find(p => p.IsMainKey);
             if (keyInfo != null)
             {
-                updateContent.AppendFormat(" {0}=@{0} \";", keyInfo.Name);
+                updateContent.AppendFormat(" where {0}=@{0} \";", keyInfo.Name);
             }
             else
             {
-                updateContent.AppendFormat(" {0}=@{0} \";", "主键");
+                updateContent.AppendFormat(" where {0}=@{0} \";", "主键");
             }
 
             string template = @"
@@ -158,72 +156,44 @@ namespace {0}
                 table_name);
         }
 
-        public string CreateBatEditMethod()
+        public string CreateDeleteMethod()
         {
-            StringBuilder updateContent = new StringBuilder(@"string updateSql = string.Format(""update ");
-            updateContent.AppendFormat(" {0} set ", table_name);
-
-            int index = 0;
-            foreach (var item in list)
+            var deleteCol = Cache_VMData.GetDeleteColumnNameAndValue(table_name, list);
+            if (deleteCol == null)
             {
-                if (item.IsMainKey)
-                {
-                    continue;
-                }
+                var keyInfo = list.Find(p => p.IsMainKey);
 
-                if (index == 0)
-                {
-                    updateContent.AppendFormat("{0}=@{0}", item.Name);
-                }
-                else
-                {
-                    updateContent.AppendFormat(",{0}=@{0}", item.Name);
-                }
+                // 物理删除
+                string updateContent = string.Format(@"string deleteSql = ""delete from {0} where {1}=@{1} limit 1;"";",
+                    table_name, (keyInfo == null ? "主键" : keyInfo.Name));
 
-                index++;
-            }
-
-            updateContent.Append(" where ");
-
-            var keyInfo = list.Find(p => p.IsMainKey);
-            if (keyInfo != null)
-            {
-                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", keyInfo.Name);
-            }
-            else
-            {
-                updateContent.AppendFormat(" {0} in ({{0}})\", idStr);", "主键");
-            }
-
-            if (keyInfo != null && (keyInfo.DbType.ToLower() == "int" || keyInfo.DbType.ToLower() == "bigint"))
-            {
                 string template = @"
-        public bool BatUpdate{3}(List<{4}> list, {0} model)
+        public bool Update{3}_delete({0} model)
         {{
-            var array = (from f in list
-                        select f.ToString()).ToArray();
-            string idStr = string.Join("","", array);
 			{1}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
-                return  sqlcn.Execute(updateSql, model) > 0;
+                return  sqlcn.Execute(deleteSql, model) > 0;
             }}
         }}
 ";
                 return string.Format(template,
                     model_name,
-                    updateContent.ToString(),
+                    updateContent,
                     db_name,
-                    table_name, keyInfo.DbType.ToLower() == "int" ? "int" : "long");
+                    table_name);
+
             }
             else
             {
+                var keyInfo = list.Find(p => p.IsMainKey);
+                string updateContent = string.Format(@"string updateSql = ""update {0} set {1}={2} where {3}=@{3} limit 1;""",
+                    table_name, deleteCol.Name, deleteCol.DefaultValue,
+                    (keyInfo == null ? "主键" : keyInfo.Name));
+
                 string template = @"
-        public bool BatUpdate{3}(List<string> list, {0} model)
+        public bool Update{3}_delete({0} model)
         {{
-            var array = (from f in list
-                        select ""'"" + f + ""'"").ToArray();
-            string idStr = string.Join("","", array);
 			{1}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
@@ -233,7 +203,7 @@ namespace {0}
 ";
                 return string.Format(template,
                     model_name,
-                    updateContent.ToString(),
+                    updateContent,
                     db_name,
                     table_name);
             }
