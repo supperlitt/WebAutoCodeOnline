@@ -14,10 +14,10 @@ namespace WinGenerateCodeDB.Code
             aspxContent.Append(CreatePageHead());
             aspxContent.Append(CreateHeader(table_name));
             aspxContent.Append(CreateBodyHead(table_name));
-            aspxContent.Append(CreateSearchContent(action, colList));
+            aspxContent.Append(CreateSearchContent(action, colList, table_name));
             aspxContent.Append(CreateCmdToolBar(action));
-            aspxContent.Append(CreateDataGrid(action, colList));
-            aspxContent.Append(CreateDialog(action, colList));
+            aspxContent.Append(CreateDataGrid(action, colList, table_name));
+            aspxContent.Append(CreateDialog(action, colList, table_name));
             aspxContent.Append(CreateNotifyMsg());
             aspxContent.Append(CreateJsDateFormat());
             aspxContent.Append(CreateJsOperation(action, colList, table_name));
@@ -67,12 +67,13 @@ namespace WinGenerateCodeDB.Code
 ", table_name);
         }
 
-        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList)
+        private static string CreateSearchContent(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder searchContent = new StringBuilder();
             int index = 0;
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
                 foreach (var item in colList.ToNotMainIdList())
                 {
                     if (index % 3 == 0)
@@ -239,7 +240,7 @@ namespace WinGenerateCodeDB.Code
             }
         }
 
-        private static string CreateDataGrid(int action, List<SqlColumnInfo> colList)
+        private static string CreateDataGrid(int action, List<SqlColumnInfo> colList, string table_name)
         {
             // singleselect=""true""
             string template = @"
@@ -259,7 +260,8 @@ namespace WinGenerateCodeDB.Code
                     <th><input type=""checkbox"" id=""chkAll"" onclick=""checkAll();"" /></th>");
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     tbodyContent.AppendFormat(@"
                     <th>{0}</th>", item.Comment);
@@ -278,7 +280,7 @@ namespace WinGenerateCodeDB.Code
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private static string CreateDialog(int action, List<SqlColumnInfo> colList)
+        private static string CreateDialog(int action, List<SqlColumnInfo> colList, string table_name)
         {
             StringBuilder dialogContent = new StringBuilder();
             int addWidth = 400;
@@ -321,14 +323,15 @@ namespace WinGenerateCodeDB.Code
                 // <=8 单列， <=18&&>8 双列，>18 三列
                 int index = 0;
                 StringBuilder content = new StringBuilder();
-                if (colList.ToNotMainIdList().Count > 18)
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                if (addList.Count > 18)
                 {
                     #region 三列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in addList)
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -369,14 +372,14 @@ namespace WinGenerateCodeDB.Code
 
                     addWidth *= 3;
                 }
-                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
+                else if (addList.Count <= 18 & addList.Count > 8)
                 {
                     #region 二列
                     content.Append(@"
                         <div class=""row form-group"">");
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in addList)
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -416,7 +419,7 @@ namespace WinGenerateCodeDB.Code
                     #region 一列
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtAdd{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in addList)
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
@@ -478,9 +481,10 @@ namespace WinGenerateCodeDB.Code
             <!-- /.modal -->
         </div>";
 
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
                 int index = 0;
                 StringBuilder content = new StringBuilder();
-                if (colList.ToNotMainIdList().Count > 18)
+                if (editList.Count > 18)
                 {
                     #region 三列
                     content.Append(@"
@@ -488,7 +492,7 @@ namespace WinGenerateCodeDB.Code
 
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in editList)
                     {
                         if (index % 3 == 0 && index != 0)
                         {
@@ -529,7 +533,7 @@ namespace WinGenerateCodeDB.Code
 
                     editWidth *= 3;
                 }
-                else if (colList.ToNotMainIdList().Count <= 18 & colList.ToNotMainIdList().Count > 8)
+                else if (editList.Count <= 18 & editList.Count > 8)
                 {
                     #region 二列
                     content.Append(@"
@@ -537,7 +541,7 @@ namespace WinGenerateCodeDB.Code
 
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in editList)
                     {
                         if (index % 2 == 0 && index != 0)
                         {
@@ -581,7 +585,7 @@ namespace WinGenerateCodeDB.Code
                     content.AppendFormat(@"
                             <input type=""hidden"" id=""txtEdit{0}"" value="""" />
                         </div>", colList.ToKeyId());
-                    foreach (var item in colList.ToNotMainIdList())
+                    foreach (var item in editList)
                     {
                         content.Append(@"
                         <div class=""row form-group"">");
@@ -667,8 +671,9 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder editpostDataContent = new StringBuilder("var postData = ");
                 editpostDataContent.AppendFormat(@"""txtEdit{0}="" + encodeURI(txtEdit{0}) ", colList.ToKeyId());
 
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                foreach (var item in editList)
                 {
                     editDefineVarContent.AppendFormat(@"
                 var txtEdit{0} = """";", item.Name);
@@ -749,7 +754,8 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder addContent = new StringBuilder();
                 StringBuilder addPostDataContent = new StringBuilder("var postData = ");
                 int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     addContent.AppendFormat(@"
                 var txtAdd{0} = $(""#txtAdd{0}"").val();", item.Name);
@@ -865,7 +871,9 @@ namespace WinGenerateCodeDB.Code
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat(@"
@@ -884,7 +892,7 @@ namespace WinGenerateCodeDB.Code
                     index++;
                 }
 
-                if (colList.ToNotMainIdList().Count == 0)
+                if (queryList.Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }
@@ -914,7 +922,8 @@ namespace WinGenerateCodeDB.Code
                 int index = 0;
                 StringBuilder coditionContent = new StringBuilder();
                 StringBuilder pagePost = new StringBuilder();
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     // 找到一个
                     coditionContent.AppendFormat(@"
@@ -933,7 +942,7 @@ namespace WinGenerateCodeDB.Code
                     index++;
                 }
 
-                if (colList.ToNotMainIdList().Count == 0)
+                if (queryList.Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }
@@ -976,6 +985,7 @@ namespace WinGenerateCodeDB.Code
             string template = @"
 
         <script type=""text/javascript"">
+            var current_Data;
             var hpageSize = 13;
             var hpage = 1;
             $(document).ready(function () {{
@@ -1009,6 +1019,7 @@ namespace WinGenerateCodeDB.Code
                     success: function (text) {{
                         var data = text;
                         var content = """";
+                        current_Data = data.Data;
                         for (var index in data.Data) {{
                             var model = data.Data[index];
                             content += ""<tr>"";
@@ -1089,7 +1100,8 @@ namespace WinGenerateCodeDB.Code
             StringBuilder pagePost = new StringBuilder();
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     coditionContent.AppendFormat(@"
                 var txtSearch{0} = $(""#txtSearch{0}"").val();", item.Name);
@@ -1110,7 +1122,8 @@ namespace WinGenerateCodeDB.Code
                 StringBuilder tagContent = new StringBuilder();
                 tagContent.Append(@"var attr = """);
                 index = 0;
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     if (index == 0)
                     {
@@ -1143,9 +1156,9 @@ namespace WinGenerateCodeDB.Code
                             content += ""<td>"" + model.{0} + ""</td>"";", item.Name);
                 }
 
-                int colspanCount = colList.ToNotMainIdList().Count;
+                int colspanCount = editList.Count;
                 pagePost.Append(";");
-                if (colList.ToNotMainIdList().Count == 0)
+                if (editList.Count == 0)
                 {
                     pagePost.Append("var pageData = \"\";\r\n");
                 }

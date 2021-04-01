@@ -332,7 +332,6 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(117, 21);
             this.txtPwd.TabIndex = 1;
-            this.txtPwd.Text = "QAZ123wsx!@#";
             // 
             // label2
             // 

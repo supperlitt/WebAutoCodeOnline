@@ -13,7 +13,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder aspxcsContent = new StringBuilder();
             aspxcsContent.Append(CreateCSHead(name_space, table_name));
             aspxcsContent.Append(CreatePageLoad());
-            aspxcsContent.Append(CreateLoadData(action, colList, dal_name));
+            aspxcsContent.Append(CreateLoadData(action, colList, dal_name, table_name));
             aspxcsContent.Append(CreateAddData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateEditData(action, colList, table_name, dal_name));
             aspxcsContent.Append(CreateDeleteData(action, colList, table_name, dal_name));
@@ -48,7 +48,7 @@ namespace {0}.Controllers
             return string.Empty;
         }
 
-        private static string CreateLoadData(int action, List<SqlColumnInfo> colList, string dal_name)
+        private static string CreateLoadData(int action, List<SqlColumnInfo> colList, string dal_name, string table_name)
         {
             string template = @"
         [HttpPost]
@@ -68,7 +68,8 @@ namespace {0}.Controllers
             StringBuilder loadStrContent = new StringBuilder();
             if ((action & (int)action_type.query_list) == (int)action_type.query_list)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                foreach (var item in queryList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -132,7 +133,8 @@ namespace {0}.Controllers
             StringBuilder addStrContent = new StringBuilder();
             if ((action & (int)action_type.add) == (int)action_type.add)
             {
-                foreach (var item in colList.ToNotMainIdList())
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -206,7 +208,8 @@ namespace {0}.Controllers
                 editContent.AppendFormat("\t\t\tstring {0} = HttpUtility.UrlDecode(txtEdit{1});\r\n", colList.ToKeyId(), colList.ToKeyId());
                 createModel.AppendFormat("\t\t\tmodel.{0} = {1};\r\n", colList.ToKeyId(), ExtendMethod.ToStringToType(colList.ToKeyId(), colList.ToKeyIdDbType()));
                 editStrContent.AppendFormat("string txtEdit{0},", colList.ToKeyId());
-                foreach (var item in colList.ToNotMainIdList())
+                var editList = Cache_VMData.GetVMList(table_name, VMType.Edit, colList.ToNotMainIdList());
+                foreach (var item in editList)
                 {
                     if (item.DbType.ToLower() == "datetime" ||
                         item.DbType.ToLower() == "date" ||
@@ -344,7 +347,8 @@ namespace {0}.Controllers
         }}
 ";
 
-                    foreach (var item in colList.ToNotMainIdList())
+                    var queryList = Cache_VMData.GetVMList(table_name, VMType.Query, colList.ToNotMainIdList());
+                    foreach (var item in queryList)
                     {
                         if (item.DbType.ToLower() == "datetime" ||
                             item.DbType.ToLower() == "date" ||
