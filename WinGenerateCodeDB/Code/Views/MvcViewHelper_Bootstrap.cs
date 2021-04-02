@@ -191,17 +191,10 @@ namespace WinGenerateCodeDB.Code
                 itemCount++;
             }
 
-            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 toolBarContent.Append(@"
             <input type=""button"" value=""删除"" onclick='destroyModel();' />");
-                itemCount++;
-            }
-
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
-            {
-                toolBarContent.Append(@"
-            <input type=""button"" value=""删除选中"" onclick='destroyBatModel();' />");
                 itemCount++;
             }
 
@@ -810,7 +803,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 string template = string.Format(@"
 

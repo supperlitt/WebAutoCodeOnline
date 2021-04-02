@@ -276,7 +276,7 @@ namespace {0}.Controllers
         private static string CreateDeleteData(int action, List<SqlColumnInfo> colList, string table_name, string dal_name)
         {
             StringBuilder batContent = new StringBuilder();
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 batContent.Append("            ids = HttpUtility.UrlDecode(ids);\r\n");
                 batContent.Append("            List<string> idList = ids.Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries).ToList();\r\n");

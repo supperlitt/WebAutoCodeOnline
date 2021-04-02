@@ -113,14 +113,9 @@ namespace WinGenerateCodeDB.Code
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-edit"" plain=""true"" onclick=""editModel()"">编辑</a>");
             }
 
-            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyModel()"">删除</a>");
-            }
-
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
-            {
-                toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyBatModel()"">删除</a>");
             }
 
             if ((action & (int)action_type.export_all) == (int)action_type.export_all)
@@ -465,7 +460,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 string template = string.Format(@"
 

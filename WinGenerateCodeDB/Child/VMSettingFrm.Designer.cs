@@ -30,36 +30,35 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.txtAddExcept = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtEditExcept = new System.Windows.Forms.TextBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtQueryExcept = new System.Windows.Forms.TextBox();
-            this.btnSaveAll = new System.Windows.Forms.Button();
-            this.btnLoadSetting = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtAdd = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtEdit = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtQuery = new System.Windows.Forms.TextBox();
-            this.txtAll = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtDeleteColValue = new System.Windows.Forms.TextBox();
+            this.txtDeleteColName = new System.Windows.Forms.TextBox();
             this.rbtnDelete1 = new System.Windows.Forms.RadioButton();
             this.rbtnDelete2 = new System.Windows.Forms.RadioButton();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.txtDeleteColName = new System.Windows.Forms.TextBox();
-            this.txtDeleteColValue = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.btnSaveAll = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtQueryExcept = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtEditExcept = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtAddExcept = new System.Windows.Forms.TextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtAll = new System.Windows.Forms.TextBox();
+            this.txtQuery = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtEdit = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtAdd = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -78,7 +77,6 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox4);
-            this.tabPage1.Controls.Add(this.btnLoadSetting);
             this.tabPage1.Controls.Add(this.btnSaveAll);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
@@ -91,172 +89,54 @@
             this.tabPage1.Text = " 通用设置 ";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // txtAddExcept
+            // groupBox4
             // 
-            this.txtAddExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAddExcept.Location = new System.Drawing.Point(19, 20);
-            this.txtAddExcept.Multiline = true;
-            this.txtAddExcept.Name = "txtAddExcept";
-            this.txtAddExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAddExcept.Size = new System.Drawing.Size(264, 131);
-            this.txtAddExcept.TabIndex = 0;
+            this.groupBox4.Controls.Add(this.label5);
+            this.groupBox4.Controls.Add(this.label4);
+            this.groupBox4.Controls.Add(this.txtDeleteColValue);
+            this.groupBox4.Controls.Add(this.txtDeleteColName);
+            this.groupBox4.Controls.Add(this.rbtnDelete1);
+            this.groupBox4.Controls.Add(this.rbtnDelete2);
+            this.groupBox4.Location = new System.Drawing.Point(339, 202);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(300, 110);
+            this.groupBox4.TabIndex = 4;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "删除选项(找不到列明，执行物理生成)";
             // 
-            // groupBox1
+            // label5
             // 
-            this.groupBox1.Controls.Add(this.txtAddExcept);
-            this.groupBox1.Location = new System.Drawing.Point(7, 17);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(304, 166);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "添加排除列（一行一个）";
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(245, 55);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(17, 12);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "值";
             // 
-            // tabPage2
+            // label4
             // 
-            this.tabPage2.Controls.Add(this.txtAll);
-            this.tabPage2.Controls.Add(this.txtQuery);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.txtEdit);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.txtAdd);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(654, 379);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "参考模板（仅开始使用，启动时已隐藏）";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Location = new System.Drawing.Point(142, 55);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "列明";
             // 
-            // groupBox2
+            // txtDeleteColValue
             // 
-            this.groupBox2.Controls.Add(this.txtEditExcept);
-            this.groupBox2.Location = new System.Drawing.Point(335, 17);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(304, 166);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "编辑排除列（一行一个）";
+            this.txtDeleteColValue.Location = new System.Drawing.Point(231, 70);
+            this.txtDeleteColValue.Name = "txtDeleteColValue";
+            this.txtDeleteColValue.Size = new System.Drawing.Size(48, 21);
+            this.txtDeleteColValue.TabIndex = 5;
             // 
-            // txtEditExcept
+            // txtDeleteColName
             // 
-            this.txtEditExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEditExcept.Location = new System.Drawing.Point(19, 20);
-            this.txtEditExcept.Multiline = true;
-            this.txtEditExcept.Name = "txtEditExcept";
-            this.txtEditExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtEditExcept.Size = new System.Drawing.Size(264, 131);
-            this.txtEditExcept.TabIndex = 0;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.txtQueryExcept);
-            this.groupBox3.Location = new System.Drawing.Point(7, 202);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(304, 166);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "查询排除列（一行一个）";
-            // 
-            // txtQueryExcept
-            // 
-            this.txtQueryExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtQueryExcept.Location = new System.Drawing.Point(19, 20);
-            this.txtQueryExcept.Multiline = true;
-            this.txtQueryExcept.Name = "txtQueryExcept";
-            this.txtQueryExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtQueryExcept.Size = new System.Drawing.Size(264, 131);
-            this.txtQueryExcept.TabIndex = 0;
-            // 
-            // btnSaveAll
-            // 
-            this.btnSaveAll.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSaveAll.Location = new System.Drawing.Point(547, 330);
-            this.btnSaveAll.Name = "btnSaveAll";
-            this.btnSaveAll.Size = new System.Drawing.Size(92, 38);
-            this.btnSaveAll.TabIndex = 2;
-            this.btnSaveAll.Text = "保存所有";
-            this.btnSaveAll.UseVisualStyleBackColor = true;
-            this.btnSaveAll.Click += new System.EventHandler(this.btnSaveAll_Click);
-            // 
-            // btnLoadSetting
-            // 
-            this.btnLoadSetting.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnLoadSetting.Location = new System.Drawing.Point(418, 330);
-            this.btnLoadSetting.Name = "btnLoadSetting";
-            this.btnLoadSetting.Size = new System.Drawing.Size(92, 38);
-            this.btnLoadSetting.TabIndex = 2;
-            this.btnLoadSetting.Text = "载入配置";
-            this.btnLoadSetting.UseVisualStyleBackColor = true;
-            this.btnLoadSetting.Click += new System.EventHandler(this.btnLoadSetting_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(301, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "添加";
-            // 
-            // txtAdd
-            // 
-            this.txtAdd.Location = new System.Drawing.Point(347, 13);
-            this.txtAdd.Multiline = true;
-            this.txtAdd.Name = "txtAdd";
-            this.txtAdd.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAdd.Size = new System.Drawing.Size(292, 114);
-            this.txtAdd.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(301, 136);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "编辑";
-            // 
-            // txtEdit
-            // 
-            this.txtEdit.Location = new System.Drawing.Point(347, 133);
-            this.txtEdit.Multiline = true;
-            this.txtEdit.Name = "txtEdit";
-            this.txtEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtEdit.Size = new System.Drawing.Size(292, 114);
-            this.txtEdit.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(301, 254);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "查询";
-            // 
-            // txtQuery
-            // 
-            this.txtQuery.Location = new System.Drawing.Point(347, 251);
-            this.txtQuery.Multiline = true;
-            this.txtQuery.Name = "txtQuery";
-            this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtQuery.Size = new System.Drawing.Size(292, 114);
-            this.txtQuery.TabIndex = 2;
-            // 
-            // txtAll
-            // 
-            this.txtAll.Location = new System.Drawing.Point(7, 10);
-            this.txtAll.Multiline = true;
-            this.txtAll.Name = "txtAll";
-            this.txtAll.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAll.Size = new System.Drawing.Size(277, 352);
-            this.txtAll.TabIndex = 3;
+            this.txtDeleteColName.Location = new System.Drawing.Point(102, 70);
+            this.txtDeleteColName.Name = "txtDeleteColName";
+            this.txtDeleteColName.Size = new System.Drawing.Size(113, 21);
+            this.txtDeleteColName.TabIndex = 4;
             // 
             // rbtnDelete1
             // 
@@ -280,54 +160,161 @@
             this.rbtnDelete2.Text = "逻辑删除";
             this.rbtnDelete2.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // btnSaveAll
             // 
-            this.groupBox4.Controls.Add(this.label5);
-            this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Controls.Add(this.txtDeleteColValue);
-            this.groupBox4.Controls.Add(this.txtDeleteColName);
-            this.groupBox4.Controls.Add(this.rbtnDelete1);
-            this.groupBox4.Controls.Add(this.rbtnDelete2);
-            this.groupBox4.Location = new System.Drawing.Point(339, 202);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(300, 110);
-            this.groupBox4.TabIndex = 4;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "删除选项(找不到列明，执行物理生成)";
+            this.btnSaveAll.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSaveAll.Location = new System.Drawing.Point(547, 330);
+            this.btnSaveAll.Name = "btnSaveAll";
+            this.btnSaveAll.Size = new System.Drawing.Size(92, 38);
+            this.btnSaveAll.TabIndex = 2;
+            this.btnSaveAll.Text = "保存设置";
+            this.btnSaveAll.UseVisualStyleBackColor = true;
+            this.btnSaveAll.Click += new System.EventHandler(this.btnSaveAll_Click);
             // 
-            // txtDeleteColName
+            // groupBox3
             // 
-            this.txtDeleteColName.Location = new System.Drawing.Point(102, 70);
-            this.txtDeleteColName.Name = "txtDeleteColName";
-            this.txtDeleteColName.Size = new System.Drawing.Size(113, 21);
-            this.txtDeleteColName.TabIndex = 4;
+            this.groupBox3.Controls.Add(this.txtQueryExcept);
+            this.groupBox3.Location = new System.Drawing.Point(7, 202);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(304, 166);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "查询排除列（一行一个）";
             // 
-            // txtDeleteColValue
+            // txtQueryExcept
             // 
-            this.txtDeleteColValue.Location = new System.Drawing.Point(231, 70);
-            this.txtDeleteColValue.Name = "txtDeleteColValue";
-            this.txtDeleteColValue.Size = new System.Drawing.Size(48, 21);
-            this.txtDeleteColValue.TabIndex = 5;
+            this.txtQueryExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtQueryExcept.Location = new System.Drawing.Point(19, 20);
+            this.txtQueryExcept.Multiline = true;
+            this.txtQueryExcept.Name = "txtQueryExcept";
+            this.txtQueryExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtQueryExcept.Size = new System.Drawing.Size(264, 131);
+            this.txtQueryExcept.TabIndex = 0;
             // 
-            // label4
+            // groupBox2
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(142, 55);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 12);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "列明";
+            this.groupBox2.Controls.Add(this.txtEditExcept);
+            this.groupBox2.Location = new System.Drawing.Point(335, 17);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(304, 166);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "编辑排除列（一行一个）";
             // 
-            // label5
+            // txtEditExcept
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(245, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(17, 12);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "值";
+            this.txtEditExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEditExcept.Location = new System.Drawing.Point(19, 20);
+            this.txtEditExcept.Multiline = true;
+            this.txtEditExcept.Name = "txtEditExcept";
+            this.txtEditExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtEditExcept.Size = new System.Drawing.Size(264, 131);
+            this.txtEditExcept.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtAddExcept);
+            this.groupBox1.Location = new System.Drawing.Point(7, 17);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(304, 166);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "添加排除列（一行一个）";
+            // 
+            // txtAddExcept
+            // 
+            this.txtAddExcept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAddExcept.Location = new System.Drawing.Point(19, 20);
+            this.txtAddExcept.Multiline = true;
+            this.txtAddExcept.Name = "txtAddExcept";
+            this.txtAddExcept.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAddExcept.Size = new System.Drawing.Size(264, 131);
+            this.txtAddExcept.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.txtAll);
+            this.tabPage2.Controls.Add(this.txtQuery);
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.txtEdit);
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.txtAdd);
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(654, 379);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "参考模板（仅开始使用，启动时已隐藏）";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // txtAll
+            // 
+            this.txtAll.Location = new System.Drawing.Point(7, 10);
+            this.txtAll.Multiline = true;
+            this.txtAll.Name = "txtAll";
+            this.txtAll.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAll.Size = new System.Drawing.Size(277, 352);
+            this.txtAll.TabIndex = 3;
+            // 
+            // txtQuery
+            // 
+            this.txtQuery.Location = new System.Drawing.Point(347, 251);
+            this.txtQuery.Multiline = true;
+            this.txtQuery.Name = "txtQuery";
+            this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtQuery.Size = new System.Drawing.Size(292, 114);
+            this.txtQuery.TabIndex = 2;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(301, 254);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "查询";
+            // 
+            // txtEdit
+            // 
+            this.txtEdit.Location = new System.Drawing.Point(347, 133);
+            this.txtEdit.Multiline = true;
+            this.txtEdit.Name = "txtEdit";
+            this.txtEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtEdit.Size = new System.Drawing.Size(292, 114);
+            this.txtEdit.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(301, 136);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "编辑";
+            // 
+            // txtAdd
+            // 
+            this.txtAdd.Location = new System.Drawing.Point(347, 13);
+            this.txtAdd.Multiline = true;
+            this.txtAdd.Name = "txtAdd";
+            this.txtAdd.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAdd.Size = new System.Drawing.Size(292, 114);
+            this.txtAdd.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(301, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "添加";
             // 
             // VMSettingFrm
             // 
@@ -340,16 +327,16 @@
             this.Load += new System.EventHandler(this.VMSettingFrm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -366,7 +353,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox txtQueryExcept;
         private System.Windows.Forms.Button btnSaveAll;
-        private System.Windows.Forms.Button btnLoadSetting;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtAdd;
         private System.Windows.Forms.TextBox txtEdit;

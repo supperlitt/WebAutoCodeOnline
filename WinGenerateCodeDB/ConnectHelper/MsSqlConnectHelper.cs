@@ -37,7 +37,7 @@ namespace WinGenerateCodeDB
         public List<string> GetTableList(string server, string name, string pwd, int port, string dbname)
         {
             string mysqlConnectionStr = string.Format("server={0};uid={1};pwd={2};database={4};", server, name, pwd, port, dbname);
-            string selectSql = string.Format("SELECT name FROM SysObjects Where XType='U'", dbname);
+            string selectSql = string.Format("select name from sysobjects where xtype='U' order by name", dbname);
             List<string> result = new List<string>();
             using (SqlConnection sqlcn = new SqlConnection(mysqlConnectionStr))
             {

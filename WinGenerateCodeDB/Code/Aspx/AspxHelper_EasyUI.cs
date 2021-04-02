@@ -117,11 +117,6 @@ namespace WinGenerateCodeDB.Code
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyModel()"">删除</a>");
             }
 
-            if ((action & (int)action_type.bat_delete) == (int)action_type.bat_delete)
-            {
-                toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""destroyBatModel()"">删除</a>");
-            }
-
             if ((action & (int)action_type.export_all) == (int)action_type.export_all)
             {
                 toolBarContent.Append(@"<a href=""javascript:void(0)"" class=""easyui-linkbutton"" iconcls=""icon-remove"" plain=""true"" onclick=""exportAll()"">导出全部</a>");
@@ -466,7 +461,7 @@ namespace WinGenerateCodeDB.Code
             #endregion
 
             #region del
-            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 string template = string.Format(@"
 
@@ -499,84 +494,6 @@ namespace WinGenerateCodeDB.Code
 
                 content.Append(template);
             }
-            #endregion
-
-            #region bat delete
-
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
-            {
-                StringBuilder batEditContent = new StringBuilder();
-                batEditContent.AppendFormat("\t\t\tvar txtBatEdit{0} = $(\"#txtBatEdit{0}\").textbox(\"getValue\");\r\n", colList.ToKeyId());
-                StringBuilder postDataContent = new StringBuilder("var postData = ");
-                postDataContent.AppendFormat("\"txtBatEdit{0}=\" + encodeURI(txtBatEdit{0}) ", colList.ToKeyId());
-                int index = 0;
-                foreach (var item in colList.ToNotMainIdList())
-                {
-                    batEditContent.AppendFormat("\t\t\tvar txtBatEdit{0} = $(\"#txtBatEdit{0}\").textbox(\"getValue\");\r\n", item.Name);
-                    postDataContent.AppendFormat(" + \"&txtBatEdit{0}=\" + encodeURI(txtBatEdit{0})", item.Name);
-
-                    index++;
-                }
-
-                if (postDataContent.ToString() == "var postData = ")
-                {
-                    postDataContent.Append("\"\"");
-                }
-
-                postDataContent.Append(";");
-
-                content.AppendFormat(@"
-
-        function batEditModel() {{
-            var row = $('#dg').datagrid('getChecked');
-            if (row && row.length>0) {{
-                $('#dlg-batedit').dialog('open').dialog('setTitle', '批量编辑成员');
-                var ids = """";
-                for(var i=0;i<row.length;i++){{
-                    ids += row[i].{0} + "","";
-                }}
-
-                ids = ids.substring(0, ids.length - 1);
-                $(""#txtBatEdit{0}"").val(ids);
-            }}
-        }}
-
-        function saveBatEditModel() {{
-            {1}
-            {2}
-            $.ajax({{
-                type: ""POST"",
-                url: ""{3}.aspx?type=batedit"",
-                data: postData,
-                success: function (msg) {{
-                    if (msg == ""0"") {{
-                        $(""#dialog>p"").text(""批量修改成功！"");
-                        LoadData();
-                    }} else {{
-                        $(""#dialog>p"").text(msg);
-                    }}
-
-                    $('#dlg').dialog('close');        // close the dialog
-
-                    // show dialog
-                    $(""#dialog"").dialog({{
-                        width: 180,
-                        height: 100,
-                        buttons: {{
-                            Ok: function () {{
-                                $(this).dialog(""close"");
-                            }}
-                        }}
-                    }});
-                }}
-            }});
-        }}
-", colList.ToKeyId(),
- batEditContent.ToString(),
- postDataContent.ToString(),
- table_name);
-            }
-
             #endregion
 
             #region export

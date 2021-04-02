@@ -28,12 +28,6 @@ namespace WinGenerateCodeDB
         private string tablename = string.Empty;
 
         private List<TabPage> cache_tabPageList = new List<TabPage>();
-        private int currentTabIndex = 0;
-
-        /// <summary>
-        /// 是否是导入，如果是导入操作，就不需要清理某些列的内容了。
-        /// </summary>
-        private bool isImport = false;
 
         public MainFrm_New()
         {
@@ -66,6 +60,7 @@ namespace WinGenerateCodeDB
 
                 if ((action_type)item == action_type.add ||
                     (action_type)item == action_type.edit ||
+                    (action_type)item == action_type.delete ||
                     (action_type)item == action_type.query_list)
                 {
                     chkActionList.Items.Add(item, true);
@@ -663,6 +658,7 @@ namespace WinGenerateCodeDB
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
                 textBox.Text = item.Value;
+                textBox.KeyPress += txtResult_KeyPress;
 
                 TabPage tb = new TabPage();
                 tb.Text = item.Key;
@@ -684,6 +680,7 @@ namespace WinGenerateCodeDB
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
                 textBox.Text = item.Value;
+                textBox.KeyPress += txtResult_KeyPress;
 
                 TabPage tb = new TabPage();
                 tb.Text = item.Key;

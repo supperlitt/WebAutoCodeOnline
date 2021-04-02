@@ -77,7 +77,7 @@ namespace {0}
                         break;");
             }
 
-            if ((action & (int)action_type.real_delete) == (int)action_type.real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 content.Append(@"
                     case ""delete"":
@@ -318,7 +318,7 @@ namespace {0}
         private static string CreateDeleteData(int action, List<SqlColumnInfo> colList, string table_name, string dal_name)
         {
             StringBuilder batContent = new StringBuilder();
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 batContent.AppendFormat("            string ids = HttpUtility.UrlDecode(Request[\"ids\"]);\r\n", colList.ToKeyId(), colList.ToKeyId());
                 batContent.Append("            List<string> idList = ids.Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries).ToList();\r\n");

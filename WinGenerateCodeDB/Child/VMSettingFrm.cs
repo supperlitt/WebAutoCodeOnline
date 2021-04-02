@@ -27,6 +27,8 @@ namespace WinGenerateCodeDB.Child
                 tb.Text = item;
                 this.tabControl1.TabPages.Add(tb);
             }
+
+            LoadSetting();
         }
 
         private void btnSaveAll_Click(object sender, EventArgs e)
@@ -66,7 +68,7 @@ namespace WinGenerateCodeDB.Child
             Cache_VMData.SaveData(list);
         }
 
-        private void btnLoadSetting_Click(object sender, EventArgs e)
+        private void LoadSetting()
         {
             var list = Cache_VMData.LoadData();
             int index = 0;

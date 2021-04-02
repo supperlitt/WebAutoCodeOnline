@@ -146,7 +146,7 @@ namespace {0}
 
         public static string CreateDeleteMethod(int action, string table_name, List<SqlColumnInfo> colList, string db_name)
         {
-            if ((action & (int)action_type.bat_real_delete) == (int)action_type.bat_real_delete)
+            if ((action & (int)action_type.delete) == (int)action_type.delete)
             {
                 StringBuilder deleteContent = new StringBuilder();
                 deleteContent.AppendFormat(@"string deleteSql = string.Format(""delete from {0} ", table_name);
