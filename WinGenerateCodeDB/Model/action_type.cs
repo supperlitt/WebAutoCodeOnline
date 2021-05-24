@@ -9,7 +9,7 @@ namespace WinGenerateCodeDB
     {
         none = 0,
         add = 1,
-        // bat_add = 2,
+        bat_add = 2,
         edit = 4,
         //bat_edit = 8,
         delete = 16,
