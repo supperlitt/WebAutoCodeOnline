@@ -9,12 +9,14 @@ namespace WinGenerateCodeDB
 {
     public class AspNetHelper
     {
+        private static string guid = string.Empty;
         private static string db_name = string.Empty;
         private static List<string> tableList = new List<string>();
         private static Dictionary<string, List<SqlColumnInfo>> tbDic = new Dictionary<string, List<SqlColumnInfo>>();
 
-        public static void Init()
+        public static void Init(string guid)
         {
+            AspNetHelper.guid = guid;
             db_name = Cache_Next.GetDbName();
             tableList = Cache_Next.GetTableList();
             tbDic = Cache_Next.GetColumnAll();

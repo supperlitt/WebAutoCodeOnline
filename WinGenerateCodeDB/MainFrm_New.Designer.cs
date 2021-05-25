@@ -52,8 +52,10 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.chkActionList = new System.Windows.Forms.CheckedListBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.btnCopyFullClass_aspnet = new System.Windows.Forms.Button();
             this.btnCopyClass_aspnet = new System.Windows.Forms.Button();
             this.tbAspNet = new System.Windows.Forms.TabControl();
@@ -120,6 +122,8 @@
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.tbAspNet.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -378,8 +382,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.tabControl2);
             this.tabPage4.Controls.Add(this.linkLabel1);
-            this.tabPage4.Controls.Add(this.chkActionList);
             this.tabPage4.Controls.Add(this.btnCopyFullClass_aspnet);
             this.tabPage4.Controls.Add(this.btnCopyClass_aspnet);
             this.tabPage4.Controls.Add(this.tbAspNet);
@@ -403,6 +407,37 @@
             this.tabPage4.Text = " asp.net ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Location = new System.Drawing.Point(699, 10);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(347, 225);
+            this.tabControl2.TabIndex = 18;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.chkActionList);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(339, 199);
+            this.tabPage5.TabIndex = 0;
+            this.tabPage5.Text = " 功能选项 ";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // chkActionList
+            // 
+            this.chkActionList.ColumnWidth = 150;
+            this.chkActionList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkActionList.FormattingEnabled = true;
+            this.chkActionList.Location = new System.Drawing.Point(3, 3);
+            this.chkActionList.MultiColumn = true;
+            this.chkActionList.Name = "chkActionList";
+            this.chkActionList.Size = new System.Drawing.Size(333, 193);
+            this.chkActionList.TabIndex = 13;
+            // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
@@ -413,16 +448,6 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "ViewModel通用配置";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVm_LinkClicked);
-            // 
-            // chkActionList
-            // 
-            this.chkActionList.ColumnWidth = 150;
-            this.chkActionList.FormattingEnabled = true;
-            this.chkActionList.Location = new System.Drawing.Point(692, 16);
-            this.chkActionList.MultiColumn = true;
-            this.chkActionList.Name = "chkActionList";
-            this.chkActionList.Size = new System.Drawing.Size(347, 212);
-            this.chkActionList.TabIndex = 13;
             // 
             // btnCopyFullClass_aspnet
             // 
@@ -482,7 +507,7 @@
             this.groupBox7.Controls.Add(this.label8);
             this.groupBox7.Controls.Add(this.txtNameSpace);
             this.groupBox7.Controls.Add(this.label7);
-            this.groupBox7.Location = new System.Drawing.Point(699, 234);
+            this.groupBox7.Location = new System.Drawing.Point(699, 242);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(340, 105);
             this.groupBox7.TabIndex = 8;
@@ -602,7 +627,7 @@
             // 
             this.groupBox9.Controls.Add(this.rbtnBootstrap);
             this.groupBox9.Controls.Add(this.rbtnEasyUI);
-            this.groupBox9.Location = new System.Drawing.Point(892, 354);
+            this.groupBox9.Location = new System.Drawing.Point(892, 362);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(154, 93);
             this.groupBox9.TabIndex = 4;
@@ -635,7 +660,7 @@
             // 
             this.groupBox6.Controls.Add(this.rbtn_ORM_Dapper);
             this.groupBox6.Controls.Add(this.rbtn_Sql);
-            this.groupBox6.Location = new System.Drawing.Point(699, 354);
+            this.groupBox6.Location = new System.Drawing.Point(699, 362);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(155, 93);
             this.groupBox6.TabIndex = 5;
@@ -1023,6 +1048,8 @@
             this.groupBox2.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
             this.tbAspNet.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
@@ -1129,6 +1156,8 @@
         private System.Windows.Forms.CheckedListBox chkActionList;
         private System.Windows.Forms.LinkLabel lblVm;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage5;
     }
 }
 

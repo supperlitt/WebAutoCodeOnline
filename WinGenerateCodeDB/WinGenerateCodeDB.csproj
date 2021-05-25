@@ -59,6 +59,9 @@
     <Compile Include="Code\Model\ModelHelper_Default.cs" />
     <Compile Include="Code\Model\ModelHelper_DefaultAttribute.cs" />
     <Compile Include="Code\Model\ModelHelper_DefaultLowerField.cs" />
+    <Compile Include="Controls\TabControlNF.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helper\AspNetHelper.cs" />
     <Compile Include="Helper\AspNetCoreHelper.cs" />
     <Compile Include="Cache\PageCache.cs" />

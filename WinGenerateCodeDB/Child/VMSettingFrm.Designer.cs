@@ -50,8 +50,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtEdit = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtAdd = new System.Windows.Forms.TextBox();
+            this.txtAddCheck = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtAdd = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.chkAddCheck = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -239,12 +242,15 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.chkAddCheck);
             this.tabPage2.Controls.Add(this.txtAll);
             this.tabPage2.Controls.Add(this.txtQuery);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.txtEdit);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.txtAdd);
+            this.tabPage2.Controls.Add(this.txtAddCheck);
+            this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -264,17 +270,17 @@
             // 
             // txtQuery
             // 
-            this.txtQuery.Location = new System.Drawing.Point(347, 251);
+            this.txtQuery.Location = new System.Drawing.Point(347, 281);
             this.txtQuery.Multiline = true;
             this.txtQuery.Name = "txtQuery";
             this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtQuery.Size = new System.Drawing.Size(292, 114);
+            this.txtQuery.Size = new System.Drawing.Size(292, 83);
             this.txtQuery.TabIndex = 2;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(301, 254);
+            this.label3.Location = new System.Drawing.Point(301, 282);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 1;
@@ -282,39 +288,67 @@
             // 
             // txtEdit
             // 
-            this.txtEdit.Location = new System.Drawing.Point(347, 133);
+            this.txtEdit.Location = new System.Drawing.Point(347, 189);
             this.txtEdit.Multiline = true;
             this.txtEdit.Name = "txtEdit";
             this.txtEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtEdit.Size = new System.Drawing.Size(292, 114);
+            this.txtEdit.Size = new System.Drawing.Size(292, 88);
             this.txtEdit.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(301, 136);
+            this.label2.Location = new System.Drawing.Point(301, 188);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "编辑";
             // 
-            // txtAdd
+            // txtAddCheck
             // 
-            this.txtAdd.Location = new System.Drawing.Point(347, 13);
-            this.txtAdd.Multiline = true;
-            this.txtAdd.Name = "txtAdd";
-            this.txtAdd.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAdd.Size = new System.Drawing.Size(292, 114);
-            this.txtAdd.TabIndex = 2;
+            this.txtAddCheck.Location = new System.Drawing.Point(347, 33);
+            this.txtAddCheck.Multiline = true;
+            this.txtAddCheck.Name = "txtAddCheck";
+            this.txtAddCheck.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAddCheck.Size = new System.Drawing.Size(292, 64);
+            this.txtAddCheck.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(301, 13);
+            this.label1.Location = new System.Drawing.Point(301, 106);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "添加";
+            // 
+            // txtAdd
+            // 
+            this.txtAdd.Location = new System.Drawing.Point(347, 101);
+            this.txtAdd.Multiline = true;
+            this.txtAdd.Name = "txtAdd";
+            this.txtAdd.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAdd.Size = new System.Drawing.Size(292, 84);
+            this.txtAdd.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(301, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 36);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "添加\r\n唯一\r\n判断";
+            // 
+            // chkAddCheck
+            // 
+            this.chkAddCheck.AutoSize = true;
+            this.chkAddCheck.Location = new System.Drawing.Point(347, 12);
+            this.chkAddCheck.Name = "chkAddCheck";
+            this.chkAddCheck.Size = new System.Drawing.Size(96, 16);
+            this.chkAddCheck.TabIndex = 4;
+            this.chkAddCheck.Text = "添加重复校验";
+            this.chkAddCheck.UseVisualStyleBackColor = true;
             // 
             // VMSettingFrm
             // 
@@ -323,6 +357,7 @@
             this.ClientSize = new System.Drawing.Size(666, 408);
             this.Controls.Add(this.tabControl1);
             this.Name = "VMSettingFrm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View Model 设置";
             this.Load += new System.EventHandler(this.VMSettingFrm_Load);
             this.tabControl1.ResumeLayout(false);
@@ -354,7 +389,7 @@
         private System.Windows.Forms.TextBox txtQueryExcept;
         private System.Windows.Forms.Button btnSaveAll;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtAdd;
+        private System.Windows.Forms.TextBox txtAddCheck;
         private System.Windows.Forms.TextBox txtEdit;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtQuery;
@@ -367,5 +402,8 @@
         private System.Windows.Forms.TextBox txtDeleteColValue;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtAdd;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox chkAddCheck;
     }
 }

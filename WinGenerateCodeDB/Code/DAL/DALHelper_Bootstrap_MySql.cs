@@ -123,7 +123,7 @@ namespace {0}
             using (MySqlConnection sqlcn = ConnectionFactory.{3})
             {{
                 sqlcn.Open();
-                for(var model in list)
+                foreach(var model in list)
                 {{
                     {2}
                     MySqlHelper2.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;

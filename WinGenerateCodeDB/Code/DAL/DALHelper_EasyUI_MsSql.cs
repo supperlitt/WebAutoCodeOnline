@@ -13,6 +13,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dalContent = new StringBuilder();
             dalContent.Append(CreateDALHeader(name_space, dal_name));
             dalContent.Append(CreateAddMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateBatAddMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateEditMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateDeleteMethod(action, table_name, colList, db_name));
             dalContent.Append(CreateQueryListMethod(action, table_name, colList, model_name, db_name));
@@ -74,6 +75,63 @@ namespace {0}
             using (SqlConnection sqlcn = ConnectionFactory.{3})
             {{
                 return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;
+            }}
+        }}
+";
+
+                return string.Format(template,
+                    model_name,
+                    addContent.ToString(),
+                    addparamsContent.ToString(),
+                    db_name,
+                    table_name);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string CreateBatAddMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
+        {
+            if ((action & (int)action_type.bat_add) == (int)action_type.bat_add)
+            {
+                StringBuilder addContent = new StringBuilder();
+                StringBuilder valueContent = new StringBuilder(") values (");
+                StringBuilder addparamsContent = new StringBuilder("List<SqlParameter> listParams = new List<SqlParameter>();\r\n");
+                addContent.AppendFormat("string insertSql = \"insert into {0}(", table_name);
+                int index = 0;
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
+                {
+                    if (index == 0)
+                    {
+                        addContent.Append(item.Name);
+                        valueContent.Append("@" + item.Name);
+                    }
+                    else
+                    {
+                        addContent.Append(" ," + item.Name);
+                        valueContent.Append(" ,@" + item.Name);
+                    }
+
+                    addparamsContent.AppendFormat("\t\t\tlistParams.Add(new SqlParameter(\"@{0}\", {1}) {{ Value = model.{0} }});\r\n", item.Name, item.DbType.ToMsSqlDbType());
+
+                    index++;
+                }
+
+                addContent.Append(valueContent.ToString() + ")\";");
+                string template = @"
+        public void Add{4}_list(List<{0}> list)
+        {{
+			{1}
+            using (SqlConnection sqlcn = ConnectionFactory.{3})
+            {{
+                foreach(var model in list)
+                {{
+                    {2}
+                    SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;
+                }}
             }}
         }}
 ";

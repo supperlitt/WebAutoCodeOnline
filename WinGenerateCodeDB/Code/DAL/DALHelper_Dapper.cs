@@ -13,6 +13,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dalContent = new StringBuilder();
             dalContent.Append(CreateDALHeader(name_space, dal_name));
             dalContent.Append(CreateAddMethod(action, table_name, colList, model_name, db_name));
+            dalContent.Append(CreateBatAddMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateEditMethod(action, table_name, colList, model_name, db_name));
             dalContent.Append(CreateDeleteMethod(action, table_name, colList, db_name));
             dalContent.Append(CreateQueryListMethod(action, table_name, colList, model_name, db_name));
@@ -70,6 +71,58 @@ namespace {0}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
                 return sqlcn.Execute(insertSql, model) > 0;
+            }}
+        }}
+";
+
+                return string.Format(template,
+                    table_name,
+                    addContent.ToString(),
+                    db_name,
+                    table_name);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string CreateBatAddMethod(int action, string table_name, List<SqlColumnInfo> colList, string model_name, string db_name)
+        {
+            if ((action & (int)action_type.bat_add) == (int)action_type.bat_add)
+            {
+                StringBuilder addContent = new StringBuilder();
+                StringBuilder valueContent = new StringBuilder(") values (");
+                addContent.AppendFormat("string insertSql = \"insert into {0}(", table_name);
+                int index = 0;
+                var addList = Cache_VMData.GetVMList(table_name, VMType.Add, colList.ToNotMainIdList());
+                foreach (var item in addList)
+                {
+                    if (index == 0)
+                    {
+                        addContent.Append(item.Name);
+                        valueContent.Append("@" + item.Name);
+                    }
+                    else
+                    {
+                        addContent.Append(" ," + item.Name);
+                        valueContent.Append(" ,@" + item.Name);
+                    }
+
+                    index++;
+                }
+
+                addContent.Append(valueContent.ToString() + ")\";");
+                string template = @"
+        public void Add{3}_list(List<{0}> list)
+        {{
+			{1}
+            using (IDbConnection sqlcn = ConnectionFactory.{2})
+            {{
+                foreach(var model in list)
+                {{
+                    sqlcn.Execute(insertSql, model);
+                }}
             }}
         }}
 ";

@@ -66,6 +66,8 @@ namespace {0}
                     index++;
                 }
 
+                var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
+
                 addContent.Append(valueContent.ToString() + ")\";");
                 string template = @"
         public bool Add{4}({0} model)
@@ -128,7 +130,7 @@ namespace {0}
             using (MySqlConnection sqlcn = ConnectionFactory.{3})
             {{
                 sqlcn.Open();
-                for(var model in list)
+                foreach(var model in list)
                 {{
                     {2}
                     MySqlHelper2.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray());

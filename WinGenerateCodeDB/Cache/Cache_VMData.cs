@@ -148,6 +148,29 @@ namespace WinGenerateCodeDB
 
             return null;
         }
+
+        public static List<SqlColumnInfo> GetAddCheckList(string table_name, List<SqlColumnInfo> current)
+        {
+            List<SqlColumnInfo> result = new List<SqlColumnInfo>();
+            var tbInfo = dataList.Find(p => p.db_name == Cache_Next.GetDbName() && p.table_name == table_name);
+            if (tbInfo == null || tbInfo.add_check_list.Count == 0)
+            {
+                return new List<SqlColumnInfo>();
+            }
+            else
+            {
+                var equalList = tbInfo.add_check_list.FindAll(p => p.Contains("="));
+                var paramsList = tbInfo.add_check_list.FindAll(p => !p.Contains("="));
+                var list = current.FindAll(p => paramsList.Contains(p.Name));
+                List<SqlColumnInfo> equalSqlList = new List<SqlColumnInfo>();
+                foreach (var item in equalList)
+                {
+                    // string[] key = item.Split(new char[] { '=' });
+                }
+
+                return new List<SqlColumnInfo>();
+            }
+        }
     }
 
     public enum VMType
@@ -175,6 +198,8 @@ namespace WinGenerateCodeDB
         public List<string> edit_list { get; set; }
 
         public List<string> query_list { get; set; }
+
+        public List<string> add_check_list { get; set; }
 
         public VMDataExtendInfo extendInfo { get; set; }
 

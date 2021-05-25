@@ -37,6 +37,9 @@ namespace WinGenerateCodeDB
 
         private void MainFrm_Load(object sender, EventArgs e)
         {
+            this.txtServer.Text = "172.20.30.101";
+            this.txtPwd.Text = "qwe123asd";
+
             InitListViewColumns();
             InitDefaultSetting();
             foreach (TabPage tab in this.tabControl1.TabPages)
@@ -272,6 +275,8 @@ namespace WinGenerateCodeDB
             }
         }
 
+        private string current_guid = string.Empty;
+
         private void btnNext_Click(object sender, EventArgs e)
         {
             List<string> tableList = new List<string>();
@@ -293,7 +298,8 @@ namespace WinGenerateCodeDB
                     Cache_Next.AddColumnList(tbName, list);
                 }
 
-                AspNetHelper.Init();
+                current_guid = Guid.NewGuid().ToString();
+                AspNetHelper.Init(current_guid);
                 this.Invoke(new Action<TabControl>(p =>
                 {
                     int mulIndex = 1;
@@ -706,6 +712,11 @@ namespace WinGenerateCodeDB
         {
             VMSettingFrm frm = new VMSettingFrm();
             frm.ShowDialog();
+        }
+
+        private void txtAddCheck_TextChanged(object sender, EventArgs e)
+        {
+            // 保存数据
         }
     }
 }
