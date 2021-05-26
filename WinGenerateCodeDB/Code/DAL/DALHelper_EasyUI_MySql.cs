@@ -67,9 +67,10 @@ namespace {0}
                 }
 
                 var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
-
-                addContent.Append(valueContent.ToString() + ")\";");
-                string template = @"
+                if (checkList.Count == 0)
+                {
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
         public bool Add{4}({0} model)
         {{
 			{1}
@@ -81,12 +82,52 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template,
-                    model_name,
-                    addContent.ToString(),
-                    addparamsContent.ToString(),
-                    db_name,
-                    table_name);
+                    return string.Format(template,
+                        model_name,
+                        addContent.ToString(),
+                        addparamsContent.ToString(),
+                        db_name,
+                        table_name);
+                }
+                else
+                {
+                    string select_text = SqlTextHelper.CreateSelectCountSql(table_name, checkList);
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
+        public bool Add{4}({0} model)
+        {{
+			{1}
+            {2}
+            {5}
+            using (MySqlConnection sqlcn = ConnectionFactory.{3})
+            {{
+                Object obj = MySqlHelper2.ExecuteScaler(sqlcn, CommandType.Text, selectSql, listParams.ToArray());
+                if(obj == null || obj == DBNull.Value)
+                {{
+                    return false;
+                }}
+
+                int count = Convert.ToInt32(obj);
+                if(count == 0)
+                {{
+                    return MySqlHelper2.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;
+                }}
+                else
+                {{
+                    return false;
+                }}
+            }}
+        }}
+";
+
+                    return string.Format(template,
+                        model_name,
+                        addContent.ToString(),
+                        addparamsContent.ToString(),
+                        db_name,
+                        table_name,
+                        select_text);
+                }
             }
             else
             {
@@ -122,8 +163,11 @@ namespace {0}
                     index++;
                 }
 
-                addContent.Append(valueContent.ToString() + ")\";");
-                string template = @"
+                var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
+                if (checkList.Count == 0)
+                {
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
         public void Add{4}_list(List<{0}> list)
         {{
 			{1}
@@ -133,18 +177,59 @@ namespace {0}
                 foreach(var model in list)
                 {{
                     {2}
+                    Object obj = MySqlHelper2.ExecuteScaler(sqlcn, CommandType.Text, selectSql, listParams.ToArray());
+                    if(obj == null || obj == DBNull.Value)
+                    {{
+                        continue;
+                    }}
+
+                    int count = Convert.ToInt32(obj);
+                    if(count == 0)
+                    {{
+                        MySqlHelper2.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray());
+                    }}
+                }}
+            }}
+        }}
+";
+
+                    return string.Format(template,
+                        model_name,
+                        addContent.ToString(),
+                        addparamsContent.ToString(),
+                        db_name,
+                        table_name);
+                }
+                else
+                {
+                    string select_text = SqlTextHelper.CreateSelectCountSql(table_name, checkList);
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
+        public void Add{4}_list(List<{0}> list)
+        {{
+            {5}
+			{1}
+            using (MySqlConnection sqlcn = ConnectionFactory.{3})
+            {{
+                sqlcn.Open();
+                foreach(var model in list)
+                {{
+                    
+                    {2}
                     MySqlHelper2.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray());
                 }}
             }}
         }}
 ";
 
-                return string.Format(template,
-                    model_name,
-                    addContent.ToString(),
-                    addparamsContent.ToString(),
-                    db_name,
-                    table_name);
+                    return string.Format(template,
+                        model_name,
+                        addContent.ToString(),
+                        addparamsContent.ToString(),
+                        db_name,
+                        table_name,
+                        select_text);
+                }
             }
             else
             {

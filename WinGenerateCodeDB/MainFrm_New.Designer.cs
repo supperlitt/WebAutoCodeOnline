@@ -238,6 +238,7 @@
             // 
             // lstTables
             // 
+            this.lstTables.HideSelection = false;
             this.lstTables.Location = new System.Drawing.Point(21, 29);
             this.lstTables.Name = "lstTables";
             this.lstTables.Size = new System.Drawing.Size(327, 225);
@@ -258,6 +259,7 @@
             // 
             // lstColumns
             // 
+            this.lstColumns.HideSelection = false;
             this.lstColumns.Location = new System.Drawing.Point(18, 20);
             this.lstColumns.Name = "lstColumns";
             this.lstColumns.Size = new System.Drawing.Size(978, 252);
@@ -277,6 +279,7 @@
             // 
             // lstDBs
             // 
+            this.lstDBs.HideSelection = false;
             this.lstDBs.Location = new System.Drawing.Point(25, 29);
             this.lstDBs.Name = "lstDBs";
             this.lstDBs.Size = new System.Drawing.Size(265, 225);
@@ -662,7 +665,7 @@
             this.groupBox6.Controls.Add(this.rbtn_Sql);
             this.groupBox6.Location = new System.Drawing.Point(699, 362);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(155, 93);
+            this.groupBox6.Size = new System.Drawing.Size(170, 93);
             this.groupBox6.TabIndex = 5;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "数据处理选择";
@@ -684,9 +687,9 @@
             this.rbtn_Sql.AutoSize = true;
             this.rbtn_Sql.Location = new System.Drawing.Point(20, 34);
             this.rbtn_Sql.Name = "rbtn_Sql";
-            this.rbtn_Sql.Size = new System.Drawing.Size(65, 16);
+            this.rbtn_Sql.Size = new System.Drawing.Size(137, 16);
             this.rbtn_Sql.TabIndex = 0;
-            this.rbtn_Sql.Text = "Sql语句";
+            this.rbtn_Sql.Text = "Sql语句（不再升级）";
             this.rbtn_Sql.UseVisualStyleBackColor = true;
             // 
             // btmExport

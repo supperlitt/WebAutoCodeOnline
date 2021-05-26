@@ -37,9 +37,6 @@ namespace WinGenerateCodeDB
 
         private void MainFrm_Load(object sender, EventArgs e)
         {
-            this.txtServer.Text = "172.20.30.101";
-            this.txtPwd.Text = "qwe123asd";
-
             InitListViewColumns();
             InitDefaultSetting();
             foreach (TabPage tab in this.tabControl1.TabPages)

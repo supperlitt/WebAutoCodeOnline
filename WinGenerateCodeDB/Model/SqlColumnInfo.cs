@@ -30,6 +30,11 @@ namespace WinGenerateCodeDB
 
         public string DefaultValue { get; set; }
 
+        /// <summary>
+        /// 临时存值
+        /// </summary>
+        public string TempValue { get; set; }
+
         private string comment = string.Empty;
 
         /// <summary>

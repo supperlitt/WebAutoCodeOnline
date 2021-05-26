@@ -35,6 +35,7 @@ namespace WinGenerateCodeDB.Code
             StringBuilder dalContent = new StringBuilder();
             dalContent.Append(CreateDALHeader());
             dalContent.Append(CreateAddMethod());
+            dalContent.Append(CreateBatAddMethod());
             dalContent.Append(CreateEditMethod());
             dalContent.Append(CreateDeleteMethod());
             dalContent.Append(CreateQueryListMethod());
@@ -61,33 +62,31 @@ namespace {0}
 
         public string CreateAddMethod()
         {
-            StringBuilder addContent = new StringBuilder();
-            StringBuilder valueContent = new StringBuilder(") values (");
-            addContent.AppendFormat("string insertSql = \"insert into {0}(", table_name);
+            StringBuilder keyContent = new StringBuilder();
+            StringBuilder valueContent = new StringBuilder();
             int index = 0;
-            foreach (var item in list)
+            foreach (var item in list.ToNotMainIdList())
             {
-                if (item.IsAutoIncrement)
-                {
-                    continue;
-                }
-
                 if (index == 0)
                 {
-                    addContent.Append(item.Name);
+                    keyContent.Append(item.Name);
                     valueContent.Append("@" + item.Name);
                 }
                 else
                 {
-                    addContent.Append(" ," + item.Name);
+                    keyContent.Append(" ," + item.Name);
                     valueContent.Append(" ,@" + item.Name);
                 }
 
                 index++;
             }
 
-            addContent.Append(valueContent.ToString() + ")\";");
-            string template = @"
+            string addContent = string.Format(@"string insertSql = ""insert into {0} ({1}) values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
+
+            var checkList = Cache_VMData.GetAddCheckList(table_name, list.ToNotMainIdList());
+            if (checkList.Count == 0)
+            {
+                string template = @"
         public bool Add{3}({0} model)
         {{
 			{1}
@@ -98,11 +97,118 @@ namespace {0}
         }}
 ";
 
-            return string.Format(template,
-                model_name,
-                addContent.ToString(),
-                db_name,
-                table_name);
+                return string.Format(template,
+                    model_name,
+                    addContent,
+                    db_name,
+                    table_name);
+            }
+            else
+            {
+                string select_text = SqlTextHelper.CreateSelectCountSql(table_name, checkList);
+                string template = @"
+        public bool Add{3}({0} model)
+        {{
+            {4}
+			{1}
+            using (IDbConnection sqlcn = ConnectionFactory.{2})
+            {{
+                int count = sqlcn.QuerySingleOrDefault<int>(selectSql, model);
+                if(count == 0)
+                {{
+                    return sqlcn.Execute(insertSql, model) > 0;
+                }}
+
+                return false;
+            }}
+        }}
+";
+
+                return string.Format(template,
+                    model_name,
+                    addContent,
+                    db_name,
+                    table_name,
+                    select_text);
+            }
+        }
+
+        public string CreateBatAddMethod()
+        {
+            StringBuilder keyContent = new StringBuilder();
+            StringBuilder valueContent = new StringBuilder();
+            int index = 0;
+            foreach (var item in list.ToNotMainIdList())
+            {
+                if (index == 0)
+                {
+                    keyContent.Append(item.Name);
+                    valueContent.Append("@" + item.Name);
+                }
+                else
+                {
+                    keyContent.Append(" ," + item.Name);
+                    valueContent.Append(" ,@" + item.Name);
+                }
+
+                index++;
+            }
+
+            string addContent = string.Format(@"string insertSql = ""insert into {0} ({1}) values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
+
+            var checkList = Cache_VMData.GetAddCheckList(table_name, list.ToNotMainIdList());
+            if (checkList.Count == 0)
+            {
+                string template = @"
+        public void Add{3}_list(List<{0}> list)
+        {{
+			{1}
+            using (IDbConnection sqlcn = ConnectionFactory.{2})
+            {{
+                foreach(var model in list)
+                {{
+                    sqlcn.Execute(insertSql, model);
+                }}
+            }}
+        }}
+";
+
+                return string.Format(template,
+                    model_name,
+                    addContent,
+                    db_name,
+                    table_name);
+            }
+            else
+            {
+                string select_text = SqlTextHelper.CreateSelectCountSql(table_name, checkList);
+                string template = @"
+        public void Add{3}_list(List<{0}> list)
+        {{
+            {4}
+			{1}
+            using (IDbConnection sqlcn = ConnectionFactory.{2})
+            {{
+                sqlcn.Open();
+                foreach(var model in list)
+                {{
+                    int count = sqlcn.QuerySingleOrDefault<int>(selectSql, model);
+                    if(count == 0)
+                    {{
+                        sqlcn.Execute(insertSql, model);
+                    }}
+                }}
+            }}
+        }}
+";
+
+                return string.Format(template,
+                    model_name,
+                    addContent,
+                    db_name,
+                    table_name,
+                    select_text);
+            }
         }
 
         public string CreateEditMethod()

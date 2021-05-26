@@ -100,6 +100,7 @@
     <Compile Include="ConnectHelper\MySqlConnectHelper.cs" />
     <Compile Include="DAL\SqlHelper.cs" />
     <Compile Include="Extend\ExtendTool.cs" />
+    <Compile Include="Helper\SqlTextHelper.cs" />
     <Compile Include="MainFrm_New.cs">
       <SubType>Form</SubType>
     </Compile>

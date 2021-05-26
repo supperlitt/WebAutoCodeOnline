@@ -66,8 +66,11 @@ namespace {0}
                     index++;
                 }
 
-                addContent.Append(valueContent.ToString() + ")\";");
-                string template = @"
+                var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
+                if (checkList.Count == 0)
+                {
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
         public bool Add{0}({0} model)
         {{
 			{1}
@@ -79,7 +82,25 @@ namespace {0}
         }}
 ";
 
-                return string.Format(template, table_name, addContent.ToString(), addparamsContent.ToString(), db_name);
+                    return string.Format(template, table_name, addContent.ToString(), addparamsContent.ToString(), db_name);
+                }
+                else
+                {
+                    addContent.Append(valueContent.ToString() + ")\";");
+                    string template = @"
+        public bool Add{0}({0} model)
+        {{
+			{1}
+            {2}
+            using (SqlConnection sqlcn = ConnectionFactory.{3})
+            {{
+                return SqlHelper.ExecuteNonQuery(sqlcn, CommandType.Text, insertSql, listParams.ToArray()) > 0;
+            }}
+        }}
+";
+
+                    return string.Format(template, table_name, addContent.ToString(), addparamsContent.ToString(), db_name);
+                }
             }
             else
             {

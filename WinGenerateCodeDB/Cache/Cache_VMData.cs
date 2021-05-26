@@ -16,6 +16,18 @@ namespace WinGenerateCodeDB
         private static List<VMDataInfo> dataList = new List<VMDataInfo>();
         private static string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache_vm.txt");
 
+        static Cache_VMData()
+        {
+            try
+            {
+                LoadData();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
         public static void SaveData(List<VMDataInfo> list)
         {
             foreach (var item in list)
@@ -60,6 +72,7 @@ namespace WinGenerateCodeDB
         {
             if (File.Exists(path))
             {
+                dataList = new List<VMDataInfo>();
                 string[] lines = File.ReadAllLines(path, Encoding.UTF8);
                 foreach (var line in lines)
                 {
@@ -155,20 +168,38 @@ namespace WinGenerateCodeDB
             var tbInfo = dataList.Find(p => p.db_name == Cache_Next.GetDbName() && p.table_name == table_name);
             if (tbInfo == null || tbInfo.add_check_list.Count == 0)
             {
-                return new List<SqlColumnInfo>();
+                return result;
             }
             else
             {
                 var equalList = tbInfo.add_check_list.FindAll(p => p.Contains("="));
                 var paramsList = tbInfo.add_check_list.FindAll(p => !p.Contains("="));
                 var list = current.FindAll(p => paramsList.Contains(p.Name));
-                List<SqlColumnInfo> equalSqlList = new List<SqlColumnInfo>();
                 foreach (var item in equalList)
                 {
-                    // string[] key = item.Split(new char[] { '=' });
+                    string[] key = item.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (key.Length == 2)
+                    {
+                        // 处理有值的情况
+                        var col = current.Find(p => p.Name == key[0]);
+                        if (col != null)
+                        {
+                            col.TempValue = key[1];
+                            result.Add(col);
+                        }
+                    }
                 }
 
-                return new List<SqlColumnInfo>();
+                foreach (var item in paramsList)
+                {
+                    var col = current.Find(p => p.Name == item);
+                    if (col != null)
+                    {
+                        result.Add(col);
+                    }
+                }
+
+                return result;
             }
         }
     }
@@ -193,21 +224,18 @@ namespace WinGenerateCodeDB
 
         public string table_name { get; set; }
 
-        public List<string> add_list { get; set; }
+        public List<string> add_list { get; set; } = new List<string>();
 
-        public List<string> edit_list { get; set; }
+        public List<string> edit_list { get; set; } = new List<string>();
 
-        public List<string> query_list { get; set; }
+        public List<string> query_list { get; set; } = new List<string>();
 
-        public List<string> add_check_list { get; set; }
+        public List<string> add_check_list { get; set; } = new List<string>();
 
         public VMDataExtendInfo extendInfo { get; set; }
 
         public VMDataInfo()
         {
-            add_list = new List<string>();
-            edit_list = new List<string>();
-            query_list = new List<string>();
         }
     }
 

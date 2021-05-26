@@ -95,25 +95,28 @@ namespace WinGenerateCodeDB
             foreach (var item in tbDic)
             {
                 string text = string.Empty;
-                if (PageCache.DbTool == 0 && PageCache.UIType == 0 && PageCache.DbType == 0)
+                if (PageCache.DbTool == 0)
                 {
-                    // easyui mysql
-                    text = DALHelper_EasyUI_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
-                }
-                else if (PageCache.DbTool == 0 && PageCache.UIType == 0 && PageCache.DbType == 1)
-                {
-                    // easyui mssql
-                    text = DALHelper_EasyUI_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
-                }
-                else if (PageCache.DbTool == 0 && PageCache.UIType == 1 && PageCache.DbType == 0)
-                {
-                    // bootstarp mysql
-                    text = DALHelper_Bootstrap_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
-                }
-                else if (PageCache.DbTool == 0 && PageCache.UIType == 1 && PageCache.DbType == 1)
-                {
-                    // bootstarp mssql
-                    text = DALHelper_Bootstrap_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                    if (PageCache.UIType == 0 && PageCache.DbType == 0)
+                    {
+                        // easyui mysql
+                        text = DALHelper_EasyUI_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                    }
+                    else if (PageCache.UIType == 0 && PageCache.DbType == 1)
+                    {
+                        // easyui mssql
+                        text = DALHelper_EasyUI_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                    }
+                    else if (PageCache.UIType == 1 && PageCache.DbType == 0)
+                    {
+                        // bootstarp mysql
+                        text = DALHelper_Bootstrap_MySql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                    }
+                    else if (PageCache.UIType == 1 && PageCache.DbType == 1)
+                    {
+                        // bootstarp mssql
+                        text = DALHelper_Bootstrap_MsSql.CreateDAL(name_space, item.Key, item.Value, action, item.Key + dal_staff, item.Key + model_staff, db_name);
+                    }
                 }
                 else if (PageCache.DbTool == 1)
                 {
@@ -129,13 +132,16 @@ namespace WinGenerateCodeDB
         public static Dictionary<string, string> CreateFactory(string name_space)
         {
             string text = string.Empty;
-            if (PageCache.DbTool == 0 && PageCache.DbType == 0)
+            if (PageCache.DbTool == 0)
             {
-                text = FactoryHelper_MySql.CreateFactory(name_space, db_name);
-            }
-            else if (PageCache.DbTool == 0 && PageCache.DbType == 1)
-            {
-                text = FactoryHelper_MsSql.CreateFactory(name_space, db_name);
+                if (PageCache.DbType == 0)
+                {
+                    text = FactoryHelper_MySql.CreateFactory(name_space, db_name);
+                }
+                else if (PageCache.DbType == 1)
+                {
+                    text = FactoryHelper_MsSql.CreateFactory(name_space, db_name);
+                }
             }
             else if (PageCache.DbTool == 1 && PageCache.DbType == 0)
             {
