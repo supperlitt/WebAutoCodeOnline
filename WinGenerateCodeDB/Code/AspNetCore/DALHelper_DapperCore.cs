@@ -165,6 +165,7 @@ namespace {0}
 			{1}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
+                sqlcn.Open();
                 foreach(var model in list)
                 {{
                     sqlcn.Execute(insertSql, model);

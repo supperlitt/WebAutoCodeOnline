@@ -143,6 +143,7 @@ namespace {0}
 			{1}
             using (SqlConnection sqlcn = ConnectionFactory.{3})
             {{
+                sqlcn.Open();
                 foreach(var model in list)
                 {{
                     {2}

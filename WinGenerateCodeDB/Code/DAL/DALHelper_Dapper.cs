@@ -60,7 +60,7 @@ namespace {0}
                     }
                 }
 
-                string addContent = string.Format(@"string insertSql = ""insert into {0}({1}） values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
+                string addContent = string.Format(@"string insertSql = ""insert into {0}({1}) values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
                 var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
                 if (checkList.Count == 0)
                 {
@@ -138,7 +138,7 @@ namespace {0}
                     }
                 }
 
-                string addContent = string.Format(@"string insertSql = ""insert into {0}({1}） values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
+                string addContent = string.Format(@"string insertSql = ""insert into {0}({1}) values ({2});"";", table_name, keyContent.ToString(), valueContent.ToString());
 
                 var checkList = Cache_VMData.GetAddCheckList(table_name, colList.ToNotMainIdList());
                 if (checkList.Count == 0)
@@ -174,6 +174,7 @@ namespace {0}
 			{1}
             using (IDbConnection sqlcn = ConnectionFactory.{2})
             {{
+                sqlcn.Open();
                 foreach(var model in list)
                 {{
                     int count = sqlcn.QuerySingleOrDefault<int>(selectSql, model);
