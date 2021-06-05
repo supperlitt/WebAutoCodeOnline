@@ -114,6 +114,7 @@
             this.btnNextMulTable = new System.Windows.Forms.Button();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.btnReturn = new System.Windows.Forms.Button();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -204,6 +205,7 @@
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -407,7 +409,7 @@
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(1054, 599);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = " asp.net ";
+            this.tabPage4.Text = " ASP.NET ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabControl2
@@ -804,7 +806,7 @@
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(1054, 599);
             this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = " asp.net core ";
+            this.tabPage6.Text = " ASP.NET CORE ";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // lblVm
@@ -971,7 +973,7 @@
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Size = new System.Drawing.Size(1054, 599);
             this.tabPage2.TabIndex = 6;
-            this.tabPage2.Text = " android ";
+            this.tabPage2.Text = " Android ";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
@@ -980,7 +982,7 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1054, 599);
             this.tabPage3.TabIndex = 7;
-            this.tabPage3.Text = " html5 ";
+            this.tabPage3.Text = " Html5 ";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // btnNext
@@ -1026,6 +1028,15 @@
             this.btnReturn.Text = "返回";
             this.btnReturn.UseVisualStyleBackColor = true;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Size = new System.Drawing.Size(1054, 599);
+            this.tabPage8.TabIndex = 8;
+            this.tabPage8.Text = " HarmonyOS ";
+            this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // MainFrm_New
             // 
@@ -1161,6 +1172,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage8;
     }
 }
 
