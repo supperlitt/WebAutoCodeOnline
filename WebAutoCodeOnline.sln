@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{CC80777C-2C80-4116-A565-73EF345E308D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTestProject", "WebTestProject\WebTestProject.csproj", "{D82809FB-8175-455F-B2CC-062FAB0D0461}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTestHandler", "WebTestHandler\WebTestHandler.csproj", "{636029DC-3018-42FD-82B9-0FB7B625E1C7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinGenerateCodeDB", "WinGenerateCodeDB\WinGenerateCodeDB.csproj", "{2D37B823-B9DA-4509-98BA-47ACEDCE339F}"
 EndProject
 Global
@@ -27,14 +23,6 @@ Global
 		{CC80777C-2C80-4116-A565-73EF345E308D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC80777C-2C80-4116-A565-73EF345E308D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC80777C-2C80-4116-A565-73EF345E308D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D82809FB-8175-455F-B2CC-062FAB0D0461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D82809FB-8175-455F-B2CC-062FAB0D0461}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D82809FB-8175-455F-B2CC-062FAB0D0461}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D82809FB-8175-455F-B2CC-062FAB0D0461}.Release|Any CPU.Build.0 = Release|Any CPU
-		{636029DC-3018-42FD-82B9-0FB7B625E1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{636029DC-3018-42FD-82B9-0FB7B625E1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{636029DC-3018-42FD-82B9-0FB7B625E1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{636029DC-3018-42FD-82B9-0FB7B625E1C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D37B823-B9DA-4509-98BA-47ACEDCE339F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D37B823-B9DA-4509-98BA-47ACEDCE339F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D37B823-B9DA-4509-98BA-47ACEDCE339F}.Release|Any CPU.ActiveCfg = Release|Any CPU
