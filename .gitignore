@@ -3,3 +3,11 @@
 ################################################################################
 
 /Model/bin/Debug
+/Model/obj/Debug
+/WebTestHandler/obj/Debug
+/WebTestProject/obj/Debug
+/WinGenerateCodeDB/bin/Debug
+/WinGenerateCodeDB/obj/Debug
+/Common/bin/Debug
+/.vs/WebAutoCodeOnline
+/Common/obj/Debug

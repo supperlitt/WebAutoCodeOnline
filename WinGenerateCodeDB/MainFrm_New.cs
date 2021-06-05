@@ -70,9 +70,6 @@ namespace WinGenerateCodeDB
                     chkActionList.Items.Add(item, false);
                 }
             }
-
-            this.txtServer.Text = "localhost";
-            this.txtPwd.Text = "QAZ123wsx!@#";
         }
 
         private void InitListViewColumns()
