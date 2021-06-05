@@ -10,3 +10,4 @@
 2021-4-2  1.优化原有逻辑，支持多表选择，和代码使用ViewModel配置，然后生成对应的功能。（如果需要类注释，请自行提前在表上设置）  
 2021-6-5  1.拆分出去旧版AutoCode  独立出来，然后新的继续在现有的上面开发（拆分地址：https://github.com/supperlitt/WinAutoCode_OldVersion）
 
+![](https://github.com/supperlitt/WebAutoCodeOnline/blob/master/image/new_page.png)
