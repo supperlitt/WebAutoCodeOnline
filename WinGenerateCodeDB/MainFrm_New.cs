@@ -70,6 +70,9 @@ namespace WinGenerateCodeDB
                     chkActionList.Items.Add(item, false);
                 }
             }
+
+            this.txtServer.Text = "localhost";
+            this.txtPwd.Text = "QAZ123wsx!@#";
         }
 
         private void InitListViewColumns()
@@ -127,9 +130,9 @@ namespace WinGenerateCodeDB
                 foreach (var columnInfo in list)
                 {
                     ListViewItem item = new ListViewItem(columnInfo.Name);
-                    item.SubItems.AddRange(new string[] 
-                    { 
-                        columnInfo.IsMainKey ? "√" : "", 
+                    item.SubItems.AddRange(new string[]
+                    {
+                        columnInfo.IsMainKey ? "√" : "",
                         columnInfo.IsAutoIncrement ? "√" : "" ,
                         columnInfo.DbType,
                         columnInfo.Length,
@@ -660,7 +663,7 @@ namespace WinGenerateCodeDB
                 textBox.Size = new System.Drawing.Size(1022, 462);
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
-                textBox.Text = item.Value;
+                textBox.Text = item.Value.Replace("\t", "    ");
                 textBox.KeyPress += txtResult_KeyPress;
 
                 TabPage tb = new TabPage();
@@ -682,7 +685,7 @@ namespace WinGenerateCodeDB
                 textBox.Size = new System.Drawing.Size(660, 479);
                 textBox.TabIndex = 0;
                 textBox.ScrollBars = ScrollBars.Vertical;
-                textBox.Text = item.Value;
+                textBox.Text = item.Value.Replace("\t", "    ");
                 textBox.KeyPress += txtResult_KeyPress;
 
                 TabPage tb = new TabPage();

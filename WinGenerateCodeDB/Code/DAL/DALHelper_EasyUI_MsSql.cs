@@ -270,19 +270,19 @@ namespace {0}
                     {
                         if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint" || item.DbType.ToLower() == "decimal" || item.DbType.ToLower() == "float" || item.DbType.ToLower() == "double")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "tinyint")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
                         }
                         else
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                         }
                     }
 
@@ -290,7 +290,7 @@ namespace {0}
                     queryWhereContent.AppendFormat("\t\t\t\tlistParams.Add(new SqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", item.Name, item.DbType.ToMsSqlDbType());
 
                     queryWhereContent.AppendFormat("\t\t\t\twhereStr += \" and {0}=@{0} \";\r\n", item.Name);
-                    queryWhereContent.Append("\t\t\t}\r\n");
+                    queryWhereContent.Append("\t\t\t}");
                     queryWhereContent.AppendLine();
 
                     index++;

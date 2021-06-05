@@ -246,19 +246,19 @@ namespace {0}
                     {
                         if (item.DbType.ToLower() == "int" || item.DbType.ToLower() == "bigint" || item.DbType.ToLower() == "decimal" || item.DbType.ToLower() == "float" || item.DbType.ToLower() == "double")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "tinyint")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} >= 0)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} >= 0)\r\n", item.Name);
                         }
                         else if (item.DbType.ToLower() == "datetime" || item.DbType.ToLower() == "date")
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif ({0} != DateTime.MinValue)\r\n", item.Name);
                         }
                         else
                         {
-                            queryWhereContent.AppendFormat("\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
+                            queryWhereContent.AppendFormat("\r\n\t\t\tif (!string.IsNullOrEmpty({0}))\r\n", item.Name);
                         }
                     }
 
@@ -266,14 +266,14 @@ namespace {0}
                     queryWhereContent.AppendFormat("\t\t\t\tlistParams.Add(new MySqlParameter(\"@{0}\", {1}) {{ Value = {0} }});\r\n", item.Name, item.DbType.ToMySqlDbType());
 
                     queryWhereContent.AppendFormat("\t\t\t\twhereStr += \" and {0}=@{0} \";\r\n", item.Name);
-                    queryWhereContent.Append("\t\t\t}\r\n");
+                    queryWhereContent.Append("\t\t\t}");
                     queryWhereContent.AppendLine();
 
                     index++;
                 }
 
                 StringBuilder selectSqlContent = new StringBuilder();
-                selectSqlContent.Append("\tstring selectSql = string.Format(@\"select * from " + table_name + " where 1=1 {0} limit {1},{2};\", whereStr, ((page - 1) * pageSize), pageSize);\r\n");
+                selectSqlContent.Append("string selectSql = string.Format(@\"select * from " + table_name + " where 1=1 {0} limit {1},{2};\", whereStr, ((page - 1) * pageSize), pageSize);\r\n");
 
                 var assignContent = new StringBuilder();
                 foreach (var item in colList)
